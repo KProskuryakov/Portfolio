@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    canvas(id="laser-game-canvas", width="402", height="402")
+    pre(class="flex-pre", id="paths-pre") This is where the paths are supposed to be
+    pre(class="flex-pre", id="imported-pre") Imported stuff
+    div(class="vertical-div")
+        textarea(id="game-text-area", rows="20", cols="50", style="resize: none;")
+        button(class="button", onclick="importButtonPress();") Import!
+        script(src="javascripts/lasergame.js")
+
