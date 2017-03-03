@@ -5,9 +5,9 @@ block content
         canvas#laser-game-canvas(width="402", height="402")
         pre#paths-pre.flex-pre This is where the paths are supposed to be
         pre#imported-pre.flex-pre Imported stuff
-        vertical-div
+        div.vertical-div
             textarea#game-text-area(rows="20", cols="50", style="resize: none;")
-            button.button(onclick="importButtonPress();") Import!
+            button.flex-button(onclick="importButtonPress();") Import!
 
     script(src="javascripts/lasergame.js")
 

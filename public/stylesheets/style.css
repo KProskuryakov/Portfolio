@@ -4,7 +4,7 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #ffaca7;
 }
 
 .flex-container {
@@ -16,9 +16,9 @@ a {
   justify-content: center;
   width: 1550px;
   height: 800px;
-  background-color: lightblue;
+  background-color: #e6a5a5;
   margin: auto;
-  border: medium groove blue;
+  border: medium groove #000000;
 }
 
 .flex-pre {
@@ -27,8 +27,8 @@ a {
   background-color: lightcyan;
 }
 
-.button {
-  background-color: #287a80; /* Green */
+.flex-button {
+  background-color: #803d39; /* Green */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -43,4 +43,28 @@ a {
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
+}
+
+.navbar-ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #332426;
+}
+
+.navbar-li {
+  float: left;
+}
+
+.navbar-li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar-li a:hover {
+  background-color: #935258;
 }
