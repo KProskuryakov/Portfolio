@@ -14,8 +14,8 @@ a {
   align-items: center;
   -webkit-justify-content: center;
   justify-content: center;
-  width: 1550px;
-  height: 800px;
+  width: 1350px;
+  height: 450px;
   background-color: #e6a5a5;
   margin: auto;
   border: medium groove #000000;
@@ -47,7 +47,7 @@ a {
 
 .navbar-ul {
   list-style-type: none;
-  margin: 0;
+  margin: 0 0 15px 0;
   padding: 0;
   overflow: hidden;
   background-color: #332426;
