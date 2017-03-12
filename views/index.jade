@@ -4,3 +4,5 @@ block content
     h1= title
     p Welcome to #{title}
     p There's supposed to be stuff here, I guess.
+    if user
+        p= "Welcome " + user.username

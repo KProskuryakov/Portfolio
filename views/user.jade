@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    if userpage
+        p= userpage.username + "'s page."
+        p This is where user data would be shown.
+    else
+        p Something is wrong and there's nothing here!

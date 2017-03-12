@@ -1,70 +1,70 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #ffaca7;
+    color: #ffaca7;
 }
 
 .flex-container {
-  display: -webkit-flex;
-  display: flex;
-  -webkit-align-items: center;
-  align-items: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  width: 1350px;
-  height: 450px;
-  background-color: #e6a5a5;
-  margin: auto;
-  border: medium groove #000000;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    width: 1350px;
+    height: 450px;
+    background-color: #e6a5a5;
+    margin: auto;
+    border: medium groove #000000;
 }
 
 .flex-pre {
-  margin: 15px;
-  width: 250px;
-  background-color: lightcyan;
+    margin: 15px;
+    width: 250px;
+    background-color: lightcyan;
 }
 
 .flex-button {
-  background-color: #803d39; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
+    background-color: #803d39; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
 
 .vertical-div {
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-direction: column;
-  flex-direction: column;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
 }
 
 .navbar-ul {
-  list-style-type: none;
-  margin: 0 0 15px 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #332426;
+    list-style-type: none;
+    margin: 0 0 15px 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #332426;
 }
 
 .navbar-li {
-  float: left;
+    float: left;
 }
 
 .navbar-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
 }
 
 .navbar-li a:hover {
-  background-color: #935258;
+    background-color: #935258;
 }

@@ -9,5 +9,15 @@ html
                 a(href="/") Home
             li.navbar-li
                 a(href="/lasergame") Laser Game
+            if !user
+                li.navbar-li(style="float:right")
+                    a(href="/login") Login
+                li.navbar-li(style="float:right")
+                    a(href="/register") Register
+            else
+                li.navbar-li(style="float:right")
+                    a(href="/user/#{user.username}")= user.username
+                li.navbar-li(style="float:right")
+                    a(href="/logout") Logout
     block content
         p I guess there's no content here :(
