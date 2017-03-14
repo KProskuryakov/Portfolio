@@ -1,7 +1,7 @@
 let express = require('express');
 let router = express.Router();
 
-let passport = require('passport');
+let passport = require('../passport');
 
 router.get('/', function (req, res) {
     res.render('login', {title: "Login"});

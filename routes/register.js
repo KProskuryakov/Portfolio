@@ -2,6 +2,7 @@ let express = require('express');
 let router = express.Router();
 
 let bcrypt = require('bcrypt-nodejs');
+let userCollection = require('../db').userCollection;
 
 router.get('/', function(req, res) {
     res.render('register', {title: "Register"});
@@ -9,20 +10,15 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
 
-    // Set our internal DB
-    let db = req.db;
-
     // Get our form values. These rely on the "name" attributes
-    let userName = req.body.username;
+    let username = req.body.username;
     let userPassword = req.body.password;
 
-    // Set our collection
-    let collection = db.get('usercollection');
 
     bcrypt.hash(userPassword, null, null, function(err, hash) {
         // Submit to the DB
-        collection.insert({
-            "username" : userName,
+        userCollection.insert({
+            "username" : username,
             "password": hash
         }, function (err, doc) {
             if (err) {

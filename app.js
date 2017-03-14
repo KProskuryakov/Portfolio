@@ -4,7 +4,6 @@ let favicon = require('serve-favicon');
 let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
-let bcrypt = require('bcrypt-nodejs');
 let session = require('express-session');
 
 let index = require('./routes/index');
@@ -14,46 +13,9 @@ let user = require('./routes/user');
 let register = require('./routes/register');
 let logout = require('./routes/logout');
 
-const monk = require('monk');
-const db = monk("localhost:27017/myproject");
-
 let app = express();
 
-app.use(function(req,res,next){
-    req.db = db;
-    next();
-});
-
-let passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
-
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-        let collection = db.get('usercollection');
-        collection.findOne({ username: username }, function(err, user) {
-            if (err) { return done(err); }
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
-            }
-            bcrypt.compare(password, user.password, function(err, res) {
-                if (!res) {
-                    return done(null, false, { message: 'Incorrect password.' });
-                }
-                return done(null, user);
-            });
-        });
-    }
-));
-
-passport.serializeUser(function(user, done) {
-    done(null, user._id);
-});
-
-passport.deserializeUser(function(id, done) {
-    let collection = db.get('usercollection');
-    collection.findOne({_id: id}, '-password', function(err, user) {
-        done(err, user);
-    });
-});
+let passport = require('./passport');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
