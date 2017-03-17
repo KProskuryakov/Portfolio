@@ -31,24 +31,6 @@ router.post('/', co.wrap(function* (req, res, next) {
             return res.redirect('/');
         });
     }
-
-
-    // bcrypt.hash(userPassword, null, null, function(err, hash) {
-    //     // Submit to the DB
-    //     userCollection.insert({
-    //         "username" : username,
-    //         "password": hash
-    //     }, function (err, doc) {
-    //         if (err) {
-    //             // If it failed, return error
-    //             res.send("There was a problem adding the information to the database.");
-    //         }
-    //         else {
-    //             // And forward to success page
-    //             res.redirect("/");
-    //         }
-    //     });
-    // });
 }));
 
 module.exports = router;

@@ -36,3 +36,6 @@ Have mongodb installed. Now we're gonna make a mongod instance.
 mongod --dbpath=./data
 ```
 
+### nodemon
+
+This is a useful little module thing that restarts the server when any js files are changed in the fs. I have it installed globally.

@@ -1,8 +1,13 @@
 extends layout
 
 block content
+    h1= title
     if userpage
         p= userpage.username + "'s page."
         p This is where user data would be shown.
+        if userpage.lasergameLevels
+            each level, i in userpage.lasergameLevels
+                li
+                    a(href='/lasergame?username=' + userpage.username + '&level=' + i) #{level.name}
     else
         p Something is wrong and there's nothing here!

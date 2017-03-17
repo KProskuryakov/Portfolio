@@ -5,6 +5,7 @@ const ctx = canvas.getContext("2d");
 const textArea = document.getElementById("game-text-area");
 const importPre = document.getElementById("imported-pre");
 const pathsPre = document.getElementById("paths-pre");
+const hiddenData = document.getElementById("hidden-data");
 
 
 const DIRECTION_NORTH = Symbol('North');
@@ -24,8 +25,8 @@ const PIECE_BLUE = Symbol('forwardSlash');
 const PIECE_RED = Symbol('forwardSlash');
 const PIECE_GREEN = Symbol('forwardSlash');
 
-const END_BLOCKED = Symbol('blocked');
-const END_LOOP = Symbol('loop');
+const END_BLOCKED = 'END_BLOCKED';
+const END_LOOP = 'END_LOOP';
 
 const TILE_FULL = 50;
 const TILE_HALF = TILE_FULL / 2;
@@ -186,6 +187,10 @@ class Color {
             case "white":
                 return new Color(255, 255, 255);
         }
+    }
+
+    static fromJSON(color) {
+        return new Color(color.r, color.g, color.b);
     }
 }
 
@@ -710,7 +715,7 @@ class LaserGrid extends CanvasComponent {
 class Ending {
     /**
      *
-     * @param {number|Symbol} end
+     * @param {number|string} end
      * @param {Color} color
      */
     constructor(end, color) {
@@ -724,15 +729,20 @@ class Ending {
      */
     toString() {
         let string = "";
-        if (this.end == END_BLOCKED) {
-            string += "blocked";
-        } else if(this.end == END_LOOP) {
-            string += "loop";
-        } else {
-            string += this.end;
-        }
+        string += this.end;
         string += " " + this.color.toName();
         return string;
+    }
+
+
+    static fromJSON(ending) {
+        if (ending.end === "blocked") {
+            return new Ending(END_BLOCKED, Color.fromJSON(ending.color));
+        } else if (ending.end === "loop") {
+            return new Ending(END_LOOP, Color.fromJSON(ending.color));
+        } else {
+            return new Ending(ending.end, Color.fromJSON(ending.color));
+        }
     }
 
     /**
@@ -816,6 +826,8 @@ function init() {
 
     lasergrid.calculateAllPaths(); // has to be done here to make sure everything is made
     lasergrid.calculateDrawPathWrapper();
+
+    importHiddenData();
 }
 
 /**
@@ -840,6 +852,29 @@ function onClick(event) {
     lasergrid.processMouseClick(loc.x, loc.y);
     toolbar.processMouseClick(loc.x, loc.y);
     draw();
+}
+
+function importHiddenData() {
+    if (hiddenData.innerHTML !== "") {
+        let leveldata = JSON.parse(hiddenData.innerHTML);
+        let tempPathsList = leveldata.level;
+        let newPathsList = [null];
+        console.log(tempPathsList);
+        for (let i = 1; i <= 20; i++) {
+
+            let arrayOfEndings = tempPathsList[i];
+            let newArrayOfEndings = [];
+            for (let j = 0; j < arrayOfEndings.length; j++) {
+                newArrayOfEndings[j] = Ending.fromJSON(arrayOfEndings[j]);
+            }
+            newPathsList[i] = newArrayOfEndings;
+        }
+
+        lasergrid.importedPathsList = newPathsList;
+
+        logImportPaths();
+        logPaths();
+    }
 }
 
 function importButtonPress() {
@@ -981,6 +1016,23 @@ function windowToCanvas(x, y) {
         x: x - bbox.left * (canvas.width / bbox.width),
         y: y - bbox.top * (canvas.height / bbox.height)
     };
+}
+
+function uploadPaths() {
+    window.fetch('/lasergame/upload', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({level: lasergrid.paths, name: "test"})
+    }).then(function(response) {
+        if (response.status == 401) {
+            alert('Must be logged in to upload a level!');
+        } else {
+            alert('Level uploaded! (Probably)');
+        }
+    });
 }
 
 init();

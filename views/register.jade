@@ -1,6 +1,7 @@
 extends layout
 
 block content
+    h1= title
     form#formAddUser(name="adduser",method="post",action="/register")
         input#inputUserName(type="text", placeholder="username", name="username")
         input#inputUserPassword(type="password", placeholder="password", name="password")

@@ -26,11 +26,41 @@ users.findAll = co.wrap(function* () {
     return yield userCollection.find('-password');
 });
 
+users.findAllUsernames = co.wrap(function* () {
+    try {
+        return yield userCollection.find({}, 'username');
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 users.insert = co.wrap(function* (username, password) {
-    return yield userCollection.insert({
+    let result = yield userCollection.insert({
         "username" : username,
         "password": password
     });
+    return result.insertedId;
+});
+
+users.addLasergameLevel = co.wrap(function* (userID, pathsString, name) {
+    let currentDate = new Date();
+    yield userCollection.update(
+        {_id: userID}, {
+            $push: {
+                lasergameLevels: {
+                    level: pathsString,
+                    name: name,
+                    uploadTime: currentDate.toString(),
+                    solutions: 0
+                }
+            }
+        }
+    );
+});
+
+users.getLasergameLevel = co.wrap(function* (username, index) {
+    let user = yield users.findByUsername(username);
+    return JSON.stringify(user.lasergameLevels[index]);
 });
 
 module.exports = {users: users};

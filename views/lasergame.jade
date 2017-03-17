@@ -8,6 +8,9 @@ block content
         div.vertical-div
             textarea#game-text-area(rows="20", cols="50", style="resize: none;")
             button.flex-button(onclick="importButtonPress();") Import!
+            button.flex-button(onclick="uploadPaths();") Upload!
+
+    p#hidden-data(hidden)= data
 
     script(src="javascripts/lasergame.js")
 
