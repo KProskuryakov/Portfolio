@@ -7,7 +7,6 @@ const importPre = document.getElementById("imported-pre");
 const pathsPre = document.getElementById("paths-pre");
 const hiddenData = document.getElementById("hidden-data");
 
-
 const DIRECTION_NORTH = Symbol('North');
 const DIRECTION_SOUTH = Symbol('South');
 const DIRECTION_EAST = Symbol('East');
@@ -42,6 +41,7 @@ class Piece {
         this.img.onload = () => {draw()};
         this.img.src = src;
     }
+
 
     /**
      * Draws the piece's img at a given tile location
@@ -570,7 +570,7 @@ class LaserGrid extends CanvasComponent {
         for (let edge = 1; edge <= 20; edge++) {
             this.calculatePath(edge, LaserGrid.edgeNumberToLaser(edge));
         }
-        logPaths();
+        logCurrentPaths();
         if (this.importedPathsList.length > 0) {
             logImportPaths();
         }
@@ -873,7 +873,7 @@ function importHiddenData() {
         lasergrid.importedPathsList = newPathsList;
 
         logImportPaths();
-        logPaths();
+        logCurrentPaths();
     }
 }
 
@@ -900,13 +900,19 @@ function importButtonPress() {
     }
     console.log(pathsList);
     lasergrid.importedPathsList = pathsList;
+    logCurrentPaths();
     logImportPaths();
-    logPaths();
 }
 
-function logPaths() {
-    let element = pathsPre;
-    let paths = lasergrid.paths;
+function logCurrentPaths() {
+    logPaths(pathsPre, lasergrid.paths, lasergrid.importedPathsList);
+}
+
+function logImportPaths() {
+    logPaths(importPre, lasergrid.importedPathsList, lasergrid.paths);
+}
+
+function logPaths(element, paths, otherPaths) {
     element.innerHTML = "";
     for (let i = 1; i <= 20; i++) {
         let path = paths[i];
@@ -926,60 +932,11 @@ function logPaths() {
         } else {
             line += path[0].toString();
         }
-        if (lasergrid.importedPathsList.length > 0) {
+        if (otherPaths.length > 0) {
             let equality = true;
-            if (lasergrid.importedPathsList[i].length === paths[i].length) {
+            if (otherPaths[i].length === paths[i].length) {
                 for (let ei = 0; ei < paths[i].length; ei++) {
-                    if(!paths[i][ei].equals(lasergrid.importedPathsList[i][ei])) {
-                        equality = false;
-                        break;
-                    }
-                }
-            } else {
-                equality = false;
-            }
-            if (equality) {
-                element.innerHTML += "<span style='color: green'>" + line + "</span>";
-            } else {
-                element.innerHTML += "<span style='color: red'>" + line + "</span>";
-            }
-
-        } else {
-            element.innerHTML += line;
-        }
-
-        if (i < 20) {
-            element.innerHTML += "\n";
-        }
-    }
-}
-
-function logImportPaths() {
-    let element = importPre;
-    let paths = lasergrid.importedPathsList;
-    element.innerHTML = "";
-    for (let i = 1; i <= 20; i++) {
-        let path = paths[i];
-        let line = i + "";
-        if (i < 10) {
-            line += "  -> ";
-        } else {
-            line += " -> ";
-        }
-        if (path.length > 1) {
-            line += "{" + path[0].toString() + ", ";
-            for (let space = 1; i < path.length - 1; i++) {
-                line += path[space].toString() + ", ";
-            }
-            line += path[path.length - 1].toString() + "}";
-        } else {
-            line += path[0].toString();
-        }
-        if (lasergrid.paths.length > 0) {
-            let equality = true;
-            if (lasergrid.paths[i].length === paths[i].length) {
-                for (let ei = 0; ei < paths[i].length; ei++) {
-                    if(!paths[i][ei].equals(lasergrid.paths[i][ei])) {
+                    if(!paths[i][ei].equals(otherPaths[i][ei])) {
                         equality = false;
                         break;
                     }

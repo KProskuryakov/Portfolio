@@ -8,6 +8,6 @@ block content
         if userpage.lasergameLevels
             each level, i in userpage.lasergameLevels
                 li
-                    a(href='/lasergame?username=' + userpage.username + '&level=' + i) #{level.name}
+                    a(href='/lasergame?username=' + userpage.username + '&level=' + i) #{level.name} - #{level.uploadTime} - #{level.solutions}
     else
         p Something is wrong and there's nothing here!

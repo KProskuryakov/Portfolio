@@ -39,3 +39,8 @@ mongod --dbpath=./data
 ### nodemon
 
 This is a useful little module thing that restarts the server when any js files are changed in the fs. I have it installed globally.
+
+
+### body-parser
+
+Apparently this parses req.body as json for me if I send a json stringified string object thing. That's cool to know.
