@@ -15,7 +15,7 @@ a {
     -webkit-justify-content: center;
     justify-content: center;
     width: 1350px;
-    height: 450px;
+    height: 500px;
     background-color: #e6a5a5;
     margin: auto;
     border: medium groove #000000;
@@ -24,7 +24,12 @@ a {
 .flex-pre {
     margin: 15px;
     width: 250px;
+    height: auto;
     background-color: lightcyan;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
 }
 
 .flex-button {

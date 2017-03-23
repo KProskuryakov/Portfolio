@@ -7,7 +7,7 @@ let router = express.Router();
 let fs = require('fs');
 
 let notesList = [];
-fs.readdir('./public/notes', function(err, files) {
+fs.readdir('./notes', function(err, files) {
     if (err) {
         console.log(err);
         return;
@@ -19,7 +19,7 @@ fs.readdir('./public/notes', function(err, files) {
 });
 
 router.get('/', function(req, res, next) {
-    res.render('notes', {notesList: notesList});
+    res.render('notes', {notesList: notesList, title: 'Notes'});
 });
 
 router.get('/:note', function(req, res, next) {

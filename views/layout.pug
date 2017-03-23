@@ -1,27 +1,42 @@
 doctype html
 html
     head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
         title= title
         link(rel='stylesheet', href='/stylesheets/style.css')
+        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", crossorigin="anonymous")
     body
-        ul.navbar-ul
-            li.navbar-li
-                a(href="/") Home
-            li.navbar-li
-                a(href="/lasergame") Laser Game
-            li.navbar-li
-                a(href="/users") All Users
-            li.navbar-li
-                a(href="/notes") Notes
-            if !user
-                li.navbar-li(style="float:right")
-                    a(href="/login") Login
-                li.navbar-li(style="float:right")
-                    a(href="/register") Register
-            else
-                li.navbar-li(style="float:right")
-                    a(href="/user/#{user.username}")= user.username
-                li.navbar-li(style="float:right")
-                    a(href="/logout") Logout
-    block content
-        p I guess there's no content here :(
+
+        nav.navbar.navbar-default
+            .container-fluid
+                .collapse.navbar-collapse
+                    ul.nav.navbar-nav
+                        li(class=title=='Home'?'active':undefined)
+                            a(href="/") Home
+                        li(class=title=='Laser Game'?'active':undefined)
+                            a(href="/lasergame") Laser Game
+                        li(class=title=='All Users'?'active':undefined)
+                            a(href="/users") All Users
+                        li(class=title=='Notes'?'active':undefined)
+                            a(href="/notes") Notes
+                    ul.nav.navbar-nav.navbar-right
+                        li.dropdown
+                            a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")= !user?'Log in':user.username
+                                span.caret
+                            ul.dropdown-menu
+                                if !user
+                                    li
+                                        a(href="/login") Login
+                                    li
+                                        a(href="/register") Register
+                                else
+                                    li.navbar-li(style="float:right")
+                                        a(href="/user/#{user.username}") My Account
+                                    li.navbar-li(style="float:right")
+                                        a(href="/logout") Logout
+        block content
+            p I guess there's no content here :(
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
