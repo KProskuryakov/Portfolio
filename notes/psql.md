@@ -1,4 +1,5 @@
 # PostgreSQL Notes
+## Learning SQL
 ### Setup on Windows
 It took me a little while to set up. There was a bit of fiddling that I had to do through pgadmin.
 
@@ -77,3 +78,42 @@ INSERT INTO weather (date, city, temp_hi, temp_lo) VALUES ('1994-11-29', 'Haywar
 ```
 
 ### Querying a table
+
+```
+SELECT * FROM weather
+```
+
+# Portfolio DB
+### Setup
+I would replace username and password with the appropriate values, of course.
+```js
+module.exports.pgconfig = {
+    user: 'username',
+    database: 'portfolio',
+    password: 'password',
+    host: 'localhost',
+    port: 5432,
+    max: 10,
+    idleTimeoutMillis: 30000
+};
+```
+### Accessing it
+Who needs pgAdmin when you have the command line and time?
+```
+psql portfolio
+```
+### Current user setup
+It's a huge pain to enter these manually. One day I'll make an 'if not created, create' clause.
+```
+CREATE TABLE users (
+    email varchar(256),
+    password varchar(256)
+);
+```
+### Insert new users
+Unfortunately all of these queries would have to be changed if the structure of the user is changed significantly.
+Glad I can keep them all in the same file and they're probably more reusable than the ones for mongo.
+```
+pgPool.query("INSERT INTO users (email, password) VALUES ($1, $2)", [email, pass]);
+```
+

@@ -3,6 +3,7 @@ let router = express.Router();
 
 let bcrypt = require('bcrypt');
 const users = require('../db').users;
+const pgUsers = require('../postgresdb').pgUsers;
 
 const co = require('co');
 
@@ -22,14 +23,16 @@ router.post('/', co.wrap(function* (req, res, next) {
         res.redirect('/register');
     } else {
         let hash = yield bcrypt.hash(userPassword, 10);
-        yield users.insert(username, hash);
-        let user = yield users.findByUsername(username);
-        req.login(user, function(err) {
-            if (err) {
-                return next(err);
-            }
-            return res.redirect('/');
-        });
+        // yield users.insert(username, hash);
+        yield pgUsers.insert(username, hash, next);
+        res.redirect('/')
+        // let user = yield users.findByUsername(username);
+        // req.login(user, function(err) {
+        //     if (err) {
+        //         return next(err);
+        //     }
+        //     res.redirect('/');
+        // });
     }
 }));
 

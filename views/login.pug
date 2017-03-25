@@ -1,8 +1,12 @@
 extends layout
 
 block content
-    h1= title
-    form#formLogin(name="loginform",method="post",action="/login")
-        input#inputUserName(type="text", placeholder="username", name="username")
-        input#inputUserEmail(type="password", placeholder="password", name="password")
-        button#btnSubmit(type="submit") submit
+
+    .container
+        form.form-signin
+            h2.form-signin-heading Please Log In
+            label.sr-only(for="inputEmail") Email Address
+            input.form-control#inputEmail(type="email", placeholder="Email Address" required autofocus)
+            label.sr-only(for="inputPassword") Password
+            input.form-control#inputPassword(type="password", placeholder="Password" required)
+            button.btn.btn-lg.btn-primary.btn-block(type="submit") Log in
