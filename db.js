@@ -63,4 +63,4 @@ users.getLasergameLevel = co.wrap(function* (username, index) {
     return JSON.stringify(user.lasergameLevels[index]);
 });
 
-module.exports = {users: users};
+module.exports = {siteUsers: users};

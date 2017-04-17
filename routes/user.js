@@ -1,22 +1,19 @@
 let express = require('express');
 let router = express.Router();
-let users = require('../db').users;
+// let users = require('../db').siteUsers;
 
-const co = require('co');
+const siteUsers = require('../postgresdb').siteUsers;
+const lasergameLevels = require('../postgresdb').lasergameLevels;
 
 router.get('/:user', function (req, res, next) {
-    if (req.user && req.params.user === req.user.username) {
-        res.render('user', {title: req.user.username, userpage: req.user});
-    } else {
-        co(function* () {
-            let user = yield users.findByUsername(req.params.user);
-            if (user) {
-                res.render('user', {title: user.username, userpage: user});
-            } else {
-                next();
-            }
+    siteUsers.getUserByDisplayName(req.params.user, function onGetUser(err, pageOwner) {
+        if (err) return next(err);
+        if (!pageOwner) next();
+        lasergameLevels.getAllLevelsOfPlayer(pageOwner.display_name, function onGetAllLevelsOfPlayer(err, levelArray) {
+            if (err) return next(err);
+            res.render('user', {title: pageOwner.display_name, pageOwner: pageOwner, levelArray: levelArray});
         });
-    }
+    });
 });
 
 module.exports = router;

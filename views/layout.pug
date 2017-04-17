@@ -17,7 +17,7 @@ html
                         span.icon-bar
                         span.icon-bar
                         span.icon-bar
-                    a.navbar-brand(href="#") Kostya Pro
+                    a.navbar-brand(href="/") Kostya Pro
                 .collapse.navbar-collapse#navbar
                     ul.nav.navbar-nav
                         li(class=title=='Home'?'active':undefined)
@@ -25,22 +25,22 @@ html
                         li(class=title=='Laser Game'?'active':undefined)
                             a(href="/lasergame") Laser Game
                         li(class=title=='All Users'?'active':undefined)
-                            a(href="/users") All Users
+                            a(href="/siteUsers") All Users
                         li(class=title=='Notes'?'active':undefined)
                             a(href="/notes") Notes
                     ul.nav.navbar-nav.navbar-right
                         li.dropdown
-                            a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")= !user?'Log in':user.username
+                            a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")= !user?'Log in':user.display_name
                                 span.caret
                             ul.dropdown-menu
                                 if !user
                                     li
-                                        a(href="/login") Login
+                                        a(href="/login") Log In
                                     li
                                         a(href="/register") Register
                                 else
                                     li
-                                        a(href="/user/#{user.username}") My Account
+                                        a(href="/user/" + user.display_name) My Account
                                     li
                                         a(href="/logout") Logout
         .container

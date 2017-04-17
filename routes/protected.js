@@ -9,7 +9,6 @@ router.get('/', function(req, res) {
     } else {
         res.status(401).send('Not logged in!');
     }
-
 });
 
 module.exports = router;

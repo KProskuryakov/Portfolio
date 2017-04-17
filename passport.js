@@ -7,37 +7,36 @@ let session = require('express-session');
 let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
 
-let co = require('co');
+let siteUsers = require('./postgresdb').siteUsers;
 
-let users = require('./db').users;
-
-passport.use(new LocalStrategy(co.wrap(function* (username, password, done) {
-    try {
-        let user = yield users.getUserPassword(username);
+passport.use(new LocalStrategy({usernameField: 'email'}, function strategy (email, password, done) {
+    console.log('Strategy activated with email: ' + email);
+    siteUsers.getUserByEmail(email, function onPasswordGet(err, user) {
+        if (err) return done(err);
         if (!user) {
+            console.log('Existing user not found for email: ' + email);
             return done(null, false, {message: 'Incorrect username.'});
         }
-        let correct = yield bcrypt.compare(password, user.password);
-        if (!correct) {
-            return done(null, false, {message: 'Incorrect password.'});
-        }
-        return done(null, user);
-    } catch (err) {
-        console.log(err);
-    }
-})));
-
-passport.serializeUser(function(user, done) {
-    done(null, user._id);
-});
-
-passport.deserializeUser(co.wrap(function* (id, done) {
-    try {
-        let user = yield users.findById(id);
-        done(null, user);
-    } catch (err) {
-        console.log(err);
-    }
+        console.log('Existing user found for email: ' + email);
+        bcrypt.compare(password, user.password, function onBcryptHashCompare(err, result) {
+            if (err) return done(err);
+            if (result === false) {
+                console.log('Incorrect password for email: ' + email);
+                return done(null, false, {message: 'Incorrect password.'});
+            }
+            console.log('Password accepted for email: ' + email);
+            return done(null, user);
+        });
+    });
 }));
 
+passport.serializeUser(function(user, done) {
+    done(null, user.email);
+});
+
+passport.deserializeUser(function (email, done) {
+    siteUsers.getUserByEmail(email, function onGetUser (err, user) {
+        return done(err, user);
+    });
+});
 module.exports = passport;

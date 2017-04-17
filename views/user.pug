@@ -2,12 +2,12 @@ extends layout
 
 block content
     h1= title
-    if userpage
-        p= userpage.username + "'s page."
+    if pageOwner
+        p= pageOwner.display_name + "'s page."
         p This is where user data would be shown.
-        if userpage.lasergameLevels
-            each level, i in userpage.lasergameLevels
+        if levelArray
+            each level in levelArray
                 li
-                    a(href='/lasergame?username=' + userpage.username + '&level=' + i) #{level.name} - #{level.uploadTime} - #{level.solutions}
+                    a(href='/lasergame?id=' + level.id) #{level.name} - #{level.upload_timestamp} - #{level.times_beaten}
     else
         p Something is wrong and there's nothing here!

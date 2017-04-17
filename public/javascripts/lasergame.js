@@ -409,7 +409,7 @@ class Toolbar extends CanvasComponent {
         ctx.globalAlpha = 0.2;
         for (let i = 0; i < numToPiece.length; i++) {
             let piece = pieces.get(numToPiece[i]);
-            if (i != this.selectedPiece && piece.tile.isValid()) {
+            if (i !== this.selectedPiece && piece.tile.isValid()) {
                 let loc = new Tile(this.tile.add(new Tile(i, 0)).tileX, this.tile.tileY).toPixels();
                 ctx.fillRect(loc.x, loc.y, TILE_FULL, TILE_FULL);
             }
@@ -424,7 +424,7 @@ class Toolbar extends CanvasComponent {
      */
     processMouseClick(x, y) {
         let relativeTile = super.processMouseClick(x, y);
-        if (relativeTile != null) {
+        if (relativeTile !== null) {
             this.selectedPiece = relativeTile.tileX;
         }
     }
@@ -512,11 +512,11 @@ class LaserGrid extends CanvasComponent {
      */
     processMouseClick(x, y) {
         let relativeTile = super.processMouseClick(x, y);
-        if (relativeTile != null) {
+        if (relativeTile !== null) {
             if (relativeTile.compare(new Tile(1, 1), (v1, v2) => v1 >= v2) && relativeTile.compare(new Tile(5, 5), (v1, v2) => v1 <= v2)) {
                 let loc = relativeTile.minus(new Tile(1, 1));
                 let piece = this.grid[loc.tileY][loc.tileX];
-                if (piece != null) {
+                if (piece !== null) {
                     this.removePiece(piece);
                 } else {
                     this.setPiece(toolbar.getSelectedPiece(), loc);
@@ -525,7 +525,7 @@ class LaserGrid extends CanvasComponent {
                 this.calculateDrawPathWrapper();
             }
             let newEdge = LaserGrid.tileToEdgeNumber(relativeTile.add(new Tile(-1, -1)));
-            if (newEdge != 0) {
+            if (newEdge !== 0) {
                 this.selectedEdge = newEdge;
             }
             this.calculateDrawPathWrapper();
@@ -751,7 +751,7 @@ class Ending {
      * @returns {boolean}
      */
     equals(otherEnding) {
-        return this.end == otherEnding.end && this.color.equals(otherEnding.color);
+        return this.end === otherEnding.end && this.color.equals(otherEnding.color);
     }
 
     /**
@@ -760,9 +760,9 @@ class Ending {
      */
     static endingFromLogString(logString) {
         let end = 0;
-        if (logString.indexOf("blocked") != -1) {
+        if (logString.indexOf("blocked") !== -1) {
             end = END_BLOCKED;
-        } else if (logString.indexOf("loop") != -1) {
+        } else if (logString.indexOf("loop") !== -1) {
             end = END_LOOP;
         } else {
             end = Number(logString.slice(0, logString.indexOf(" ")));
@@ -826,8 +826,6 @@ function init() {
 
     lasergrid.calculateAllPaths(); // has to be done here to make sure everything is made
     lasergrid.calculateDrawPathWrapper();
-
-    importHiddenData();
 }
 
 /**
@@ -877,16 +875,46 @@ function importHiddenData() {
     }
 }
 
+function importLevel(levelID) {
+    if (!levelID) return;
+    window.fetch(`/api/lasergame/${levelID}`, {
+        method: 'GET',
+        credentials: 'same-origin'
+    }).then(function(response) {
+        return response.json();
+    }).then(function(parsedJSON) {
+        let tempPathsList = parsedJSON.level_data;
+        let newPathsList = [null];
+        console.log(tempPathsList);
+        for (let i = 1; i <= 20; i++) {
+
+            let arrayOfEndings = tempPathsList[i];
+            let newArrayOfEndings = [];
+            for (let j = 0; j < arrayOfEndings.length; j++) {
+                newArrayOfEndings[j] = Ending.fromJSON(arrayOfEndings[j]);
+            }
+            newPathsList[i] = newArrayOfEndings;
+        }
+
+        lasergrid.importedPathsList = newPathsList;
+
+        logImportPaths();
+        logCurrentPaths();
+    }).catch(function(err) {
+        alert('Import Level Failed!' + err); //TODO better error handling here
+    });
+}
+
 function importButtonPress() {
     let textareastuff = textArea.value.split("\n");
-    if (textareastuff.length != 20) {
+    if (textareastuff.length !== 20) {
         alert("There need to be 20 lines!");
         return;
     }
     let pathsList = [];
     for (let i = 0; i < 20; i++) {
         let path = textareastuff[i].slice(6);
-        if (path.charAt(0) == "{") {
+        if (path.charAt(0) === "{") {
             let endingsList = path.split(", ");
             endingsList[0] = endingsList[0].slice(1);
             endingsList[endingsList.length - 1] = endingsList[endingsList.length - 1].slice(0, endingsList[endingsList.length - 1].length - 1);
@@ -976,15 +1004,15 @@ function windowToCanvas(x, y) {
 }
 
 function uploadPaths() {
-    window.fetch('/lasergame/upload', {
+    window.fetch('/api/lasergame/upload', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         credentials: 'same-origin',
-        body: JSON.stringify({level: lasergrid.paths, name: "test"})
+        body: JSON.stringify({level_data: lasergrid.paths, name: "test"})
     }).then(function(response) {
-        if (response.status == 401) {
+        if (response.status === 401) {
             alert('Must be logged in to upload a level!');
         } else {
             alert('Level uploaded! (Probably)');

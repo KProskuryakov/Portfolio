@@ -6,11 +6,9 @@ block content
         pre#paths-pre.flex-pre This is where the paths are supposed to be
         pre#imported-pre.flex-pre Imported stuff
         div.vertical-div
-            textarea#game-text-area(rows="20", cols="50", style="resize: none;")
             button.flex-button(onclick="importButtonPress();") Import!
             button.flex-button(onclick="uploadPaths();") Upload!
 
-    p#hidden-data(hidden)= data
-
     script(src="javascripts/lasergame.js")
+    script importLevel(#{levelID});
 

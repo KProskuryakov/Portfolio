@@ -15,10 +15,12 @@ let logout = require('./routes/logout');
 let protectedRoute = require('./routes/protected');
 let usersRoute = require('./routes/users');
 let notesRoute = require('./routes/notes');
+let apiLasergameRoute = require('./routes/api_lasergame');
 
 let app = express();
 
 let passport = require('./passport');
+let secretkey = require('./secret').secretkey;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,9 +31,9 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser("Incredible!"));
+app.use(cookieParser(secretkey));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({secret: "Incredible!"}));
+app.use(session({secret: secretkey, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -49,8 +51,9 @@ app.use('/user', user);
 app.use('/register', register);
 app.use('/logout', logout);
 app.use('/protected', protectedRoute);
-app.use('/users', usersRoute);
+app.use('/siteUsers', usersRoute);
 app.use('/notes', notesRoute);
+app.use('/api/lasergame', apiLasergameRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
