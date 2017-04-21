@@ -1,14 +1,15 @@
 extends layout
 
+block stylesheets
+    link(rel='stylesheet', href='/stylesheets/lasergame.css')
+
 block content
     div.flex-container
         canvas#laser-game-canvas(width="402", height="402")
         pre#paths-pre.flex-pre This is where the paths are supposed to be
         pre#imported-pre.flex-pre Imported stuff
         div.vertical-div
-            button.flex-button(onclick="importButtonPress();") Import!
             button.flex-button(onclick="uploadPaths();") Upload!
 
     script(src="javascripts/lasergame.js")
     script importLevel(#{levelID});
-

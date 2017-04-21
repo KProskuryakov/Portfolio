@@ -1,7 +1,9 @@
 extends layout
 
-block content
+block stylesheets
+    link(rel='stylesheet', href='/stylesheets/form_signin.css')
 
+block content
     .container
         form.form-signin(method="POST", action="/login")
             h2.form-signin-heading Please Log In
