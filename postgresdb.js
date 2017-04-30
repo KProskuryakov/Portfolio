@@ -1,7 +1,6 @@
 // This file is for the express purpose of converting the existing mongodb system to postgresql
 let pg = require('pg');
 let config = require('./secret').pgconfig;
-let co = require('co');
 
 let pool = new pg.Pool(config);
 
@@ -9,6 +8,9 @@ let pool = new pg.Pool(config);
 process.on('unhandledRejection', function(e) {
     console.log(e.message, e.stack)
 });
+
+pool.query("CREATE TABLE IF NOT EXISTS site_users (email varchar(256) PRIMARY KEY, password varchar(80) NOT NULL, display_name varchar(64) UNIQUE NOT NULL);");
+pool.query("CREATE TABLE IF NOT EXISTS lasergame_levels (id serial PRIMARY KEY, name varchar(64) NOT NULL, level_data jsonb NOT NULL, upload_timestamp timestamptz DEFAULT current_timestamp, times_beaten int DEFAULT 0, user_display_name varchar(64) references site_users (display_name));")
 
 /**
  * @namespace
@@ -110,7 +112,7 @@ let lasergameLevels = {
     /**
      * Represents a LasergameLevel in the database
      * @typedef {Object} LasergameLevel
-     * @property id
+     * @property id SERIAL
      * @property name
      * @property level_data
      * @property upload_timestamp
