@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use strict";
 const canvas = document.getElementById("laser-game-canvas");
 const ctx = canvas.getContext("2d");
@@ -7,22 +8,22 @@ const importPre = document.getElementById("imported-pre");
 const pathsPre = document.getElementById("paths-pre");
 const hiddenData = document.getElementById("hidden-data");
 
-const DIRECTION_NORTH = Symbol('North');
-const DIRECTION_SOUTH = Symbol('South');
-const DIRECTION_EAST = Symbol('East');
-const DIRECTION_WEST = Symbol('West');
-const DIRECTION_NONE = Symbol('None');
-const DIRECTION_SPLIT_EAST_WEST = Symbol('Split East-West');
-const DIRECTION_SPLIT_NORTH_SOUTH = Symbol('Split North-South');
+const DIRECTION_NORTH = 'dir north';
+const DIRECTION_SOUTH = 'dir south';
+const DIRECTION_EAST = 'dir east';
+const DIRECTION_WEST = 'dir west';
+const DIRECTION_NONE = 'dir none';
+const DIRECTION_SPLIT_EAST_WEST = 'dir ew';
+const DIRECTION_SPLIT_NORTH_SOUTH = 'dir ns';
 
-const PIECE_FORWARDSLASH = Symbol('forwardSlash');
-const PIECE_BACKSLASH = Symbol('forwardSlash');
-const PIECE_BLACKHOLE = Symbol('forwardSlash');
-const PIECE_SIDESPLIT = Symbol('forwardSlash');
-const PIECE_UPSPLIT = Symbol('forwardSlash');
-const PIECE_BLUE = Symbol('forwardSlash');
-const PIECE_RED = Symbol('forwardSlash');
-const PIECE_GREEN = Symbol('forwardSlash');
+const PIECE_FORWARDSLASH = 'forward slash';
+const PIECE_BACKSLASH = 'backslash';
+const PIECE_BLACKHOLE = 'black hole';
+const PIECE_SIDESPLIT = 'side split';
+const PIECE_UPSPLIT = 'up split';
+const PIECE_BLUE = 'blue';
+const PIECE_RED = 'red';
+const PIECE_GREEN = 'green';
 
 const END_BLOCKED = 'END_BLOCKED';
 const END_LOOP = 'END_LOOP';
@@ -60,10 +61,10 @@ class Mirror extends Piece {
     /**
      * Creates a mirror out of this stuff
      * @param {string} src
-     * @param {Symbol} north
-     * @param {Symbol} east
-     * @param {Symbol} south
-     * @param {Symbol} west
+     * @param {string} north
+     * @param {string} east
+     * @param {string} south
+     * @param {string} west
      */
     constructor(src, north, east, south, west) {
         super(src);
@@ -201,7 +202,7 @@ class Laser {
     /**
      * Constructs a Laser
      * @param {Tile} tile
-     * @param {Symbol} dir
+     * @param {string} dir
      * @param {Color} color
      */
     constructor(tile, dir, color = new Color()) {
@@ -306,7 +307,7 @@ class Tile {
 
     /**
      * returns the next tile in a given direction
-     * @param {Symbol} dir
+     * @param {string} dir
      * @return {Tile}
      */
     nextTile(dir) {
@@ -509,8 +510,9 @@ class LaserGrid extends CanvasComponent {
      * Process mouse clicks on the grid
      * @param {number} x
      * @param {number} y
+     * @param {Toolbar} toolbar
      */
-    processMouseClick(x, y) {
+    processMouseClick(x, y, toolbar) {
         let relativeTile = super.processMouseClick(x, y);
         if (relativeTile !== null) {
             if (relativeTile.compare(new Tile(1, 1), (v1, v2) => v1 >= v2) && relativeTile.compare(new Tile(5, 5), (v1, v2) => v1 <= v2)) {
@@ -759,6 +761,7 @@ class Ending {
      * @param {string} logString (5 black) or (blocked blue) or (loop white)
      */
     static endingFromLogString(logString) {
+        /** @type {number|string} */
         let end = 0;
         if (logString.indexOf("blocked") !== -1) {
             end = END_BLOCKED;
@@ -780,16 +783,16 @@ const lasergrid = new LaserGrid("images/lasergrid.png", new Tile(0, 0), 7, 7);
  */
 const pieces = new Map();
 /**
- * @type {Symbol[]}
+ * @type {string[]}
  */
 const numToPiece = [PIECE_FORWARDSLASH, PIECE_BACKSLASH, PIECE_BLACKHOLE, PIECE_SIDESPLIT, PIECE_UPSPLIT, PIECE_BLUE, PIECE_RED, PIECE_GREEN];
 
 /**
- * @type {Object.<Symbol, Tile>}
+ * @type {Object.<string, Tile>}
  */
 let directionMapping;
 /**
- * @type {Object.<Symbol, Symbol>}
+ * @type {Object.<string, Symbol>}
  */
 let oppositeDirection;
 
@@ -847,7 +850,7 @@ function onMouseMove(event) {
 function onClick(event) {
     //console.log("Clicked here: x" + event.clientX + ", y: " + event.clientY);
     let loc = windowToCanvas(event.clientX, event.clientY);
-    lasergrid.processMouseClick(loc.x, loc.y);
+    lasergrid.processMouseClick(loc.x, loc.y, toolbar);
     toolbar.processMouseClick(loc.x, loc.y);
     draw();
 }
@@ -987,7 +990,7 @@ function logPaths(element, paths, otherPaths) {
         }
     }
 }
-
+ 
 /**
  * Converts the x, y pixel coordinates from window position to relative canvas position
  * @param {number} x clientX

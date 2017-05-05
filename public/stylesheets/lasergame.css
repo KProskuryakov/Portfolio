@@ -1,42 +1,63 @@
 .flex-container {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
-    -webkit-align-items: center;
-    align-items: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    width: 1350px;
-    height: 500px;
-    background-color: #e6a5a5;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+    width: auto;
+    height: auto;
     margin: auto;
-    border: medium groove #000000;
+}
+
+.flex-lasergame-canvas{
+    width: 402px;
+    height: 402px;
+    margin: auto;
+    flex: 0 0;
 }
 
 .flex-pre {
-    margin: 15px;
-    width: 250px;
+    margin: 0px;
+    width: auto;
     height: auto;
     background-color: lightcyan;
-    padding: 0;
+    padding: 0px 0px 0px 10px;
     border: 0;
     font-size: 100%;
     vertical-align: baseline;
+    border-radius: 0;
+    flex: 1 auto;
 }
 
 .flex-button {
-    background-color: #803d39; /* Green */
+    background-color: #009db9;
     border: none;
     color: white;
     padding: 15px 32px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-size: 16px;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-top: 10px;
+    flex: 1 100%;
 }
 
-.vertical-div {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
+.flex-break {
+    width: 0;
+    height: auto;
+    margin-right: auto;
+    margin-left: 0;
+}
+
+@media all and (min-width: 600px) {
+    .flex-lasergame-canvas {
+        margin-left: auto;
+        margin-right: 0;
+    }
+    .flex-pre {
+        flex: 0 auto;
+        width: 300px;
+    }
 }

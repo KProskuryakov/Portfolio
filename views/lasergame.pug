@@ -4,12 +4,14 @@ block stylesheets
     link(rel='stylesheet', href='/stylesheets/lasergame.css')
 
 block content
-    div.flex-container
-        canvas#laser-game-canvas(width="402", height="402")
+    .flex-container
+        canvas#laser-game-canvas.flex-lasergame-canvas(width="402", height="402")
         pre#paths-pre.flex-pre This is where the paths are supposed to be
-        pre#imported-pre.flex-pre Imported stuff
-        div.vertical-div
-            button.flex-button(onclick="uploadPaths();") Upload!
+        if levelID
+            pre#imported-pre.flex-pre Imported stuff
+        .flex-break
+        button.flex-button(onclick="uploadPaths();") Upload!
 
-    script(src="javascripts/lasergame.js")
-    script importLevel(#{levelID});
+    script(src="javascripts/lasergame/lasergame-bundle.js")
+    if levelID
+        script importLevel(#{levelID});
