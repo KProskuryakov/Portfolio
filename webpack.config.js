@@ -1,10 +1,14 @@
+// @ts-nocheck
 var path = require('path');
 
 module.exports = {
-    entry: "./src/lasergame/lasergame.ts",
+    entry: {
+        lasergame: "./src/lasergame/lasergame.ts",
+        secondgame: "./src/secondgame/weirdgame.ts"
+    },
     output: {
-        filename: "lasergame-bundle.js",
-        path: path.resolve(__dirname, 'public/javascripts/lasergame/')
+        filename: "[name]-bundle.js",
+        path: path.resolve(__dirname, 'dist')
     },
     resolve: {
         // Add '.ts' and '.tsx' as a resolvable extension.
