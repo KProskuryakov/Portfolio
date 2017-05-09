@@ -6,7 +6,6 @@ This is also where my notes regarding programming are stored.
 
 Current settings in vscode:
 ```
-// Place your settings in this file to overwrite the default settings
 {
     "editor.renderWhitespace": "boundary",
     "editor.minimap.enabled": true,

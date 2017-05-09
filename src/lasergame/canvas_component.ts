@@ -9,7 +9,7 @@ export default class CanvasComponent {
     widthInTiles: number;
     heightInTiles:number;
     offsetX: number;
-    offsetY: number
+    offsetY: number;
 
     /**
      *
