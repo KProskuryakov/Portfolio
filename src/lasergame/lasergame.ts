@@ -50,8 +50,8 @@ export interface PathsList {
     length: number;
 }
 
-export const toolbar = new Toolbar("images/toolbar.png", new Tile(0, 7), 8, 1, 0, 0, draw);
-export const lasergrid = new LaserGrid("images/lasergrid.png", new Tile(0, 0), 7, 7, 0, 0, draw);
+export const toolbar = new Toolbar("images/toolbar.png", new Tile(0, 7), 8, 1, draw);
+export const lasergrid = new LaserGrid("images/lasergrid.png", new Tile(0, 0), 7, 7, draw);
 
 export const pieces: Array<Piece|Swatch> = [];
 
@@ -61,7 +61,7 @@ export const oppositeDirection: Direction[] = [];
 /**
  * Inits the things that aren't constants
  */
-function init() {
+    function init() {
     canvas.addEventListener("mousemove", onMouseMove, false);
     canvas.addEventListener("click", onClick, false);
 
@@ -88,7 +88,7 @@ function init() {
 
     lasergrid.calculateAllPaths(); // has to be done here to make sure everything is made
     lasergrid.calculateDrawPathWrapper();
-}
+    }
 
 /**
  * Draws all the things
