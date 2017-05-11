@@ -249,6 +249,10 @@ function logPaths(element: HTMLElement, paths: PathsList, otherPaths: PathsList)
         }
     }
 }
+
+function createRandomLevel() {
+    
+}
  
 /**
  * Converts the x, y pixel coordinates from window position to relative canvas position
