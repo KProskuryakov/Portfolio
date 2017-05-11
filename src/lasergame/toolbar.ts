@@ -17,8 +17,8 @@ export default class Toolbar extends CanvasComponent {
      * @param {number} [offsetX = 0] pixel offset for the image
      * @param {number} [offsetY = 0] pixel offset for the image
      */
-    constructor(src: string, tile: Tile, widthInTiles: number, heightInTiles: number, offsetX = 0, offsetY = 0, draw: any) {
-        super(src, tile, widthInTiles, heightInTiles, offsetX, offsetY, draw);
+    constructor(src: string, tile: Tile, widthInTiles: number, heightInTiles: number, draw: () => void, offsetX = 0, offsetY = 0) {
+        super(src, tile, widthInTiles, heightInTiles, draw, offsetX, offsetY);
         this.selectedPiece = 0;
     }
 

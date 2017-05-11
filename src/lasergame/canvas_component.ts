@@ -14,7 +14,7 @@ export default class CanvasComponent {
     /**
      *
      */
-    constructor(src: string, tile: Tile, widthInTiles: number, heightInTiles: number, offsetX = 0, offsetY = 0, draw: any) {
+    constructor(src: string, tile: Tile, widthInTiles: number, heightInTiles: number, draw: () => void, offsetX = 0, offsetY = 0) {
         this.img = new Image();
         this.img.onload = () => {draw()};
         this.img.src = src;
