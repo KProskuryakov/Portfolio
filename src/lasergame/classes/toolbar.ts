@@ -1,4 +1,5 @@
-import { pieces, TILE_FULL } from './lasergame';
+import { pieces } from '../lasergame';
+import { TILE_FULL } from '../const';
 import Tile from './tile';
 import CanvasComponent from './canvas_component';
 

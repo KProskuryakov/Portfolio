@@ -1,4 +1,5 @@
-import { TILE_FULL, directionMapping, Direction } from './lasergame';
+import { TILE_FULL, directionMapping } from '../const';
+import { Direction } from '../enum';
 
 /**
  * A class that represents a tile, holds tileX and tileY

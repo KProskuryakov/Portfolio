@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,258 +73,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var canvas = document.getElementById("laser-game-canvas");
-exports.ctx = canvas.getContext("2d");
-var textArea = document.getElementById("game-text-area");
-var importPre = document.getElementById("imported-pre");
-var pathsPre = document.getElementById("paths-pre");
-var hiddenData = document.getElementById("hidden-data");
-var toolbar_1 = __webpack_require__(9);
-var lasergrid_1 = __webpack_require__(8);
-var tile_1 = __webpack_require__(1);
-var mirror_1 = __webpack_require__(4);
-var swatch_1 = __webpack_require__(5);
-var ending_1 = __webpack_require__(3);
-var color_1 = __webpack_require__(2);
-exports.TILE_FULL = 50;
-exports.TILE_HALF = exports.TILE_FULL / 2;
-var End;
-(function (End) {
-    End[End["Blocked"] = -2] = "Blocked";
-    End[End["Loop"] = -1] = "Loop";
-})(End = exports.End || (exports.End = {}));
-var Direction;
-(function (Direction) {
-    Direction[Direction["North"] = 0] = "North";
-    Direction[Direction["East"] = 1] = "East";
-    Direction[Direction["South"] = 2] = "South";
-    Direction[Direction["West"] = 3] = "West";
-    Direction[Direction["None"] = 4] = "None";
-    Direction[Direction["SplitEastWest"] = 5] = "SplitEastWest";
-    Direction[Direction["SplitNorthSouth"] = 6] = "SplitNorthSouth";
-})(Direction = exports.Direction || (exports.Direction = {}));
-var Pieces;
-(function (Pieces) {
-    Pieces[Pieces["ForwardSlash"] = 0] = "ForwardSlash";
-    Pieces[Pieces["BackSlash"] = 1] = "BackSlash";
-    Pieces[Pieces["BlackHole"] = 2] = "BlackHole";
-    Pieces[Pieces["SideSplit"] = 3] = "SideSplit";
-    Pieces[Pieces["UpSplit"] = 4] = "UpSplit";
-    Pieces[Pieces["Blue"] = 5] = "Blue";
-    Pieces[Pieces["Red"] = 6] = "Red";
-    Pieces[Pieces["Green"] = 7] = "Green";
-})(Pieces = exports.Pieces || (exports.Pieces = {}));
-exports.toolbar = new toolbar_1.default("images/toolbar.png", new tile_1.default(0, 7), 8, 1, 0, 0, draw);
-exports.lasergrid = new lasergrid_1.default("images/lasergrid.png", new tile_1.default(0, 0), 7, 7, 0, 0, draw);
-exports.pieces = [];
-exports.directionMapping = [];
-exports.oppositeDirection = [];
-function init() {
-    canvas.addEventListener("mousemove", onMouseMove, false);
-    canvas.addEventListener("click", onClick, false);
-    exports.pieces[Pieces.ForwardSlash] = new mirror_1.default("images/pieces/mirror_forwardslash.png", Direction.East, Direction.North, Direction.West, Direction.South, draw);
-    exports.pieces[Pieces.BackSlash] = new mirror_1.default("images/pieces/mirror_backslash.png", Direction.West, Direction.South, Direction.East, Direction.North, draw);
-    exports.pieces[Pieces.BlackHole] = new mirror_1.default("images/pieces/mirror_blackhole.png", Direction.None, Direction.None, Direction.None, Direction.None, draw);
-    exports.pieces[Pieces.SideSplit] = new mirror_1.default("images/pieces/mirror_sidesplit.png", Direction.East, Direction.None, Direction.East, Direction.SplitNorthSouth, draw);
-    exports.pieces[Pieces.UpSplit] = new mirror_1.default("images/pieces/mirror_upsplit.png", Direction.None, Direction.North, Direction.SplitEastWest, Direction.North, draw);
-    exports.pieces[Pieces.Blue] = new swatch_1.default("images/pieces/swatch_blue.png", new color_1.default(0, 0, 255), draw);
-    exports.pieces[Pieces.Red] = new swatch_1.default("images/pieces/swatch_red.png", new color_1.default(255, 0, 0), draw);
-    exports.pieces[Pieces.Green] = new swatch_1.default("images/pieces/swatch_green.png", new color_1.default(0, 255, 0), draw);
-    exports.directionMapping[Direction.North] = new tile_1.default(0, -1);
-    exports.directionMapping[Direction.East] = new tile_1.default(1, 0);
-    exports.directionMapping[Direction.South] = new tile_1.default(0, 1);
-    exports.directionMapping[Direction.West] = new tile_1.default(-1, 0);
-    exports.oppositeDirection[Direction.North] = Direction.South;
-    exports.oppositeDirection[Direction.East] = Direction.West;
-    exports.oppositeDirection[Direction.South] = Direction.North;
-    exports.oppositeDirection[Direction.West] = Direction.East;
-    exports.lasergrid.calculateAllPaths();
-    exports.lasergrid.calculateDrawPathWrapper();
-}
-function draw() {
-    exports.ctx.clearRect(0, 0, canvas.width, canvas.height);
-    exports.ctx.fillStyle = '#bcbcbc';
-    exports.ctx.fillRect(0, 0, canvas.width, canvas.height);
-    exports.lasergrid.draw(exports.ctx);
-    exports.toolbar.draw(exports.ctx);
-}
-exports.draw = draw;
-function onMouseMove(event) {
-}
-function onClick(event) {
-    var loc = windowToCanvas(event.clientX, event.clientY);
-    exports.lasergrid.processMouseClick(loc.x, loc.y);
-    exports.toolbar.processMouseClick(loc.x, loc.y);
-    draw();
-}
-function importHiddenData() {
-    if (hiddenData.innerHTML !== "") {
-        var leveldata = JSON.parse(hiddenData.innerHTML);
-        var tempPathsList = leveldata.level;
-        var newPathsList = [null];
-        console.log(tempPathsList);
-        for (var i = 1; i <= 20; i++) {
-            var arrayOfEndings = tempPathsList[i];
-            var newArrayOfEndings = [];
-            for (var j = 0; j < arrayOfEndings.length; j++) {
-                newArrayOfEndings[j] = ending_1.default.fromJSON(arrayOfEndings[j]);
-            }
-            newPathsList[i] = newArrayOfEndings;
-        }
-        exports.lasergrid.importedPathsList = newPathsList;
-        logImportPaths();
-        logCurrentPaths();
-    }
-}
-function importLevel(levelID) {
-    if (!levelID)
-        return;
-    window.fetch("/api/lasergame/" + levelID, {
-        method: 'GET',
-        credentials: 'same-origin'
-    }).then(function (response) {
-        return response.json();
-    }).then(function (parsedJSON) {
-        var tempPathsList = parsedJSON.level_data;
-        var newPathsList = [null];
-        console.log(tempPathsList);
-        for (var i = 1; i <= 20; i++) {
-            var arrayOfEndings = tempPathsList[i];
-            var newArrayOfEndings = [];
-            for (var j = 0; j < arrayOfEndings.length; j++) {
-                newArrayOfEndings[j] = ending_1.default.fromJSON(arrayOfEndings[j]);
-            }
-            newPathsList[i] = newArrayOfEndings;
-        }
-        exports.lasergrid.importedPathsList = newPathsList;
-        logImportPaths();
-        logCurrentPaths();
-    }).catch(function (err) {
-        alert('Import Level Failed!' + err);
-    });
-}
-function importButtonPress() {
-    var textareastuff = textArea.value.split("\n");
-    if (textareastuff.length !== 20) {
-        alert("There need to be 20 lines!");
-        return;
-    }
-    var pathsList = [];
-    for (var i = 0; i < 20; i++) {
-        var path = textareastuff[i].slice(6);
-        if (path.charAt(0) === "{") {
-            var endingsList = path.split(", ");
-            endingsList[0] = endingsList[0].slice(1);
-            endingsList[endingsList.length - 1] = endingsList[endingsList.length - 1].slice(0, endingsList[endingsList.length - 1].length - 1);
-            pathsList[i + 1] = [];
-            for (var j = 0; j < endingsList.length; j++) {
-                pathsList[i + 1].push(ending_1.default.endingFromLogString(endingsList[j]));
-            }
-        }
-        else {
-            pathsList[i + 1] = [ending_1.default.endingFromLogString(path)];
-        }
-    }
-    console.log(pathsList);
-    exports.lasergrid.importedPathsList = pathsList;
-    logCurrentPaths();
-    logImportPaths();
-}
-function logCurrentPaths() {
-    logPaths(pathsPre, exports.lasergrid.paths, exports.lasergrid.importedPathsList);
-}
-exports.logCurrentPaths = logCurrentPaths;
-function logImportPaths() {
-    logPaths(importPre, exports.lasergrid.importedPathsList, exports.lasergrid.paths);
-}
-exports.logImportPaths = logImportPaths;
-function logPaths(element, paths, otherPaths) {
-    element.innerHTML = "";
-    for (var i = 1; i <= 20; i++) {
-        var path = paths[i];
-        var line = i + "";
-        if (i < 10) {
-            line += "  -> ";
-        }
-        else {
-            line += " -> ";
-        }
-        if (path.length > 1) {
-            line += "{" + path[0].toString() + ", ";
-            console.log(path.length);
-            for (var space = 1; space < path.length - 1; space++) {
-                line += path[space].toString() + ", ";
-            }
-            line += path[path.length - 1].toString() + "}";
-        }
-        else {
-            line += path[0].toString();
-        }
-        if (otherPaths.length > 0) {
-            var equality = true;
-            if (otherPaths[i].length === paths[i].length) {
-                for (var ei = 0; ei < paths[i].length; ei++) {
-                    if (!paths[i][ei].equals(otherPaths[i][ei])) {
-                        equality = false;
-                        break;
-                    }
-                }
-            }
-            else {
-                equality = false;
-            }
-            if (equality) {
-                element.innerHTML += "<span style='color: green'>" + line + "</span>";
-            }
-            else {
-                element.innerHTML += "<span style='color: red'>" + line + "</span>";
-            }
-        }
-        else {
-            element.innerHTML += line;
-        }
-        if (i < 20) {
-            element.innerHTML += "\n";
-        }
-    }
-}
-function createRandomLevel() {
-}
-function windowToCanvas(x, y) {
-    var bbox = canvas.getBoundingClientRect();
-    return {
-        x: x - bbox.left * (canvas.width / bbox.width),
-        y: y - bbox.top * (canvas.height / bbox.height)
-    };
-}
-function uploadPaths() {
-    window.fetch('/api/lasergame/upload', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({ level_data: exports.lasergrid.paths, name: "test" })
-    }).then(function (response) {
-        if (response.status === 401) {
-            alert('Must be logged in to upload a level!');
-        }
-        else {
-            alert('Level uploaded! (Probably)');
-        }
-    });
-}
-init();
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var lasergame_1 = __webpack_require__(0);
+var const_1 = __webpack_require__(1);
 var Tile = (function () {
     function Tile(tileX, tileY) {
         if (tileX === void 0) { tileX = -1; }
@@ -333,7 +82,7 @@ var Tile = (function () {
         this.tileY = tileY;
     }
     Tile.TileFromPixels = function (x, y) {
-        return new Tile(Math.floor(x / lasergame_1.TILE_FULL), Math.floor(y / lasergame_1.TILE_FULL));
+        return new Tile(Math.floor(x / const_1.TILE_FULL), Math.floor(y / const_1.TILE_FULL));
     };
     Tile.prototype.isValid = function (maxX, maxY) {
         if (maxX === void 0) { maxX = Infinity; }
@@ -341,7 +90,7 @@ var Tile = (function () {
         return (this.tileX > -1 && this.tileY > -1 && this.tileX < maxX && this.tileY < maxY);
     };
     Tile.prototype.toPixels = function () {
-        return { x: this.tileX * lasergame_1.TILE_FULL, y: this.tileY * lasergame_1.TILE_FULL };
+        return { x: this.tileX * const_1.TILE_FULL, y: this.tileY * const_1.TILE_FULL };
     };
     Tile.prototype.compare = function (tile, comparator) {
         return (comparator(this.tileX, tile.tileX) && comparator(this.tileY, tile.tileY));
@@ -356,7 +105,7 @@ var Tile = (function () {
         return new Tile(this.tileX, this.tileY);
     };
     Tile.prototype.nextTile = function (dir) {
-        return this.add(lasergame_1.directionMapping[dir]);
+        return this.add(const_1.directionMapping[dir]);
     };
     return Tile;
 }());
@@ -364,7 +113,70 @@ exports.default = Tile;
 
 
 /***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tile_1 = __webpack_require__(0);
+var enum_1 = __webpack_require__(2);
+exports.importPre = document.getElementById("imported-pre");
+exports.pathsPre = document.getElementById("paths-pre");
+exports.canvas = document.getElementById("laser-game-canvas");
+exports.ctx = exports.canvas.getContext("2d");
+exports.TILE_FULL = 50;
+exports.TILE_HALF = exports.TILE_FULL / 2;
+exports.directionMapping = [];
+exports.oppositeDirection = [];
+exports.pieces = [];
+exports.directionMapping[enum_1.Direction.North] = new tile_1.default(0, -1);
+exports.directionMapping[enum_1.Direction.East] = new tile_1.default(1, 0);
+exports.directionMapping[enum_1.Direction.South] = new tile_1.default(0, 1);
+exports.directionMapping[enum_1.Direction.West] = new tile_1.default(-1, 0);
+exports.oppositeDirection[enum_1.Direction.North] = enum_1.Direction.South;
+exports.oppositeDirection[enum_1.Direction.East] = enum_1.Direction.West;
+exports.oppositeDirection[enum_1.Direction.South] = enum_1.Direction.North;
+exports.oppositeDirection[enum_1.Direction.West] = enum_1.Direction.East;
+
+
+/***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Direction;
+(function (Direction) {
+    Direction[Direction["North"] = 0] = "North";
+    Direction[Direction["East"] = 1] = "East";
+    Direction[Direction["South"] = 2] = "South";
+    Direction[Direction["West"] = 3] = "West";
+    Direction[Direction["None"] = 4] = "None";
+    Direction[Direction["SplitEastWest"] = 5] = "SplitEastWest";
+    Direction[Direction["SplitNorthSouth"] = 6] = "SplitNorthSouth";
+})(Direction = exports.Direction || (exports.Direction = {}));
+var End;
+(function (End) {
+    End[End["Blocked"] = -2] = "Blocked";
+    End[End["Loop"] = -1] = "Loop";
+})(End = exports.End || (exports.End = {}));
+var Pieces;
+(function (Pieces) {
+    Pieces[Pieces["ForwardSlash"] = 0] = "ForwardSlash";
+    Pieces[Pieces["BackSlash"] = 1] = "BackSlash";
+    Pieces[Pieces["BlackHole"] = 2] = "BlackHole";
+    Pieces[Pieces["SideSplit"] = 3] = "SideSplit";
+    Pieces[Pieces["UpSplit"] = 4] = "UpSplit";
+    Pieces[Pieces["Blue"] = 5] = "Blue";
+    Pieces[Pieces["Red"] = 6] = "Red";
+    Pieces[Pieces["Green"] = 7] = "Green";
+})(Pieces = exports.Pieces || (exports.Pieces = {}));
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -444,14 +256,174 @@ exports.default = Color;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var lasergame_1 = __webpack_require__(0);
-var color_1 = __webpack_require__(2);
+var const_1 = __webpack_require__(1);
+var enum_1 = __webpack_require__(2);
+var toolbar_1 = __webpack_require__(11);
+var lasergrid_1 = __webpack_require__(10);
+var tile_1 = __webpack_require__(0);
+var mirror_1 = __webpack_require__(6);
+var swatch_1 = __webpack_require__(7);
+var ending_1 = __webpack_require__(5);
+var color_1 = __webpack_require__(3);
+exports.toolbar = new toolbar_1.default("images/toolbar.png", new tile_1.default(0, 7), 8, 1, draw);
+exports.lasergrid = new lasergrid_1.default("images/lasergrid.png", new tile_1.default(0, 0), 7, 7, draw);
+exports.pieces = [];
+function init() {
+    const_1.canvas.addEventListener("mousemove", onMouseMove, false);
+    const_1.canvas.addEventListener("click", onClick, false);
+    exports.pieces[enum_1.Pieces.ForwardSlash] = new mirror_1.default("images/pieces/mirror_forwardslash.png", enum_1.Direction.East, enum_1.Direction.North, enum_1.Direction.West, enum_1.Direction.South, draw);
+    exports.pieces[enum_1.Pieces.BackSlash] = new mirror_1.default("images/pieces/mirror_backslash.png", enum_1.Direction.West, enum_1.Direction.South, enum_1.Direction.East, enum_1.Direction.North, draw);
+    exports.pieces[enum_1.Pieces.BlackHole] = new mirror_1.default("images/pieces/mirror_blackhole.png", enum_1.Direction.None, enum_1.Direction.None, enum_1.Direction.None, enum_1.Direction.None, draw);
+    exports.pieces[enum_1.Pieces.SideSplit] = new mirror_1.default("images/pieces/mirror_sidesplit.png", enum_1.Direction.East, enum_1.Direction.None, enum_1.Direction.East, enum_1.Direction.SplitNorthSouth, draw);
+    exports.pieces[enum_1.Pieces.UpSplit] = new mirror_1.default("images/pieces/mirror_upsplit.png", enum_1.Direction.None, enum_1.Direction.North, enum_1.Direction.SplitEastWest, enum_1.Direction.North, draw);
+    exports.pieces[enum_1.Pieces.Blue] = new swatch_1.default("images/pieces/swatch_blue.png", new color_1.default(0, 0, 255), draw);
+    exports.pieces[enum_1.Pieces.Red] = new swatch_1.default("images/pieces/swatch_red.png", new color_1.default(255, 0, 0), draw);
+    exports.pieces[enum_1.Pieces.Green] = new swatch_1.default("images/pieces/swatch_green.png", new color_1.default(0, 255, 0), draw);
+    exports.lasergrid.calculateAllPaths();
+    exports.lasergrid.calculateDrawPathWrapper();
+}
+function draw() {
+    const_1.ctx.clearRect(0, 0, const_1.canvas.width, const_1.canvas.height);
+    const_1.ctx.fillStyle = '#bcbcbc';
+    const_1.ctx.fillRect(0, 0, const_1.canvas.width, const_1.canvas.height);
+    exports.lasergrid.draw(const_1.ctx);
+    exports.toolbar.draw(const_1.ctx);
+}
+function onMouseMove(event) {
+}
+function onClick(event) {
+    var loc = windowToCanvas(event.clientX, event.clientY);
+    exports.lasergrid.processMouseClick(loc.x, loc.y);
+    exports.toolbar.processMouseClick(loc.x, loc.y);
+    draw();
+}
+function importLevel(levelID) {
+    if (!levelID)
+        return;
+    window.fetch("/api/lasergame/" + levelID, {
+        method: 'GET',
+        credentials: 'same-origin'
+    }).then(function (response) {
+        return response.json();
+    }).then(function (parsedJSON) {
+        var tempPathsList = parsedJSON.level_data;
+        var newPathsList = [null];
+        console.log(tempPathsList);
+        for (var i = 1; i <= 20; i++) {
+            var arrayOfEndings = tempPathsList[i];
+            var newArrayOfEndings = [];
+            for (var j = 0; j < arrayOfEndings.length; j++) {
+                newArrayOfEndings[j] = ending_1.default.fromJSON(arrayOfEndings[j]);
+            }
+            newPathsList[i] = newArrayOfEndings;
+        }
+        exports.lasergrid.importedPathsList = newPathsList;
+        logImportPaths();
+        logCurrentPaths();
+    }).catch(function (err) {
+        alert('Import Level Failed!' + err);
+    });
+}
+function logCurrentPaths() {
+    logPaths(const_1.pathsPre, exports.lasergrid.paths, exports.lasergrid.importedPathsList);
+}
+exports.logCurrentPaths = logCurrentPaths;
+function logImportPaths() {
+    logPaths(const_1.importPre, exports.lasergrid.importedPathsList, exports.lasergrid.paths);
+}
+exports.logImportPaths = logImportPaths;
+function logPaths(element, paths, otherPaths) {
+    element.innerHTML = "";
+    for (var i = 1; i <= 20; i++) {
+        var path = paths[i];
+        var line = i + "";
+        if (i < 10) {
+            line += "  -> ";
+        }
+        else {
+            line += " -> ";
+        }
+        if (path.length > 1) {
+            line += "{" + path[0].toString() + ", ";
+            console.log(path.length);
+            for (var space = 1; space < path.length - 1; space++) {
+                line += path[space].toString() + ", ";
+            }
+            line += path[path.length - 1].toString() + "}";
+        }
+        else {
+            line += path[0].toString();
+        }
+        if (otherPaths.length > 0) {
+            var equality = true;
+            if (otherPaths[i].length === paths[i].length) {
+                for (var ei = 0; ei < paths[i].length; ei++) {
+                    if (!paths[i][ei].equals(otherPaths[i][ei])) {
+                        equality = false;
+                        break;
+                    }
+                }
+            }
+            else {
+                equality = false;
+            }
+            if (equality) {
+                element.innerHTML += "<span style='color: green'>" + line + "</span>";
+            }
+            else {
+                element.innerHTML += "<span style='color: red'>" + line + "</span>";
+            }
+        }
+        else {
+            element.innerHTML += line;
+        }
+        if (i < 20) {
+            element.innerHTML += "\n";
+        }
+    }
+}
+function windowToCanvas(x, y) {
+    var bbox = const_1.canvas.getBoundingClientRect();
+    return {
+        x: x - bbox.left * (const_1.canvas.width / bbox.width),
+        y: y - bbox.top * (const_1.canvas.height / bbox.height)
+    };
+}
+function uploadPaths() {
+    window.fetch('/api/lasergame/upload', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ level_data: exports.lasergrid.paths, name: "test" })
+    }).then(function (response) {
+        if (response.status === 401) {
+            alert('Must be logged in to upload a level!');
+        }
+        else {
+            alert('Level uploaded! (Probably)');
+        }
+    });
+}
+init();
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var enum_1 = __webpack_require__(2);
+var color_1 = __webpack_require__(3);
 var Ending = (function () {
     function Ending(end, color) {
         this.end = end;
@@ -465,10 +437,10 @@ var Ending = (function () {
     };
     Ending.fromJSON = function (ending) {
         if (ending.end === "blocked") {
-            return new Ending(lasergame_1.End.Blocked, color_1.default.fromJSON(ending.color));
+            return new Ending(enum_1.End.Blocked, color_1.default.fromJSON(ending.color));
         }
         else if (ending.end === "loop") {
-            return new Ending(lasergame_1.End.Loop, color_1.default.fromJSON(ending.color));
+            return new Ending(enum_1.End.Loop, color_1.default.fromJSON(ending.color));
         }
         else {
             return new Ending(ending.end, color_1.default.fromJSON(ending.color));
@@ -488,7 +460,7 @@ exports.default = Ending;
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -504,17 +476,17 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var piece_1 = __webpack_require__(7);
-var lasergame_1 = __webpack_require__(0);
+var piece_1 = __webpack_require__(9);
+var enum_1 = __webpack_require__(2);
 var Mirror = (function (_super) {
     __extends(Mirror, _super);
     function Mirror(src, north, east, south, west, draw) {
         var _this = _super.call(this, src, draw) || this;
         _this.dirs = [];
-        _this.dirs[lasergame_1.Direction.North] = north;
-        _this.dirs[lasergame_1.Direction.East] = east;
-        _this.dirs[lasergame_1.Direction.South] = south;
-        _this.dirs[lasergame_1.Direction.West] = west;
+        _this.dirs[enum_1.Direction.North] = north;
+        _this.dirs[enum_1.Direction.East] = east;
+        _this.dirs[enum_1.Direction.South] = south;
+        _this.dirs[enum_1.Direction.West] = west;
         return _this;
     }
     return Mirror;
@@ -523,7 +495,7 @@ exports.default = Mirror;
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -539,7 +511,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var piece_1 = __webpack_require__(7);
+var piece_1 = __webpack_require__(9);
 var Swatch = (function (_super) {
     __extends(Swatch, _super);
     function Swatch(src, color, draw) {
@@ -553,15 +525,15 @@ exports.default = Swatch;
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var tile_1 = __webpack_require__(1);
+var tile_1 = __webpack_require__(0);
 var CanvasComponent = (function () {
-    function CanvasComponent(src, tile, widthInTiles, heightInTiles, offsetX, offsetY, draw) {
+    function CanvasComponent(src, tile, widthInTiles, heightInTiles, draw, offsetX, offsetY) {
         if (offsetX === void 0) { offsetX = 0; }
         if (offsetY === void 0) { offsetY = 0; }
         this.img = new Image();
@@ -590,13 +562,13 @@ exports.default = CanvasComponent;
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var tile_1 = __webpack_require__(1);
+var tile_1 = __webpack_require__(0);
 var Piece = (function () {
     function Piece(src, draw) {
         this.tile = new tile_1.default(-1, -1);
@@ -614,7 +586,7 @@ exports.default = Piece;
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -630,19 +602,21 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var laser_1 = __webpack_require__(11);
-var lasergame_1 = __webpack_require__(0);
-var canvas_component_1 = __webpack_require__(6);
-var tile_1 = __webpack_require__(1);
-var mirror_1 = __webpack_require__(4);
-var swatch_1 = __webpack_require__(5);
-var ending_1 = __webpack_require__(3);
+var laser_1 = __webpack_require__(13);
+var const_1 = __webpack_require__(1);
+var enum_1 = __webpack_require__(2);
+var lasergame_1 = __webpack_require__(4);
+var canvas_component_1 = __webpack_require__(8);
+var tile_1 = __webpack_require__(0);
+var mirror_1 = __webpack_require__(6);
+var swatch_1 = __webpack_require__(7);
+var ending_1 = __webpack_require__(5);
 var LaserGrid = (function (_super) {
     __extends(LaserGrid, _super);
-    function LaserGrid(src, tile, widthInTiles, heightInTiles, offsetX, offsetY, draw) {
+    function LaserGrid(src, tile, widthInTiles, heightInTiles, draw, offsetX, offsetY) {
         if (offsetX === void 0) { offsetX = 0; }
         if (offsetY === void 0) { offsetY = 0; }
-        var _this = _super.call(this, src, tile, widthInTiles, heightInTiles, offsetX, offsetY, draw) || this;
+        var _this = _super.call(this, src, tile, widthInTiles, heightInTiles, draw, offsetX, offsetY) || this;
         _this.grid = [];
         for (var i = 0; i < 5; i++) {
             _this.grid[i] = [];
@@ -658,8 +632,8 @@ var LaserGrid = (function (_super) {
     }
     LaserGrid.prototype.draw = function (ctx) {
         _super.prototype.draw.call(this, ctx);
-        for (var i = 0; i < lasergame_1.pieces.length; i++) {
-            var piece = lasergame_1.pieces[i];
+        for (var i = 0; i < const_1.pieces.length; i++) {
+            var piece = const_1.pieces[i];
             if (piece.tile.isValid()) {
                 piece.drawAt(this.tile.add(piece.tile).add(new tile_1.default(1, 1)), ctx);
             }
@@ -669,11 +643,11 @@ var LaserGrid = (function (_super) {
             var laser = this.drawPath[i];
             ctx.strokeStyle = laser.color.toRGBString();
             var loc = laser.tile.add(new tile_1.default(1, 1)).toPixels();
-            loc.x += lasergame_1.TILE_HALF;
-            loc.y += lasergame_1.TILE_HALF;
+            loc.x += const_1.TILE_HALF;
+            loc.y += const_1.TILE_HALF;
             ctx.moveTo(loc.x, loc.y);
-            var tilemap = lasergame_1.directionMapping[laser.dir];
-            ctx.lineTo(loc.x + tilemap.tileX * lasergame_1.TILE_HALF, loc.y + tilemap.tileY * lasergame_1.TILE_HALF);
+            var tilemap = const_1.directionMapping[laser.dir];
+            ctx.lineTo(loc.x + tilemap.tileX * const_1.TILE_HALF, loc.y + tilemap.tileY * const_1.TILE_HALF);
             ctx.stroke();
         }
     };
@@ -737,16 +711,16 @@ var LaserGrid = (function (_super) {
                 if (piece instanceof mirror_1.default) {
                     laser.dir = piece.dirs[laser.dir];
                     switch (laser.dir) {
-                        case lasergame_1.Direction.SplitNorthSouth:
-                            laser.dir = lasergame_1.Direction.North;
-                            this.calculatePath(edge, new laser_1.default(laser.tile, lasergame_1.Direction.South, laser.color));
+                        case enum_1.Direction.SplitNorthSouth:
+                            laser.dir = enum_1.Direction.North;
+                            this.calculatePath(edge, new laser_1.default(laser.tile, enum_1.Direction.South, laser.color));
                             break;
-                        case lasergame_1.Direction.SplitEastWest:
-                            laser.dir = lasergame_1.Direction.East;
-                            this.calculatePath(edge, new laser_1.default(laser.tile, lasergame_1.Direction.West, laser.color));
+                        case enum_1.Direction.SplitEastWest:
+                            laser.dir = enum_1.Direction.East;
+                            this.calculatePath(edge, new laser_1.default(laser.tile, enum_1.Direction.West, laser.color));
                             break;
-                        case lasergame_1.Direction.None:
-                            this.addEndingToPaths(edge, new ending_1.default(lasergame_1.End.Blocked, laser.color));
+                        case enum_1.Direction.None:
+                            this.addEndingToPaths(edge, new ending_1.default(enum_1.End.Blocked, laser.color));
                             return;
                     }
                 }
@@ -755,7 +729,7 @@ var LaserGrid = (function (_super) {
                 }
             }
         }
-        this.addEndingToPaths(edge, new ending_1.default(lasergame_1.End.Loop, laser.color));
+        this.addEndingToPaths(edge, new ending_1.default(enum_1.End.Loop, laser.color));
     };
     LaserGrid.prototype.calculateDrawPathWrapper = function () {
         this.drawPath = [];
@@ -773,17 +747,17 @@ var LaserGrid = (function (_super) {
                 if (piece instanceof mirror_1.default) {
                     laser.dir = piece.dirs[laser.dir];
                     switch (laser.dir) {
-                        case lasergame_1.Direction.SplitNorthSouth:
-                            laser.dir = lasergame_1.Direction.North;
+                        case enum_1.Direction.SplitNorthSouth:
+                            laser.dir = enum_1.Direction.North;
                             this.drawPath.push(laser.getOppositeLaser());
-                            this.calculateDrawPath(new laser_1.default(laser.tile, lasergame_1.Direction.South, laser.color));
+                            this.calculateDrawPath(new laser_1.default(laser.tile, enum_1.Direction.South, laser.color));
                             break;
-                        case lasergame_1.Direction.SplitEastWest:
-                            laser.dir = lasergame_1.Direction.East;
+                        case enum_1.Direction.SplitEastWest:
+                            laser.dir = enum_1.Direction.East;
                             this.drawPath.push(laser.getOppositeLaser());
-                            this.calculateDrawPath(new laser_1.default(laser.tile, lasergame_1.Direction.West, laser.color));
+                            this.calculateDrawPath(new laser_1.default(laser.tile, enum_1.Direction.West, laser.color));
                             break;
-                        case lasergame_1.Direction.None:
+                        case enum_1.Direction.None:
                             return;
                     }
                 }
@@ -802,16 +776,16 @@ var LaserGrid = (function (_super) {
     };
     LaserGrid.edgeNumberToLaser = function (edge) {
         if (edge < 6) {
-            return new laser_1.default(new tile_1.default(edge - 1, -1), lasergame_1.Direction.South);
+            return new laser_1.default(new tile_1.default(edge - 1, -1), enum_1.Direction.South);
         }
         else if (edge < 11) {
-            return new laser_1.default(new tile_1.default(5, edge - 6), lasergame_1.Direction.West);
+            return new laser_1.default(new tile_1.default(5, edge - 6), enum_1.Direction.West);
         }
         else if (edge < 16) {
-            return new laser_1.default(new tile_1.default(-edge + 15, 5), lasergame_1.Direction.North);
+            return new laser_1.default(new tile_1.default(-edge + 15, 5), enum_1.Direction.North);
         }
         else if (edge < 21) {
-            return new laser_1.default(new tile_1.default(-1, -edge + 20), lasergame_1.Direction.East);
+            return new laser_1.default(new tile_1.default(-1, -edge + 20), enum_1.Direction.East);
         }
     };
     LaserGrid.tileToEdgeNumber = function (tile) {
@@ -837,7 +811,7 @@ exports.default = LaserGrid;
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -853,15 +827,16 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var lasergame_1 = __webpack_require__(0);
-var tile_1 = __webpack_require__(1);
-var canvas_component_1 = __webpack_require__(6);
+var lasergame_1 = __webpack_require__(4);
+var const_1 = __webpack_require__(1);
+var tile_1 = __webpack_require__(0);
+var canvas_component_1 = __webpack_require__(8);
 var Toolbar = (function (_super) {
     __extends(Toolbar, _super);
-    function Toolbar(src, tile, widthInTiles, heightInTiles, offsetX, offsetY, draw) {
+    function Toolbar(src, tile, widthInTiles, heightInTiles, draw, offsetX, offsetY) {
         if (offsetX === void 0) { offsetX = 0; }
         if (offsetY === void 0) { offsetY = 0; }
-        var _this = _super.call(this, src, tile, widthInTiles, heightInTiles, offsetX, offsetY, draw) || this;
+        var _this = _super.call(this, src, tile, widthInTiles, heightInTiles, draw, offsetX, offsetY) || this;
         _this.selectedPiece = 0;
         return _this;
     }
@@ -873,7 +848,7 @@ var Toolbar = (function (_super) {
         ctx.fillStyle = "green";
         ctx.globalAlpha = 0.2;
         var loc = new tile_1.default(this.tile.add(new tile_1.default(this.selectedPiece, 0)).tileX, this.tile.tileY).toPixels();
-        ctx.fillRect(loc.x, loc.y, lasergame_1.TILE_FULL, lasergame_1.TILE_FULL);
+        ctx.fillRect(loc.x, loc.y, const_1.TILE_FULL, const_1.TILE_FULL);
         ctx.globalAlpha = 1;
         ctx.fillStyle = "red";
         ctx.globalAlpha = 0.2;
@@ -881,7 +856,7 @@ var Toolbar = (function (_super) {
             var piece = lasergame_1.pieces[i];
             if (i !== this.selectedPiece && piece.tile.isValid()) {
                 var loc_1 = new tile_1.default(this.tile.add(new tile_1.default(i, 0)).tileX, this.tile.tileY).toPixels();
-                ctx.fillRect(loc_1.x, loc_1.y, lasergame_1.TILE_FULL, lasergame_1.TILE_FULL);
+                ctx.fillRect(loc_1.x, loc_1.y, const_1.TILE_FULL, const_1.TILE_FULL);
             }
         }
         ctx.globalAlpha = 1.0;
@@ -902,15 +877,15 @@ exports.default = Toolbar;
 
 
 /***/ }),
-/* 10 */,
-/* 11 */
+/* 12 */,
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var lasergame_1 = __webpack_require__(0);
-var color_1 = __webpack_require__(2);
+var const_1 = __webpack_require__(1);
+var color_1 = __webpack_require__(3);
 var Laser = (function () {
     function Laser(tile, dir, color) {
         if (color === void 0) { color = new color_1.default(); }
@@ -919,7 +894,7 @@ var Laser = (function () {
         this.color = color;
     }
     Laser.prototype.getOppositeLaser = function () {
-        return new Laser(this.tile.copy(), lasergame_1.oppositeDirection[this.dir], this.color.copy());
+        return new Laser(this.tile.copy(), const_1.oppositeDirection[this.dir], this.color.copy());
     };
     Laser.prototype.copy = function () {
         return new Laser(this.tile.copy(), this.dir, this.color.copy());

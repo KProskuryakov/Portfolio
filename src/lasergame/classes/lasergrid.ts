@@ -1,5 +1,8 @@
 import Laser from "./laser";
-import { TILE_HALF, directionMapping, toolbar, logCurrentPaths, logImportPaths, pieces, Direction, End, PathsList } from './lasergame';
+import { TILE_HALF, directionMapping, pieces} from '../const';
+import { Direction, End } from '../enum';
+import { toolbar, logCurrentPaths, logImportPaths } from '../lasergame';
+import { PathsList } from '../interfaces';
 import CanvasComponent from './canvas_component';
 import Piece from './piece';
 import Tile from './tile';

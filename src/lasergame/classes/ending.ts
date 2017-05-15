@@ -1,4 +1,4 @@
-import { End } from './lasergame';
+import { End } from '../enum';
 import Color from './color';
 
 /**

@@ -1,67 +1,26 @@
 "use strict";
-const canvas = (<HTMLCanvasElement>document.getElementById("laser-game-canvas"));
-export const ctx = canvas.getContext("2d");
 
-const textArea = document.getElementById("game-text-area");
-const importPre = document.getElementById("imported-pre");
-const pathsPre = document.getElementById("paths-pre");
-const hiddenData = document.getElementById("hidden-data");
-
-import Toolbar from './toolbar';
-import LaserGrid from './lasergrid';
-import Tile from './tile';
-import Piece from './piece';
-import Mirror from './mirror';
-import Swatch from './swatch';
-import Ending from './ending';
-import Color from './color';
-
-export const TILE_FULL = 50;
-export const TILE_HALF = TILE_FULL / 2;
-
-export enum End {
-    Blocked = -2,
-    Loop
-}
-
-export enum Direction {
-    North,
-    East,
-    South,
-    West,
-    None,
-    SplitEastWest,
-    SplitNorthSouth
-}
-
-export enum Pieces {
-    ForwardSlash,
-    BackSlash,
-    BlackHole,
-    SideSplit,
-    UpSplit,
-    Blue,
-    Red,
-    Green
-}
-
-export interface PathsList {
-    [index: number]: Array<Ending>;
-    length: number;
-}
+import { canvas, importPre, pathsPre, ctx} from './const';
+import { Direction, End, Pieces } from './enum';
+import { PathsList } from './interfaces'
+import Toolbar from './classes/toolbar';
+import LaserGrid from './classes/lasergrid';
+import Tile from './classes/tile';
+import Piece from './classes/piece';
+import Mirror from './classes/mirror';
+import Swatch from './classes/swatch';
+import Ending from './classes/ending';
+import Color from './classes/color';
 
 export const toolbar = new Toolbar("images/toolbar.png", new Tile(0, 7), 8, 1, draw);
 export const lasergrid = new LaserGrid("images/lasergrid.png", new Tile(0, 0), 7, 7, draw);
 
-export const pieces: Array<Piece|Swatch> = [];
-
-export const directionMapping: Tile[] = [];
-export const oppositeDirection: Direction[] = [];
+export const pieces: Array<Piece | Swatch> = [];
 
 /**
  * Inits the things that aren't constants
  */
-    function init() {
+function init() {
     canvas.addEventListener("mousemove", onMouseMove, false);
     canvas.addEventListener("click", onClick, false);
 
@@ -75,25 +34,14 @@ export const oppositeDirection: Direction[] = [];
     pieces[Pieces.Red] = new Swatch("images/pieces/swatch_red.png", new Color(255, 0, 0), draw);
     pieces[Pieces.Green] = new Swatch("images/pieces/swatch_green.png", new Color(0, 255, 0), draw);
 
-
-    directionMapping[Direction.North] = new Tile(0, -1);
-    directionMapping[Direction.East] = new Tile(1, 0);
-    directionMapping[Direction.South] = new Tile(0, 1);
-    directionMapping[Direction.West] = new Tile(-1, 0);
-
-    oppositeDirection[Direction.North] = Direction.South;
-    oppositeDirection[Direction.East] = Direction.West;
-    oppositeDirection[Direction.South] = Direction.North;
-    oppositeDirection[Direction.West] = Direction.East;
-
     lasergrid.calculateAllPaths(); // has to be done here to make sure everything is made
     lasergrid.calculateDrawPathWrapper();
-    }
+}
 
 /**
  * Draws all the things
  */
-export function draw() {
+function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#bcbcbc';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -114,37 +62,38 @@ function onClick(event: any) {
     draw();
 }
 
-function importHiddenData() {
-    if (hiddenData.innerHTML !== "") {
-        let leveldata = JSON.parse(hiddenData.innerHTML);
-        let tempPathsList = leveldata.level;
-        let newPathsList: PathsList = [null];
-        console.log(tempPathsList);
-        for (let i = 1; i <= 20; i++) {
+// TODO delete importHiddenData() when all tidied up
+// function importHiddenData() {
+//     if (hiddenData.innerHTML !== "") {
+//         let leveldata = JSON.parse(hiddenData.innerHTML);
+//         let tempPathsList = leveldata.level;
+//         let newPathsList: PathsList = [null];
+//         console.log(tempPathsList);
+//         for (let i = 1; i <= 20; i++) {
 
-            let arrayOfEndings = tempPathsList[i];
-            let newArrayOfEndings = [];
-            for (let j = 0; j < arrayOfEndings.length; j++) {
-                newArrayOfEndings[j] = Ending.fromJSON(arrayOfEndings[j]);
-            }
-            newPathsList[i] = newArrayOfEndings;
-        }
+//             let arrayOfEndings = tempPathsList[i];
+//             let newArrayOfEndings = [];
+//             for (let j = 0; j < arrayOfEndings.length; j++) {
+//                 newArrayOfEndings[j] = Ending.fromJSON(arrayOfEndings[j]);
+//             }
+//             newPathsList[i] = newArrayOfEndings;
+//         }
 
-        lasergrid.importedPathsList = newPathsList;
+//         lasergrid.importedPathsList = newPathsList;
 
-        logImportPaths();
-        logCurrentPaths();
-    }
-}
+//         logImportPaths();
+//         logCurrentPaths();
+//     }
+// }
 
 function importLevel(levelID: number) {
     if (!levelID) return;
     window.fetch(`/api/lasergame/${levelID}`, {
         method: 'GET',
         credentials: 'same-origin'
-    }).then(function(response) {
+    }).then(function (response) {
         return response.json();
-    }).then(function(parsedJSON) {
+    }).then(function (parsedJSON) {
         let tempPathsList = parsedJSON.level_data;
         let newPathsList: PathsList = [null];
         console.log(tempPathsList);
@@ -162,37 +111,38 @@ function importLevel(levelID: number) {
 
         logImportPaths();
         logCurrentPaths();
-    }).catch(function(err) {
+    }).catch(function (err) {
         alert('Import Level Failed!' + err); //TODO better error handling here
     });
 }
 
-function importButtonPress() {
-    let textareastuff = (<HTMLTextAreaElement>textArea).value.split("\n");
-    if (textareastuff.length !== 20) {
-        alert("There need to be 20 lines!");
-        return;
-    }
-    let pathsList = [];
-    for (let i = 0; i < 20; i++) {
-        let path = textareastuff[i].slice(6);
-        if (path.charAt(0) === "{") {
-            let endingsList = path.split(", ");
-            endingsList[0] = endingsList[0].slice(1);
-            endingsList[endingsList.length - 1] = endingsList[endingsList.length - 1].slice(0, endingsList[endingsList.length - 1].length - 1);
-            pathsList[i+1] = [];
-            for (let j = 0; j < endingsList.length; j++) {
-                pathsList[i+1].push(Ending.endingFromLogString(endingsList[j]));
-            }
-        } else {
-            pathsList[i+1] = [Ending.endingFromLogString(path)];
-        }
-    }
-    console.log(pathsList);
-    lasergrid.importedPathsList = pathsList;
-    logCurrentPaths();
-    logImportPaths();
-}
+// delete importButtonPress() when all tidied up
+// function importButtonPress() {
+//     let textareastuff = (<HTMLTextAreaElement>textArea).value.split("\n");
+//     if (textareastuff.length !== 20) {
+//         alert("There need to be 20 lines!");
+//         return;
+//     }
+//     let pathsList = [];
+//     for (let i = 0; i < 20; i++) {
+//         let path = textareastuff[i].slice(6);
+//         if (path.charAt(0) === "{") {
+//             let endingsList = path.split(", ");
+//             endingsList[0] = endingsList[0].slice(1);
+//             endingsList[endingsList.length - 1] = endingsList[endingsList.length - 1].slice(0, endingsList[endingsList.length - 1].length - 1);
+//             pathsList[i+1] = [];
+//             for (let j = 0; j < endingsList.length; j++) {
+//                 pathsList[i+1].push(Ending.endingFromLogString(endingsList[j]));
+//             }
+//         } else {
+//             pathsList[i+1] = [Ending.endingFromLogString(path)];
+//         }
+//     }
+//     console.log(pathsList);
+//     lasergrid.importedPathsList = pathsList;
+//     logCurrentPaths();
+//     logImportPaths();
+// }
 
 export function logCurrentPaths() {
     logPaths(pathsPre, lasergrid.paths, lasergrid.importedPathsList);
@@ -226,7 +176,7 @@ function logPaths(element: HTMLElement, paths: PathsList, otherPaths: PathsList)
             let equality = true;
             if (otherPaths[i].length === paths[i].length) {
                 for (let ei = 0; ei < paths[i].length; ei++) {
-                    if(!paths[i][ei].equals(otherPaths[i][ei])) {
+                    if (!paths[i][ei].equals(otherPaths[i][ei])) {
                         equality = false;
                         break;
                     }
@@ -250,10 +200,6 @@ function logPaths(element: HTMLElement, paths: PathsList, otherPaths: PathsList)
     }
 }
 
-function createRandomLevel() {
-    
-}
- 
 /**
  * Converts the x, y pixel coordinates from window position to relative canvas position
  * @param {number} x clientX
@@ -276,8 +222,8 @@ function uploadPaths() {
             'Content-Type': 'application/json'
         },
         credentials: 'same-origin',
-        body: JSON.stringify({level_data: lasergrid.paths, name: "test"})
-    }).then(function(response) {
+        body: JSON.stringify({ level_data: lasergrid.paths, name: "test" })
+    }).then(function (response) {
         if (response.status === 401) {
             alert('Must be logged in to upload a level!');
         } else {

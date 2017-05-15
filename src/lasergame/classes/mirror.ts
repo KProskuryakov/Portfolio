@@ -1,5 +1,5 @@
 import Piece from './piece';
-import { Direction } from './lasergame';
+import { Direction } from '../enum';
 
 /**
  * Mirrors represent pieces on the board that can change a laser's direction or split it/nullify it.
