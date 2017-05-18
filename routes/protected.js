@@ -1,14 +1,14 @@
-let express = require('express');
-let router = express.Router();
-
-let passport = require('../passport');
-
-router.get('/', function(req, res) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express = require("express");
+var router = express.Router();
+var passport = require('../passport');
+router.get('/', function (req, res) {
     if (req.user) {
         res.send('woo!');
-    } else {
+    }
+    else {
         res.status(401).send('Not logged in!');
     }
 });
-
 module.exports = router;

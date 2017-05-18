@@ -3,3 +3,5 @@ node_modules/
 data/
 npm-debug.log
 secret.js
+mylib/
+public/

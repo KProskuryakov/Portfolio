@@ -1,49 +1,51 @@
-let express = require('express');
-let path = require('path');
-let favicon = require('serve-favicon');
-let logger = require('morgan');
-let cookieParser = require('cookie-parser');
-let bodyParser = require('body-parser');
-let session = require('express-session');
-
-let index = require('./routes/index');
-let laserGame = require('./routes/lasergame');
-let login = require('./routes/login');
-let user = require('./routes/user');
-let register = require('./routes/register');
-let logout = require('./routes/logout');
-let protectedRoute = require('./routes/protected');
-let usersRoute = require('./routes/users');
-let notesRoute = require('./routes/notes');
-let apiLasergameRoute = require('./routes/api_lasergame');
-
-let app = express();
-
-let passport = require('./passport');
-let secretkey = require('./secret').secretkey;
-
-// view engine setup
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var express = require("express");
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var session = require('express-session');
+var index = require('./routes/index');
+var laserGame = require('./routes/lasergame');
+var login = require('./routes/login');
+var user = require('./routes/user');
+var register = require('./routes/register');
+var logout = require('./routes/logout');
+var protectedRoute = require('./routes/protected');
+var usersRoute = require('./routes/users');
+var notesRoute = require('./routes/notes');
+var apiLasergameRoute = require('./routes/api_lasergame');
+var app = express();
+var passport = require('./passport');
+var secretkey = require('./secret').secretkey;
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(secretkey));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({secret: secretkey, resave: false, saveUninitialized: false }));
+app.use(session({ secret: secretkey, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     if (req.user) {
         res.locals.user = req.user;
     }
     next();
 });
-
 app.use('/', index);
 app.use('/lasergame', laserGame);
 app.use('/login', login);
@@ -54,23 +56,22 @@ app.use('/protected', protectedRoute);
 app.use('/siteUsers', usersRoute);
 app.use('/notes', notesRoute);
 app.use('/api/lasergame', apiLasergameRoute);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  let err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+var ErrorWithStatus = (function (_super) {
+    __extends(ErrorWithStatus, _super);
+    function ErrorWithStatus() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ErrorWithStatus;
+}(Error));
+app.use(function (req, res, next) {
+    var err = new ErrorWithStatus('Not Found');
+    err.status = 404;
+    next(err);
 });
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+app.use(function (err, req, res, next) {
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.status(err.status || 500);
+    res.render('error');
 });
-
 module.exports = app;

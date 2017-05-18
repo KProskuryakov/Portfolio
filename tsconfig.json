@@ -5,8 +5,17 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "sourceMap": true,
         "alwaysStrict": true,
-        "allowSyntheticDefaultImports": false
-    }
+        "allowSyntheticDefaultImports": false,
+        "outDir": "./",
+        "rootDir": "./src/"
+    },
+    "include": [
+      "src/**/*"
+    ],
+    "exclude": [
+      "node_modules",
+      "websrc"
+    ],
+    "compileOnSave": true
 }
