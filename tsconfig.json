@@ -7,15 +7,13 @@
         "preserveConstEnums": true,
         "alwaysStrict": true,
         "allowSyntheticDefaultImports": false,
-        "outDir": "./",
+        "outDir": "./js",
         "rootDir": "./src/"
     },
     "include": [
       "src/**/*"
     ],
     "exclude": [
-      "node_modules",
-      "websrc"
-    ],
-    "compileOnSave": true
+      "node_modules"
+    ]
 }

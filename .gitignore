@@ -2,6 +2,5 @@ node_modules/
 .idea/
 data/
 npm-debug.log
-secret.js
-mylib/
 public/
+js/
