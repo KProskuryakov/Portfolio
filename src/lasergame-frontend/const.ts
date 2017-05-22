@@ -3,12 +3,6 @@ import Piece from './classes/piece';
 import Swatch from './classes/swatch';
 import { Direction } from './enum';
 
-export const importPre = <HTMLPreElement>document.getElementById("imported-pre");
-export const pathsPre = <HTMLPreElement>document.getElementById("paths-pre");
-export const canvas = <HTMLCanvasElement>document.getElementById("laser-game-canvas");
-
-export const ctx = canvas.getContext("2d");
-
 export const TILE_FULL = 50;
 export const TILE_HALF = TILE_FULL / 2;
 

@@ -1,6 +1,4 @@
-"use strict";
-
-import { canvas, importPre, pathsPre, ctx } from './const';
+import { canvas, importPre, pathsPre, ctx } from './htmlelements';
 import { Direction, End, Pieces } from './enum';
 import { PathsList } from './interfaces'
 import Toolbar from './classes/toolbar';
@@ -12,28 +10,21 @@ import Mirror from './classes/mirror';
 import Swatch from './classes/swatch';
 import Ending from './classes/ending';
 import Color from './classes/color';
+import Path from './classes/path';
+import { pieces } from './pieces';
 
 export const toolbar = new Toolbar("toolbar.png", new Tile(0, 7), 8, 1, draw);
 export const lasergridComponent = new LaserGridComponent("lasergrid.png", new Tile(0, 0), 7, 7, draw);
 
-export const pieces: Array<Piece> = []
 export const pieceComponents: Array<PieceComponent> = [];
+
+let currentLevel: Path[] = null;
 
 /**
  * Inits the things that aren't constants
  */
 function init() {
-  canvas.addEventListener("mousemove", onMouseMove, false);
   canvas.addEventListener("click", onClick, false);
-
-  pieces[Pieces.ForwardSlash] = new Mirror(Direction.East, Direction.North, Direction.West, Direction.South);
-  pieces[Pieces.BackSlash] = new Mirror(Direction.West, Direction.South, Direction.East, Direction.North);
-  pieces[Pieces.BlackHole] = new Mirror(Direction.None, Direction.None, Direction.None, Direction.None);
-  pieces[Pieces.SideSplit] = new Mirror(Direction.East, Direction.None, Direction.East, Direction.SplitNorthSouth);
-  pieces[Pieces.UpSplit] = new Mirror(Direction.None, Direction.North, Direction.SplitEastWest, Direction.North);
-  pieces[Pieces.Blue] = new Swatch(new Color(0, 0, 255));
-  pieces[Pieces.Red] = new Swatch(new Color(255, 0, 0));
-  pieces[Pieces.Green] = new Swatch(new Color(0, 255, 0));
 
   pieceComponents[Pieces.ForwardSlash] = new PieceComponent(pieces[Pieces.ForwardSlash], "pieces/mirror_forwardslash.png", draw);
   pieceComponents[Pieces.BackSlash] = new PieceComponent(pieces[Pieces.BackSlash], "pieces/mirror_backslash.png", draw);
@@ -45,12 +36,11 @@ function init() {
   pieceComponents[Pieces.Green] = new PieceComponent(pieces[Pieces.Green], "pieces/swatch_green.png", draw);
 
   lasergridComponent.lasergrid.calculateAllEndings();
+  printPaths();
   lasergridComponent.calculateDrawPathWrapper();
+  getRandomLevel();
 }
 
-/**
- * Draws all the things
- */
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = '#bcbcbc';
@@ -60,41 +50,12 @@ function draw() {
   toolbar.draw(ctx);
 }
 
-function onMouseMove(event: any) {
-  //console.log("Moved here: x" + event.clientX + ", y: " + event.clientY);
-}
-
 function onClick(event: any) {
-  //console.log("Clicked here: x" + event.clientX + ", y: " + event.clientY);
   let loc = windowToCanvas(event.clientX, event.clientY);
   lasergridComponent.processMouseClick(loc.x, loc.y);
   toolbar.processMouseClick(loc.x, loc.y);
   draw();
 }
-
-// TODO delete importHiddenData() when all tidied up
-// function importHiddenData() {
-//     if (hiddenData.innerHTML !== "") {
-//         let leveldata = JSON.parse(hiddenData.innerHTML);
-//         let tempPathsList = leveldata.level;
-//         let newPathsList: PathsList = [null];
-//         console.log(tempPathsList);
-//         for (let i = 1; i <= 20; i++) {
-
-//             let arrayOfEndings = tempPathsList[i];
-//             let newArrayOfEndings = [];
-//             for (let j = 0; j < arrayOfEndings.length; j++) {
-//                 newArrayOfEndings[j] = Ending.fromJSON(arrayOfEndings[j]);
-//             }
-//             newPathsList[i] = newArrayOfEndings;
-//         }
-
-//         lasergrid.importedPathsList = newPathsList;
-
-//         logImportPaths();
-//         logCurrentPaths();
-//     }
-// }
 
 function importLevel(levelID: number) {
   if (!levelID) return;
@@ -118,93 +79,35 @@ function importLevel(levelID: number) {
 
     lasergridComponent.importedPathsList = newPathsList;
 
-    logImportPaths();
-    logCurrentPaths();
+    printPaths();
   }).catch(function (err) {
     alert('Import Level Failed!' + err); //TODO better error handling here
   });
 }
 
-// delete importButtonPress() when all tidied up
-// function importButtonPress() {
-//     let textareastuff = (<HTMLTextAreaElement>textArea).value.split("\n");
-//     if (textareastuff.length !== 20) {
-//         alert("There need to be 20 lines!");
-//         return;
-//     }
-//     let pathsList = [];
-//     for (let i = 0; i < 20; i++) {
-//         let path = textareastuff[i].slice(6);
-//         if (path.charAt(0) === "{") {
-//             let endingsList = path.split(", ");
-//             endingsList[0] = endingsList[0].slice(1);
-//             endingsList[endingsList.length - 1] = endingsList[endingsList.length - 1].slice(0, endingsList[endingsList.length - 1].length - 1);
-//             pathsList[i+1] = [];
-//             for (let j = 0; j < endingsList.length; j++) {
-//                 pathsList[i+1].push(Ending.endingFromLogString(endingsList[j]));
-//             }
-//         } else {
-//             pathsList[i+1] = [Ending.endingFromLogString(path)];
-//         }
-//     }
-//     console.log(pathsList);
-//     lasergrid.importedPathsList = pathsList;
-//     logCurrentPaths();
-//     logImportPaths();
-// }
-
-export function logCurrentPaths() {
-  console.log(lasergridComponent.lasergrid.paths);
-  logPaths(pathsPre, lasergridComponent.lasergrid.paths, lasergridComponent.importedPathsList);
-}
-
-export function logImportPaths() {
-  logPaths(importPre, lasergridComponent.importedPathsList, lasergridComponent.lasergrid.paths);
-}
-
-function logPaths(element: HTMLElement, paths: PathsList, otherPaths: PathsList) {
-  element.innerHTML = "";
+export function printPaths() {
+  pathsPre.innerHTML = "";
+  let paths = lasergridComponent.lasergrid.paths;
+  let curLevelNum = 0;
   for (let i = 1; i <= 20; i++) {
-    let path = paths[i];
-    let line = i + "";
-    if (i < 10) {
-      line += "  -> ";
-    } else {
-      line += " -> ";
-    }
-    if (path.length > 1) {
-      line += "{" + path[0].toString() + ", ";
-      for (let space = 1; space < path.length - 1; space++) {
-        line += path[space].toString() + ", ";
-      }
-      line += path[path.length - 1].toString() + "}";
-    } else {
-      line += path[0].toString();
-    }
-    if (otherPaths.length > 0) {
-      let equality = true;
-      if (otherPaths[i].length === paths[i].length) {
-        for (let ei = 0; ei < paths[i].length; ei++) {
-          if (!paths[i][ei].equals(otherPaths[i][ei])) {
-            equality = false;
-            break;
-          }
+    let curPath = paths[i];
+    let line = curPath.toString();
+    if (currentLevel && curLevelNum < 5) {
+      let levelPath = currentLevel[curLevelNum];
+      if (levelPath.start === i) {
+        line += ` (${levelPath.endingListToString()})`
+        if (curPath.endingsEqual(levelPath)) {
+          line = `<span style='color: green'>${line}</span>`
+        } else { 
+          line = `<span style='color: red'>${line}</span>`
         }
-      } else {
-        equality = false;
+        curLevelNum++;
       }
-      if (equality) {
-        element.innerHTML += "<span style='color: green'>" + line + "</span>";
-      } else {
-        element.innerHTML += "<span style='color: red'>" + line + "</span>";
-      }
-
-    } else {
-      element.innerHTML += line;
     }
+    pathsPre.innerHTML += line;
 
     if (i < 20) {
-      element.innerHTML += "\n";
+      pathsPre.innerHTML += "\n";
     }
   }
 }
@@ -238,6 +141,21 @@ function uploadPaths() {
     } else {
       alert('Level uploaded! (Probably)');
     }
+  });
+}
+
+function getRandomLevel() {
+  window.fetch('/api/lasergame/random', {
+    method: 'GET',
+    credentials: 'same-origin'
+  }).then(function (response) {
+    response.json().then((value: Path[]) => {
+      currentLevel = [];
+      for (let i = 0; i < value.length; i++) {
+        currentLevel.push(Path.fromJSONObject(value[i]));
+      }
+      printPaths();
+    });
   });
 }
 

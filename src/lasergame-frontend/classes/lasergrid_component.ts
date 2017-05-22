@@ -4,7 +4,7 @@ import Laser from "./laser";
 import CanvasComponent from './canvas_component';
 import Tile from './tile';
 import { TILE_HALF, directionMapping } from '../const';
-import { toolbar, logCurrentPaths, logImportPaths, pieceComponents } from '../lasergame';
+import { toolbar, printPaths, pieceComponents } from '../lasergame';
 import Mirror from './mirror';
 import Swatch from './swatch';
 import { Direction, End } from '../enum';
@@ -61,10 +61,8 @@ export default class LaserGridComponent extends CanvasComponent {
         } else {
           this.lasergrid.setPiece(toolbar.getSelectedPieceComponent().piece, loc);
         }
-        logCurrentPaths();
-        if (this.importedPathsList.length > 0) {
-          logImportPaths();
-        }
+        printPaths();
+        
         this.calculateDrawPathWrapper();
       }
       let newEdge = LaserGrid.tileToEdgeNumber(relativeTile.add(new Tile(-1, -1)));

@@ -5,7 +5,7 @@ import Color from './color';
  * A data point for the paths list holding a color and an ending edge number
  */
 export default class Ending {
-    end: number|string;
+    end: number;
     color: Color;
 
     /**
@@ -13,7 +13,7 @@ export default class Ending {
      * @param {number|string} end
      * @param {Color} color
      */
-    constructor(end: number|string, color: Color) {
+    constructor(end: number, color: Color) {
         this.end = end;
         this.color = color;
     }
@@ -24,16 +24,22 @@ export default class Ending {
      */
     toString() {
         let string = "";
-        string += this.end;
+        if (this.end === -2) {
+          string += "blocked";
+        } else if (this.end === -1) {
+          string += "loop";
+        } else {
+          string += this.end;
+        }
         string += " " + this.color.toName();
         return string;
     }
 
 
     static fromJSON(ending: Ending) {
-        if (ending.end === "blocked") {
+        if (ending.end === End.Blocked) {
             return new Ending(End.Blocked, Color.fromJSON(ending.color));
-        } else if (ending.end === "loop") {
+        } else if (ending.end === End.Loop) {
             return new Ending(End.Loop, Color.fromJSON(ending.color));
         } else {
             return new Ending(ending.end, Color.fromJSON(ending.color));

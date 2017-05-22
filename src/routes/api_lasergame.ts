@@ -5,6 +5,12 @@ import express = require('express');
 let router = express.Router();
 
 import { lasergameLevels } from '../postgresdb';
+import { generateRandomLevel } from '../lasergame-backend/lasergame';
+
+router.get('/random', (req, res, next) => {
+  let randomLevel = generateRandomLevel();
+  res.send(JSON.stringify(randomLevel));
+});
 
 router.get('/:id', function (req, res, next) {
   let id = parseInt(req.params.id);
@@ -26,10 +32,6 @@ router.post('/upload', function (req, res, next) {
   } else {
     res.status(401).send('You must be logged in to upload!');
   }
-});
-
-router.get('/random', (req, res, next) => {
-  
 });
 
 export = router;

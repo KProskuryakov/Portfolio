@@ -5,10 +5,11 @@ import Tile from './tile';
 import Mirror from './mirror';
 import Swatch from './swatch';
 import Ending from './ending';
+import Path from './path';
 
 export default class LaserGrid {
   grid: Piece[][];
-  paths: Ending[][];
+  paths: Path[];
 
   constructor() {
     this.grid = [];
@@ -40,9 +41,9 @@ export default class LaserGrid {
   }
 
   calculateAllEndings() {
-    let endings: Ending[][] = [];
+    let endings: Path[] = [];
     for (let i = 1; i <= 20; i++) {
-      endings[i] = this.calculateEndingList(i);
+      endings[i] = new Path(i, this.calculateEndingList(i));
     }
     this.paths = endings;
   }
@@ -85,15 +86,6 @@ export default class LaserGrid {
 
     trackOneEnding(this, LaserGrid.edgeNumberToLaser(edge));
     return ending;
-  }
-
-  /**
-   */
-  addEndingToPaths(edge: number, ending: Ending) {
-    if (!this.paths[edge]) {
-      this.paths[edge] = []
-    }
-    this.paths[edge].push(ending);
   }
 
   /**
