@@ -5,17 +5,19 @@ import { Direction, End, Pieces } from './enum';
 import { PathsList } from './interfaces'
 import Toolbar from './classes/toolbar';
 import LaserGridComponent from './classes/lasergrid_component';
+import PieceComponent from './classes/piece_component';
 import Tile from './classes/tile';
-import Piece from './classes/grid_piece';
+import Piece from './classes/piece';
 import Mirror from './classes/mirror';
 import Swatch from './classes/swatch';
 import Ending from './classes/ending';
 import Color from './classes/color';
 
 export const toolbar = new Toolbar("toolbar.png", new Tile(0, 7), 8, 1, draw);
-export const lasergrid = new LaserGridComponent("lasergrid.png", new Tile(0, 0), 7, 7, draw);
+export const lasergridComponent = new LaserGridComponent("lasergrid.png", new Tile(0, 0), 7, 7, draw);
 
-export const pieces: Array<Piece | Swatch> = [];
+export const pieces: Array<Piece> = []
+export const pieceComponents: Array<PieceComponent> = [];
 
 /**
  * Inits the things that aren't constants
@@ -24,17 +26,26 @@ function init() {
   canvas.addEventListener("mousemove", onMouseMove, false);
   canvas.addEventListener("click", onClick, false);
 
-  pieces[Pieces.ForwardSlash] = new Mirror("pieces/mirror_forwardslash.png", Direction.East, Direction.North, Direction.West, Direction.South, draw);
-  pieces[Pieces.BackSlash] = new Mirror("pieces/mirror_backslash.png", Direction.West, Direction.South, Direction.East, Direction.North, draw);
-  pieces[Pieces.BlackHole] = new Mirror("pieces/mirror_blackhole.png", Direction.None, Direction.None, Direction.None, Direction.None, draw);
-  pieces[Pieces.SideSplit] = new Mirror("pieces/mirror_sidesplit.png", Direction.East, Direction.None, Direction.East, Direction.SplitNorthSouth, draw);
-  pieces[Pieces.UpSplit] = new Mirror("pieces/mirror_upsplit.png", Direction.None, Direction.North, Direction.SplitEastWest, Direction.North, draw);
+  pieces[Pieces.ForwardSlash] = new Mirror(Direction.East, Direction.North, Direction.West, Direction.South);
+  pieces[Pieces.BackSlash] = new Mirror(Direction.West, Direction.South, Direction.East, Direction.North);
+  pieces[Pieces.BlackHole] = new Mirror(Direction.None, Direction.None, Direction.None, Direction.None);
+  pieces[Pieces.SideSplit] = new Mirror(Direction.East, Direction.None, Direction.East, Direction.SplitNorthSouth);
+  pieces[Pieces.UpSplit] = new Mirror(Direction.None, Direction.North, Direction.SplitEastWest, Direction.North);
+  pieces[Pieces.Blue] = new Swatch(new Color(0, 0, 255));
+  pieces[Pieces.Red] = new Swatch(new Color(255, 0, 0));
+  pieces[Pieces.Green] = new Swatch(new Color(0, 255, 0));
 
-  pieces[Pieces.Blue] = new Swatch("pieces/swatch_blue.png", new Color(0, 0, 255), draw);
-  pieces[Pieces.Red] = new Swatch("pieces/swatch_red.png", new Color(255, 0, 0), draw);
-  pieces[Pieces.Green] = new Swatch("pieces/swatch_green.png", new Color(0, 255, 0), draw);
-  lasergrid.lasergrid.calculateAllEndings();
-  lasergrid.calculateDrawPathWrapper();
+  pieceComponents[Pieces.ForwardSlash] = new PieceComponent(pieces[Pieces.ForwardSlash], "pieces/mirror_forwardslash.png", draw);
+  pieceComponents[Pieces.BackSlash] = new PieceComponent(pieces[Pieces.BackSlash], "pieces/mirror_backslash.png", draw);
+  pieceComponents[Pieces.BlackHole] = new PieceComponent(pieces[Pieces.BlackHole], "pieces/mirror_blackhole.png", draw);
+  pieceComponents[Pieces.SideSplit] = new PieceComponent(pieces[Pieces.SideSplit], "pieces/mirror_sidesplit.png", draw);
+  pieceComponents[Pieces.UpSplit] = new PieceComponent(pieces[Pieces.UpSplit], "pieces/mirror_upsplit.png", draw);
+  pieceComponents[Pieces.Blue] = new PieceComponent(pieces[Pieces.Blue], "pieces/swatch_blue.png", draw);
+  pieceComponents[Pieces.Red] = new PieceComponent(pieces[Pieces.Red], "pieces/swatch_red.png", draw);
+  pieceComponents[Pieces.Green] = new PieceComponent(pieces[Pieces.Green], "pieces/swatch_green.png", draw);
+
+  lasergridComponent.lasergrid.calculateAllEndings();
+  lasergridComponent.calculateDrawPathWrapper();
 }
 
 /**
@@ -45,7 +56,7 @@ function draw() {
   ctx.fillStyle = '#bcbcbc';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  lasergrid.draw(ctx);
+  lasergridComponent.draw(ctx);
   toolbar.draw(ctx);
 }
 
@@ -56,7 +67,7 @@ function onMouseMove(event: any) {
 function onClick(event: any) {
   //console.log("Clicked here: x" + event.clientX + ", y: " + event.clientY);
   let loc = windowToCanvas(event.clientX, event.clientY);
-  lasergrid.processMouseClick(loc.x, loc.y);
+  lasergridComponent.processMouseClick(loc.x, loc.y);
   toolbar.processMouseClick(loc.x, loc.y);
   draw();
 }
@@ -105,7 +116,7 @@ function importLevel(levelID: number) {
       newPathsList[i] = newArrayOfEndings;
     }
 
-    lasergrid.importedPathsList = newPathsList;
+    lasergridComponent.importedPathsList = newPathsList;
 
     logImportPaths();
     logCurrentPaths();
@@ -143,12 +154,12 @@ function importLevel(levelID: number) {
 // }
 
 export function logCurrentPaths() {
-  console.log(lasergrid.lasergrid.paths);
-  logPaths(pathsPre, lasergrid.lasergrid.paths, lasergrid.importedPathsList);
+  console.log(lasergridComponent.lasergrid.paths);
+  logPaths(pathsPre, lasergridComponent.lasergrid.paths, lasergridComponent.importedPathsList);
 }
 
 export function logImportPaths() {
-  logPaths(importPre, lasergrid.importedPathsList, lasergrid.lasergrid.paths);
+  logPaths(importPre, lasergridComponent.importedPathsList, lasergridComponent.lasergrid.paths);
 }
 
 function logPaths(element: HTMLElement, paths: PathsList, otherPaths: PathsList) {
@@ -220,7 +231,7 @@ function uploadPaths() {
       'Content-Type': 'application/json'
     },
     credentials: 'same-origin',
-    body: JSON.stringify({ level_data: lasergrid.lasergrid.paths, name: "test" })
+    body: JSON.stringify({ level_data: lasergridComponent.lasergrid.paths, name: "test" })
   }).then(function (response) {
     if (response.status === 401) {
       alert('Must be logged in to upload a level!');

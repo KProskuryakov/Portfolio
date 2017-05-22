@@ -3,9 +3,8 @@ import { PathsList } from '../interfaces';
 import Laser from "./laser";
 import CanvasComponent from './canvas_component';
 import Tile from './tile';
-import Ending from './ending';
 import { TILE_HALF, directionMapping } from '../const';
-import { toolbar, logCurrentPaths, logImportPaths, pieces } from '../lasergame';
+import { toolbar, logCurrentPaths, logImportPaths, pieceComponents } from '../lasergame';
 import Mirror from './mirror';
 import Swatch from './swatch';
 import { Direction, End } from '../enum';
@@ -29,10 +28,11 @@ export default class LaserGridComponent extends CanvasComponent {
   draw(ctx: CanvasRenderingContext2D) {
     super.draw(ctx);
 
-    for (let i = 0; i < pieces.length; i++) {
-      let piece = pieces[i];
+    for (let i = 0; i < pieceComponents.length; i++) {
+      let pieceComponent = pieceComponents[i];
+      let piece = pieceComponent.piece;
       if (piece.tile.isValid()) {
-        piece.drawAt(this.tile.add(piece.tile).add(new Tile(1, 1)), ctx);
+        pieceComponent.drawAt(this.tile.add(piece.tile).add(new Tile(1, 1)), ctx);
       }
     }
 
@@ -59,7 +59,7 @@ export default class LaserGridComponent extends CanvasComponent {
         if (piece !== null) {
           this.lasergrid.removePiece(piece);
         } else {
-          this.lasergrid.setPiece(toolbar.getSelectedPiece(), loc);
+          this.lasergrid.setPiece(toolbar.getSelectedPieceComponent().piece, loc);
         }
         logCurrentPaths();
         if (this.importedPathsList.length > 0) {

@@ -1,4 +1,4 @@
-import Piece from './grid_piece';
+import Piece from './piece';
 import Color from './color';
 
 /**
@@ -7,11 +7,8 @@ import Color from './color';
 export default class Swatch extends Piece {
     color: Color;
 
-    /**
-     *
-     */
-    constructor(src: string, color: Color, draw: () => void) {
-        super(src, draw);
+    constructor(color: Color) {
+        super();
         this.color = color;
     }
 }

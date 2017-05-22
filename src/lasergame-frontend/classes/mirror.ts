@@ -1,4 +1,4 @@
-import Piece from './grid_piece';
+import Piece from './piece';
 import { Direction } from '../enum';
 
 /**
@@ -10,8 +10,8 @@ export default class Mirror extends Piece {
     /**
      * Creates a mirror out of this stuff
      */
-    constructor(src: string, north: Direction, east: Direction, south: Direction, west: Direction, draw: () => void) {
-        super(src, draw);
+    constructor(north: Direction, east: Direction, south: Direction, west: Direction) {
+        super();
         this.dirs = [];
         this.dirs[Direction.North] = north;
         this.dirs[Direction.East] = east;

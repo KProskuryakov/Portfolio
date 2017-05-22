@@ -1,5 +1,5 @@
 import Tile from './classes/tile';
-import Piece from './classes/grid_piece';
+import Piece from './classes/piece';
 import Swatch from './classes/swatch';
 import { Direction } from './enum';
 

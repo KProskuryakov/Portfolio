@@ -1,4 +1,4 @@
-import { pieces } from '../lasergame';
+import { pieceComponents } from '../lasergame';
 import { TILE_FULL } from '../const';
 import Tile from './tile';
 import CanvasComponent from './canvas_component';
@@ -30,8 +30,8 @@ export default class Toolbar extends CanvasComponent {
         super.draw(ctx);
 
         // draw pieces in each box
-        for (let i = 0; i < pieces.length; i++) {
-            pieces[i].drawAt(this.tile.add(new Tile(i, 0)), ctx);
+        for (let i = 0; i < pieceComponents.length; i++) {
+            pieceComponents[i].drawAt(this.tile.add(new Tile(i, 0)), ctx);
         }
 
         // draw the green highlight
@@ -44,8 +44,8 @@ export default class Toolbar extends CanvasComponent {
         // draw the red highlight
         ctx.fillStyle = "red";
         ctx.globalAlpha = 0.2;
-        for (let i = 0; i < pieces.length; i++) {
-            let piece = pieces[i];
+        for (let i = 0; i < pieceComponents.length; i++) {
+            let piece = pieceComponents[i].piece;
             if (i !== this.selectedPiece && piece.tile.isValid()) {
                 let loc = new Tile(this.tile.add(new Tile(i, 0)).tileX, this.tile.tileY).toPixels();
                 ctx.fillRect(loc.x, loc.y, TILE_FULL, TILE_FULL);
@@ -71,7 +71,7 @@ export default class Toolbar extends CanvasComponent {
      * Fetches the selected piece object.
      * @returns {Piece}
      */
-    getSelectedPiece() {
-        return pieces[this.selectedPiece];
+    getSelectedPieceComponent() {
+        return pieceComponents[this.selectedPiece];
     }
 }
