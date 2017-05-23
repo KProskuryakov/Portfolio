@@ -43,7 +43,7 @@ function init() {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#bcbcbc';
+  ctx.fillStyle = "#9c9a9b";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   lasergridComponent.draw(ctx);

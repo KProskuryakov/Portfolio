@@ -1,51 +1,50 @@
 doctype html
 html
-    head
-        meta(charset="utf-8")
-        meta(http-equiv="X-UA-Compatible", content="IE=edge")
-        meta(name="viewport" content="width=device-width, initial-scale=1")
-        title= title
-        block stylesheets
-        link(rel='stylesheet', href='/stylesheets/style.css')
-        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", crossorigin="anonymous")
-    body
-
-        nav.navbar.navbar-fixed-top.navbar-inverse
-            .container
-                .navbar-header
-                    button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar", aria-expanded="false", aria-controls="navbar")
-                        span.sr-only Toggle Navigation
-                        span.icon-bar
-                        span.icon-bar
-                        span.icon-bar
-                    a.navbar-brand(href="/") Kostya Pro
-                .collapse.navbar-collapse#navbar
-                    ul.nav.navbar-nav
-                        li(class=title=='Home'?'active':undefined)
-                            a(href="/") Home
-                        li(class=title=='Laser Game'?'active':undefined)
-                            a(href="/lasergame") Laser Game
-                        li(class=title=='All Users'?'active':undefined)
-                            a(href="/siteUsers") All Users
-                        li(class=title=='Notes'?'active':undefined)
-                            a(href="/notes") Notes
-                    ul.nav.navbar-nav.navbar-right
-                        li.dropdown
-                            a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")= !user?'Log in':user.display_name
-                                span.caret
-                            ul.dropdown-menu
-                                if !user
-                                    li
-                                        a(href="/login") Log In
-                                    li
-                                        a(href="/register") Register
-                                else
-                                    li
-                                        a(href="/user/" + user.display_name) My Account
-                                    li
-                                        a(href="/logout") Logout
-        block content
-            p I guess there's no content here :(
-        footer.footer
-        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
-        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    title= title
+    block stylesheets
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", crossorigin="anonymous")
+  body
+    nav.navbar.navbar-fixed-top.navbar-inverse
+      .container
+        .navbar-header
+          button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#navbar", aria-expanded="false", aria-controls="navbar")
+            span.sr-only Toggle Navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href="/") Kostya Pro
+        .collapse.navbar-collapse#navbar
+          ul.nav.navbar-nav
+            li(class=title=='Home'?'active':undefined)
+              a(href="/") Home
+            li(class=title=='Laser Game'?'active':undefined)
+              a(href="/lasergame") Laser Game
+            li(class=title=='All Users'?'active':undefined)
+              a(href="/siteUsers") All Users
+            li(class=title=='Notes'?'active':undefined)
+              a(href="/notes") Notes
+          ul.nav.navbar-nav.navbar-right
+            li.dropdown
+              a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")= !user?'Log in':user.display_name
+                span.caret
+                  ul.dropdown-menu
+                    if !user
+                      li
+                        a(href="/login") Log In
+                      li
+                        a(href="/register") Register
+                    else
+                      li
+                        a(href="/user/" + user.display_name) My Account
+                      li
+                        a(href="/logout") Logout
+    block content
+      p I guess there's no content here :(
+    footer.footer
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")

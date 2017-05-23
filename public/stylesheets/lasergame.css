@@ -20,7 +20,6 @@
 
 .flex-pre {
     margin: 0px;
-    width: auto;
     height: auto;
     background-color: lightcyan;
     padding: 0px 0px 0px 10px;
@@ -28,7 +27,7 @@
     font-size: 100%;
     vertical-align: baseline;
     border-radius: 0;
-    flex: 1 auto;
+    flex: 1 0 400px;
 }
 
 .flex-button {
@@ -51,13 +50,12 @@
     margin-left: 0;
 }
 
-@media all and (min-width: 600px) {
+@media all and (min-width: 768px) {
     .flex-lasergame-canvas {
         margin-left: auto;
         margin-right: 0;
     }
     .flex-pre {
-        flex: 0 auto;
-        width: 300px;
+        flex: 0 0 400px;
     }
 }
