@@ -51,7 +51,7 @@ export default class LaserGrid {
   calculateEndingList(edge: number) {
     let ending: Ending[] = [];
 
-    function trackOneEnding(self: LaserGrid, laser: Laser) {
+    function trackOneEnding(grid: LaserGrid, laser: Laser) {
       for (let i = 0; i < 100; i++) {
         laser.tile = laser.tile.nextTile(laser.dir);
         if (!laser.tile.isValid(5, 5)) {
@@ -59,18 +59,18 @@ export default class LaserGrid {
           ending.push(new Ending(endEdge, laser.color));
           return;
         }
-        let piece = self.getPiece(laser.tile);
+        let piece = grid.getPiece(laser.tile);
         if (piece) {
           if (piece instanceof Mirror) {
             laser.dir = piece.dirs[laser.dir];
             switch (laser.dir) {
               case Direction.SplitNorthSouth:
                 laser.dir = Direction.North;
-                trackOneEnding(self, new Laser(laser.tile, Direction.South, laser.color));
+                trackOneEnding(grid, new Laser(laser.tile, Direction.South, laser.color));
                 break;
               case Direction.SplitEastWest:
                 laser.dir = Direction.East;
-                trackOneEnding(self, new Laser(laser.tile, Direction.West, laser.color));
+                trackOneEnding(grid, new Laser(laser.tile, Direction.West, laser.color));
                 break;
               case Direction.None:
                 ending.push(new Ending(End.Blocked, laser.color));
@@ -119,5 +119,4 @@ export default class LaserGrid {
     }
     return 0;
   }
-
 }

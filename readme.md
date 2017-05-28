@@ -4,10 +4,16 @@ This project is a way for me to show off my skills as a programmer.
 As I learn more, this will be updated to reflect what I've learned. 
 This is also where my notes regarding programming are stored.
 
-## Plans
-This area is for me to document my next steps in a bullet list.
+## Lasergame
 
-* 
+### Cool level
+```
+2  -> {20 black, 14 blue, blocked blue} ({20 black, 14 blue, blocked blue})
+6  -> 4 black (4 black)
+13 -> blocked magenta (blocked magenta)
+14 -> 2 blue (2 blue)
+17 -> blocked black (blocked black)
+```
 
 ## Environment
 
@@ -28,10 +34,13 @@ This area is for me to document my next steps in a bullet list.
 
 ### Current extensions in vscode:
 
+These are all extensions that I use specifically for this project.
+
 * Debugger for Chrome
 * Document This
 * gitignore
 * HTML CSS Support
+* Markdown Shortcuts
 * Move TS
 * TODO Parser
 * VS Color Picker

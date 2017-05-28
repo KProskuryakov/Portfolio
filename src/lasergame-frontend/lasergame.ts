@@ -55,8 +55,10 @@ function onClick(event: any) {
   lasergridComponent.processMouseClick(loc.x, loc.y);
   toolbar.processMouseClick(loc.x, loc.y);
   draw();
+  console.log(checkVictory());
 }
 
+// TODO remove/change when importLevel needs new functionality
 function importLevel(levelID: number) {
   if (!levelID) return;
   window.fetch(`/api/lasergame/${levelID}`, {
@@ -83,6 +85,16 @@ function importLevel(levelID: number) {
   }).catch(function (err) {
     alert('Import Level Failed!' + err); //TODO better error handling here
   });
+}
+
+function checkVictory(): boolean {
+  for (let p = 0; p < currentLevel.length; p++) {
+    let path = currentLevel[p];
+    if (!path.endingsEqual(lasergridComponent.lasergrid.paths[path.start])) {
+      return false;
+    }
+  }
+  return true;
 }
 
 export function printPaths() {

@@ -6,6 +6,7 @@ import Ending from '../lasergame-frontend/classes/ending';
 import Path from '../lasergame-frontend/classes/path';
 
 let defaultGrid = new Lasergrid();
+defaultGrid.calculateAllEndings();
 
 export function generateRandomLevel() {
   let success = false;
@@ -50,7 +51,7 @@ export function generateRandomLevel() {
     cleansedEndings[i] = t;
   }
 
-  let randomEndings: Path[] = cleansedEndings.slice(0, 5); // TODO test inclusivity
+  let randomEndings: Path[] = cleansedEndings.slice(0, 5);
 
   randomEndings.sort((a, b) => { return a.start < b.start ? -1 : 1 });
 
