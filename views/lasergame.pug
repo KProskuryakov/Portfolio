@@ -5,6 +5,7 @@ block stylesheets
 
 block content
   .flex-container
+    p#victory-p.flex-p(hidden, align="center") Incredible! You won! Refresh the page to generate a new random puzzle.
     canvas#laser-game-canvas.flex-lasergame-canvas(width="402", height="402")
     pre#paths-pre.flex-pre This is where the paths are supposed to be
     if levelID

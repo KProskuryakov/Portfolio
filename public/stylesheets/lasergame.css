@@ -16,7 +16,12 @@ body {
     margin: auto;
 }
 
-.flex-lasergame-canvas{
+.flex-p {
+  flex: 1 0 100%;
+  margin: 10px auto 10px auto;
+}
+
+.flex-lasergame-canvas {
     width: 402px;
     height: 402px;
     margin: auto;

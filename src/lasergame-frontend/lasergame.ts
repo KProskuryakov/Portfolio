@@ -40,7 +40,7 @@ function init() {
   lasergridComponent.calculateDrawPathWrapper();
   getRandomLevel();
 }
-
+ 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "#9c9a9b";
@@ -55,7 +55,9 @@ function onClick(event: any) {
   lasergridComponent.processMouseClick(loc.x, loc.y);
   toolbar.processMouseClick(loc.x, loc.y);
   draw();
-  console.log(checkVictory());
+  if (checkVictory()) {
+    document.getElementById('victory-p').hidden = false;
+  }
 }
 
 // TODO remove/change when importLevel needs new functionality

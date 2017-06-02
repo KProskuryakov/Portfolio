@@ -8,9 +8,9 @@
  * password: varchar(256)
  */
 export interface SiteUser {
-    email: string,
-    display_name: string,
-    password: string
+  email: string,
+  display_name: string,
+  password: string
 }
 
 /**
@@ -25,10 +25,21 @@ export interface SiteUser {
  * user_display_name varchar(64) fkey to site_users.display_name
  */
 export interface LasergameLevel {
-    id: number,
-    name: string,
-    level_data: any,
-    upload_timestamp: string,
-    times_beaten: number,
-    user_display_name: string
+  id: number,
+  name: string,
+  level_data: any,
+  upload_timestamp: string,
+  times_beaten: number,
+  user_display_name: string
+}
+
+/**
+ * 
+ * 
+ * @export
+ * @interface LasergameDailyLevel
+ */
+export interface LasergameDailyLevel {
+  daily_date: string,
+  level_data: any
 }
