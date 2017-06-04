@@ -91,9 +91,9 @@ let lasergameDailyLevels = {
     });
   },
 
-  insertDailyLevel: function(levelData: object, callback: (err: Error, date: string) => void) {
-    pool.query('INSERT INTO lasergame_daily_levels (level_data) VALUES ($1) RETURNING daily_date', [JSON.stringify(levelData)], (err: Error, res: any) => {
-      if (res) return callback(err, res.rows[0].daily_date);
+  insertDailyLevel: function(levelData: object, callback: (err: Error, date: LasergameDailyLevel) => void) {
+    pool.query('INSERT INTO lasergame_daily_levels (level_data) VALUES ($1) RETURNING *', [JSON.stringify(levelData)], (err: Error, res: any) => {
+      if (res) return callback(err, res.rows[0]);
       return callback(err, null);
     });
   },

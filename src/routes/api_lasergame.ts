@@ -5,11 +5,18 @@ import express = require('express');
 let router = express.Router();
 
 import { lasergameLevels } from '../postgresdb';
-import { generateRandomLevel } from '../lasergame-backend/lasergame';
+import { generateRandomLevel, getDailyLevel } from '../lasergame-backend/lasergame';
 
 router.get('/random', (req, res, next) => {
   let randomLevel = generateRandomLevel();
   res.send(JSON.stringify(randomLevel));
+});
+
+router.get('/today', (req, res, next) => {
+  getDailyLevel((err, level) => {
+    if (err) return next(err);
+    res.send(JSON.stringify(level));
+  });
 });
 
 router.get('/:id', function (req, res, next) {
