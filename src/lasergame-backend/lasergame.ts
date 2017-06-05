@@ -61,7 +61,7 @@ export function generateRandomLevel() {
   return randomEndings;
 }
 
-export function getDailyLevel(callback: (err: Error, level: LasergameDailyLevel) => void) {
+export function getTodaysDailyLevel(callback: (err: Error, level: LasergameDailyLevel) => void) {
   lasergameDailyLevels.getTodaysDailyLevel((err, level) => {
     if (!level) {
       lasergameDailyLevels.insertDailyLevel(generateRandomLevel(), (err, newLevel) => {
@@ -77,5 +77,12 @@ export function getDailyLevel(callback: (err: Error, level: LasergameDailyLevel)
       console.log(`Lasergame daily level fetched for date: ${level.daily_date}`);
       callback(err, level);
     }
+  });
+}
+
+export function getDailyLevel(date: string, callback: (err: Error, level: LasergameDailyLevel)) {
+  lasergameDailyLevels.getDailyLevel(date, (err, level) => {
+    if (err) return callback(err, null);
+    return callback(null, level);
   });
 }
