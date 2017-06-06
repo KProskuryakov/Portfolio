@@ -1,4 +1,5 @@
 import express = require('express');
+import { readdir } from 'fs';
 let path = require('path');
 let favicon = require('serve-favicon');
 let logger = require('morgan');
@@ -22,17 +23,29 @@ let app = express();
 let passport = require('./passport');
 let secretkey = require('./secret').secretkey;
 
+let notesList: string[] = [];
+readdir('./notes', function (err, files) {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  for (let i = 0; i < files.length; i++) {
+    let file = files[i];
+    notesList.push(file.slice(0, file.indexOf('.')));
+  }
+});
+
 // view engine setup
-app.set('views', path.join(__dirname, '../', 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, '../public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(secretkey));
-app.use(express.static(path.join(__dirname, '../', 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(session({secret: secretkey, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -41,6 +54,7 @@ app.use(function(req: any, res: any, next: any) {
     if (req.user) {
         res.locals.user = req.user;
     }
+    res.locals.notesList = notesList;
     next();
 });
 
