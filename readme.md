@@ -17,6 +17,14 @@ This is also where my notes regarding programming are stored.
 
 ## Environment
 
+### Global npm modules
+
+```
+typescript
+webpack
+nodemon
+```
+
 ### secret.js
 
 This is what the config file in `js/` looks like:
