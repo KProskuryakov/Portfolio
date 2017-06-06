@@ -1,23 +1,7 @@
 import pool from './postgresdb';
+import SiteUser from './models/SiteUser';
 
 pool.query("CREATE TABLE IF NOT EXISTS site_users (email varchar(256) PRIMARY KEY, password varchar(80) NOT NULL, display_name varchar(64) UNIQUE NOT NULL);");
-
-/**
- * The db representation of a user
- * 
- * @interface SiteUser
- * 
- * email: varchar(256) PRIMARY KEY
- * display_name: varchar(64) UNIQUE NOT NULL
- * password: varchar(256)
- */
-export interface SiteUser {
-  email: string;
-  display_name: string;
-  password: string;
-}
-
-export default SiteUser;
 
 export function insertSiteUser(email: string, displayName: string, pass: string, callback: (err: Error, user: SiteUser) => void) {
   pool.query("INSERT INTO site_users (email, password, display_name) VALUES ($1, $2, $3) RETURNING *", [email, pass, displayName], (err: Error, res: any) => {

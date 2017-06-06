@@ -20,13 +20,19 @@ html
           a.navbar-brand(href="/") Kostya Pro
         .collapse.navbar-collapse#navbar
           ul.nav.navbar-nav
-            li(class=title=='Home'?'active':undefined)
+            li(class=page=='Home'?'active':undefined)
               a(href="/") Home
-            li(class=title=='Laser Game'?'active':undefined)
-              a(href="/lasergame") Laser Game
-            li(class=title=='All Users'?'active':undefined)
+            li(class=page=='Laser Game'?'active':undefined).dropdown
+              a(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Lasergame
+                span.caret
+                  ul.dropdown-menu
+                    li
+                      a(href="/lasergame/random") Random Level
+                    li
+                      a(href="/lasergame/daily") Today's Daily Level
+            li(class=page=='All Users'?'active':undefined)
               a(href="/siteUsers") All Users
-            li(class=title=='Notes'?'active':undefined).dropdown
+            li(class=page=='Notes'?'active':undefined).dropdown
               a(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Notes
                 span.caret
                   ul.dropdown-menu

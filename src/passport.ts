@@ -7,7 +7,8 @@ import session = require('express-session');
 import passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
 
-import SiteUser, * as db_su from './db/site_user';
+import SiteUser from './db/models/SiteUser';
+import * as db_su from './db/SiteUserTable';
 
 passport.use(new LocalStrategy({ usernameField: 'email' }, function strategy(email: string, password: string, done: any) {
   email = email.toLocaleLowerCase();

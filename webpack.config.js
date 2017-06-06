@@ -6,7 +6,8 @@ module.exports = {
   },
   output: {
     filename: "[name]/[name]-bundle.js",
-    path: path.resolve(__dirname, './public/')
+    path: path.resolve(__dirname, './public/'),
+    library: "[name]"
   },
   resolve: {
     // Add '.ts' and '.tsx' as a resolvable extension.

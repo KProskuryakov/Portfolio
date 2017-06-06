@@ -4,15 +4,16 @@
 import express = require('express');
 let router = express.Router();
 
-import * as db_ll from '../db/lasergame_level';
-import { generateRandomLevel, getTodaysDailyLevel, getDailyLevel } from '../lasergame-backend/lasergame';
+import * as db_ll from '../db/LasergameLevelTable';
+import { generateLevelFromSeed, getTodaysDailyLevel, getDailyLevel } from '../lasergame-backend/lasergame';
 
-router.get('/random', (req, res, next) => {
-  let randomLevel = generateRandomLevel();
-  res.send(JSON.stringify(randomLevel));
+router.get('/', (req, res, next) => {
+  let seed = req.query.seed;
+  let seededLevel = generateLevelFromSeed(seed);
+  res.send(JSON.stringify(seededLevel));
 });
 
-router.get('/today', (req, res, next) => {
+router.get('/daily', (req, res, next) => {
   getTodaysDailyLevel((err, level) => {
     if (err) return next(err);
     res.send(JSON.stringify(level));

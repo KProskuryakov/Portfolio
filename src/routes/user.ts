@@ -2,8 +2,8 @@ import express = require('express');
 let router = express.Router();
 // let users = require('../db').siteUsers;
 
-import * as db_su from '../db/site_user';
-import * as db_ll from '../db/lasergame_level';
+import * as db_su from '../db/SiteUserTable';
+import * as db_ll from '../db/LasergameLevelTable';
 
 router.get('/:user', function (req, res, next) {
   db_su.getSiteUserByDisplayName(req.params.user, function onGetUser(err: Error, pageOwner) {

@@ -4,11 +4,11 @@ let router = express.Router();
 let addresses = require('email-addresses');
 
 import bcrypt = require('bcrypt');
-import * as db_su from '../db/site_user';
+import * as db_su from '../db/SiteUserTable';
 
 router.get('/', function (req, res) {
   let err = req.query.err;
-  res.render('register', { title: "Register", err: err});
+  res.render('register', { page: "Register", err: err});
 });
 
 /**

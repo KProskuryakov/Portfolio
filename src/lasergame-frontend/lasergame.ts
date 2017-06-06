@@ -1,5 +1,5 @@
-import { canvas, importPre, pathsPre, ctx } from './htmlelements';
-import { Direction, End, Pieces } from './enum';
+import { canvas, importPre, pathsPre, victoryP, ctx } from './htmlelements';
+import { Direction, End, Pieces, LevelType } from './enum';
 import { PathsList } from './interfaces'
 import Toolbar from './classes/toolbar';
 import LaserGridComponent from './classes/lasergrid_component';
@@ -13,12 +13,15 @@ import Color from './classes/color';
 import Path from './classes/path';
 import { pieces } from './pieces';
 
+import LasergameDailyLevel from '../db/models/LasergameDailyLevel';
+
 export const toolbar = new Toolbar("toolbar.png", new Tile(0, 7), 8, 1, draw);
 export const lasergridComponent = new LaserGridComponent("lasergrid.png", new Tile(0, 0), 7, 7, draw);
 
 export const pieceComponents: Array<PieceComponent> = [];
 
 let currentLevel: Path[] = null;
+let levelType: LevelType = LevelType.Custom;
 
 /**
  * Inits the things that aren't constants
@@ -38,7 +41,6 @@ function init() {
   lasergridComponent.lasergrid.calculateAllEndings();
   printPaths();
   lasergridComponent.calculateDrawPathWrapper();
-  getRandomLevel();
 }
  
 function draw() {
@@ -56,12 +58,19 @@ function onClick(event: any) {
   toolbar.processMouseClick(loc.x, loc.y);
   draw();
   if (checkVictory()) {
-    document.getElementById('victory-p').hidden = false;
+    if (levelType === LevelType.Random) {
+      victoryP.textContent = "Incredible! You won! Refresh the page to generate a new random puzzle.";
+    } else if (levelType === LevelType.Daily) {
+      victoryP.textContent = "Wow! You beat the daily level!";
+    } else if (levelType === LevelType.Custom) {
+      victoryP.textContent = "Wow! You beat the custom level!";
+    }
+    victoryP.hidden = false;
   }
 }
 
 // TODO remove/change when importLevel needs new functionality
-function importLevel(levelID: number) {
+export function importLevel(levelID: number) {
   if (!levelID) return;
   window.fetch(`/api/lasergame/${levelID}`, {
     method: 'GET',
@@ -158,19 +167,42 @@ function uploadPaths() {
   });
 }
 
-function getRandomLevel() {
-  window.fetch('/api/lasergame/random', {
+export function getLevel(seed: string) {
+  window.fetch(`/api/lasergame?seed=${seed}`, {
     method: 'GET',
     credentials: 'same-origin'
   }).then(function (response) {
-    response.json().then((value: Path[]) => {
+    response.json().then((randomLevel: LasergameDailyLevel) => { // TODO change to LasergameLevel as soon as it's normalized
+      levelType = LevelType.Random;
+      let levelData = randomLevel.level_data;
+      let seed = randomLevel.seed;
+      console.log(seed);
       currentLevel = [];
-      for (let i = 0; i < value.length; i++) {
-        currentLevel.push(Path.fromJSONObject(value[i]));
+      for (let i = 0; i < levelData.length; i++) {
+        currentLevel.push(Path.fromJSONObject(levelData[i]));
       }
       printPaths();
     });
   });
+}
+
+export function getDailyLevel() {
+  window.fetch('/api/lasergame/daily', {
+    method: 'GET',
+    credentials: 'same-origin'
+  }).then((response) => {
+    response.json().then((dailyLevel: LasergameDailyLevel) => {
+      levelType = LevelType.Daily;
+      let levelData = dailyLevel.level_data;
+      let seed = dailyLevel.seed;
+      console.log(seed);
+      currentLevel = [];
+      for (let i = 0; i < levelData.length; i++) {
+        currentLevel.push(Path.fromJSONObject(levelData[i]));
+      }
+      printPaths();
+    });
+  })
 }
 
 init();
