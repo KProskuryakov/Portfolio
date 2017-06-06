@@ -10,6 +10,7 @@ let LocalStrategy = require('passport-local').Strategy;
 import SiteUser, * as db_su from './db/site_user';
 
 passport.use(new LocalStrategy({ usernameField: 'email' }, function strategy(email: string, password: string, done: any) {
+  email = email.toLocaleLowerCase();
   console.log('Strategy activated with email: ' + email);
   db_su.getSiteUserByEmail(email, function onPasswordGet(err: Error, user: SiteUser) {
     if (err) return done(err);

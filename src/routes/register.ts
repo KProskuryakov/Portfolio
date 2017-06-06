@@ -11,7 +11,7 @@ router.get('/', function (req, res) {
 
 router.post('/', function postRegister(req, res, next) {
   // Get our form values. These rely on the "name" attributes in the html tags
-  let email = req.body.email;
+  let email = (<string>req.body.email).toLocaleLowerCase();
   let password = req.body.password;
   let displayName = req.body.display_name;
 
