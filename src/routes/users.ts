@@ -1,18 +1,13 @@
 import express = require('express');
 let router = express.Router();
 
-import { SiteUser } from '../dbmodels';
-
-// const users = require('../db').siteUsers;
-// const pool = require('../postgresdb');
-
-const siteUsers = require('../postgresdb').siteUsers;
+import SiteUser, * as db_su from '../db/site_user';
 
 router.get('/', function (req, res, next) {
-    siteUsers.getAll(function onGetAll (err: Error, userArray: SiteUser[]) {
-        if (err) next(err);
-        res.render('users', {title: "All Users", userArray: userArray});
-    });
+  db_su.getAllSiteUsers(function onGetAll(err: Error, userArray: SiteUser[]) {
+    if (err) next(err);
+    res.render('users', { title: "All Users", userArray: userArray });
+  });
 });
 
 module.exports = router;

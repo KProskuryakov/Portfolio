@@ -5,8 +5,7 @@ import Tile from '../lasergame-frontend/classes/tile';
 import Ending from '../lasergame-frontend/classes/ending';
 import Path from '../lasergame-frontend/classes/path';
 
-import {lasergameDailyLevels} from '../postgresdb';
-import {LasergameDailyLevel} from '../dbmodels';
+import LasergameDailyLevel, * as db_ldl from '../db/lasergame_daily_level';
 
 let defaultGrid = new Lasergrid();
 defaultGrid.calculateAllEndings();
@@ -30,7 +29,7 @@ export function generateRandomLevel() {
     randomGrid.calculateAllEndings();
 
     let gridEndings = randomGrid.paths;
-    
+
     cleansedEndings = [];
 
     for (let i = 1; i < gridEndings.length; i++) {
@@ -61,10 +60,10 @@ export function generateRandomLevel() {
   return randomEndings;
 }
 
-export function getTodaysDailyLevel(callback: (err: Error, level: LasergameDailyLevel) => void) {
-  lasergameDailyLevels.getTodaysDailyLevel((err, level) => {
+export function getTodaysDailyLevel(callback: (err: Error, level: db_ldl.LasergameDailyLevel) => void) {
+  db_ldl.getTodaysDailyLevel((err, level) => {
     if (!level) {
-      lasergameDailyLevels.insertDailyLevel(generateRandomLevel(), (err, newLevel) => {
+      db_ldl.insertDailyLevel(generateRandomLevel(), (err, newLevel) => {
         if (newLevel) {
           console.log(`New lasergame daily level generated for date: ${newLevel.daily_date}`); // TODO Proper logging
           callback(err, newLevel);
@@ -80,8 +79,8 @@ export function getTodaysDailyLevel(callback: (err: Error, level: LasergameDaily
   });
 }
 
-export function getDailyLevel(date: string, callback: (err: Error, level: LasergameDailyLevel)) {
-  lasergameDailyLevels.getDailyLevel(date, (err, level) => {
+export function getDailyLevel(date: string, callback: (err: Error, level: LasergameDailyLevel) => void) {
+  db_ldl.getDailyLevel(date, (err, level) => {
     if (err) return callback(err, null);
     return callback(null, level);
   });
