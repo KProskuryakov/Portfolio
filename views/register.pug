@@ -1,16 +1,28 @@
 extends layout
 
 block stylesheets
-    link(rel='stylesheet', href='/stylesheets/form_signin.css')
+  link(rel='stylesheet', href='/stylesheets/form_signin.css')
 
 block content
-    .container
-        form.form-signin(method="POST", action="/register")
-            h2.form-signin-heading Please Register
-            label.sr-only(for="inputEmail") Email Address
-            input.form-control#inputEmail(name="email", type="email", placeholder="Email Address" required autofocus)
-            label.sr-only(for="inputDisplayName") Display Name
-            input.form-control#inputDisplayName(name="display_name", type="text", placeholder="Display Name" required)
-            label.sr-only(for="inputPassword") Password
-            input.form-control#inputPassword(name="password", type="password", placeholder="Password" required)
-            button.btn.btn-lg.btn-primary.btn-block(type="submit") Register
+  .container
+    form.form-signin(method="POST", action="/register")
+      .alert.alert-warning Your connection to this site is not secure. Don't use a password you care about.
+      h2.form-signin-heading Please Register
+      label.sr-only(for="inputEmail") Email Address
+      input.form-control#inputEmail(name="email", type="email", placeholder="Email Address" required autofocus)
+      label.sr-only(for="inputDisplayName") Display Name
+      input.form-control#inputDisplayName(name="display_name", type="text", placeholder="Display Name" required)
+      label.sr-only(for="inputPassword") Password
+      input.form-control#inputPassword(name="password", type="password", placeholder="Password" required)
+      if err
+        if err === 'INVALID_EMAIL'
+          .alert.alert-danger Email must be valid.
+        else if err === 'INVALID_PASSWORD'
+          .alert.alert-danger Password must be between 6 and 256 characters (inclusive). But seriously, try to use something longer than 16 characters.
+        else if err === 'INVALID_DISPLAY_NAME'
+          .alert.alert-danger Display Name must be less than 65 characters.
+        else if err === 'DUPLICATE_EMAIL'
+          .alert.alert-danger Email is already registered. Choose a different one.
+        else if err === 'DUPLICATE_DISPLAY_NAME'
+          .alert.alert-danger Display Name is already in use. Choose a different one.
+      button.btn.btn-lg.btn-primary.btn-block(type="submit") Register

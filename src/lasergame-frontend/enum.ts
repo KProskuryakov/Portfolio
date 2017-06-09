@@ -23,3 +23,9 @@ export enum Pieces {
   Red,
   Green
 }
+
+export enum LevelType {
+  Daily,
+  Random,
+  Custom
+}

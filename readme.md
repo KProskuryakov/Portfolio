@@ -17,6 +17,31 @@ This is also where my notes regarding programming are stored.
 
 ## Environment
 
+### Global npm modules
+
+```
+typescript
+webpack
+nodemon
+```
+
+### secret.js
+
+This is what the config file in `js/` looks like:
+```
+module.exports.pgconfig = {
+  user: 'postgres',
+  database: 'mydb',         // Not my actual db name
+  password: 'mypassword',   // Not my actual db password
+  host: 'localhost',
+  port: 5432,
+  max: 10,
+  idleTimeoutMillis: 30000
+};
+
+module.exports.secretkey = "Secretkey";   // The key for cookie-parser and session management
+```
+
 ### Current settings in vscode:
 
 ```

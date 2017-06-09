@@ -20,14 +20,27 @@ html
           a.navbar-brand(href="/") Kostya Pro
         .collapse.navbar-collapse#navbar
           ul.nav.navbar-nav
-            li(class=title=='Home'?'active':undefined)
+            li(class=page=='Home'?'active':undefined)
               a(href="/") Home
-            li(class=title=='Laser Game'?'active':undefined)
-              a(href="/lasergame") Laser Game
-            li(class=title=='All Users'?'active':undefined)
+            li(class=page=='Laser Game'?'active':undefined).dropdown
+              a(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Lasergame
+                span.caret
+                  ul.dropdown-menu
+                    li
+                      a(href="/lasergame/random") Random Level
+                    li
+                      a(href="/lasergame/daily") Today's Daily Level
+            li(class=page=='All Users'?'active':undefined)
               a(href="/siteUsers") All Users
-            li(class=title=='Notes'?'active':undefined)
-              a(href="/notes") Notes
+            li(class=page=='Notes'?'active':undefined).dropdown
+              a(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Notes
+                span.caret
+                  ul.dropdown-menu
+                    li
+                      a(href="/notes/readme") readme
+                    each file in notesList
+                      li
+                        a(href='/notes/' + file) #{file}
           ul.nav.navbar-nav.navbar-right
             li.dropdown
               a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")= !user?'Log in':user.display_name
@@ -43,8 +56,11 @@ html
                         a(href="/user/" + user.display_name) My Account
                       li
                         a(href="/logout") Logout
+  .container
     block content
       p I guess there's no content here :(
-    footer.footer
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
+  footer.footer
+    .container
+      span.text-muted Kostyantyn Proskuryakov 2017
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")

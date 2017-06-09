@@ -13,5 +13,7 @@ block content
     .flex-break
 
   script(type="text/javascript", src="lasergame-bundle.js")
-  if levelID
-    script importLevel(#{levelID});
+  if seed
+    script lasergame.getLevel("#{seed}");
+  if daily
+    script lasergame.getDailyLevel();

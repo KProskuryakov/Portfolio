@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    h1= title
-    each user in userArray
-        li
-            a(href='/user/' + user.display_name) #{user.display_name}
+  h1= title
+  each user in userArray
+    li
+      a(href='/user/' + user.display_name) #{user.display_name}
