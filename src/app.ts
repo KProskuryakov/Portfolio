@@ -6,16 +6,21 @@ let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let session = require('express-session');
 
-let index = require('./routes/index');
-let laserGame = require('./routes/lasergame');
-let login = require('./routes/login');
-let user = require('./routes/user');
-let register = require('./routes/register');
-let logout = require('./routes/logout');
-let protectedRoute = require('./routes/protected');
-let usersRoute = require('./routes/users');
-let notesRoute = require('./routes/notes');
-let apiLasergameRoute = require('./routes/api_lasergame');
+const routes = {
+  index: require('./routes/index'),
+  lasergame: require('./routes/lasergame'),
+  login: require('./routes/login'),
+  user: require('./routes/user'),
+  register: require('./routes/register'),
+  logout: require('./routes/logout'),
+  protected: require('./routes/protected'),
+  users: require('./routes/users'),
+  notes: require('./routes/notes'),
+  api: {
+    index: require('./routes/api/index'),
+    lasergame: require('./routes/api/lasergame')
+  }
+}
 
 let app = express();
 
@@ -33,41 +38,42 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(secretkey));
 app.use(express.static(path.join(__dirname, '../', 'public')));
-app.use(session({secret: secretkey, resave: false, saveUninitialized: false }));
+app.use(session({ secret: secretkey, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(function(req: any, res: any, next: any) {
-    if (req.user) {
-        res.locals.user = req.user;
-    }
-    next();
+app.use(function (req: any, res: any, next: any) {
+  if (req.user) {
+    res.locals.user = req.user;
+  }
+  next();
 });
 
-app.use('/', index);
-app.use('/lasergame', laserGame);
-app.use('/login', login);
-app.use('/user', user);
-app.use('/register', register);
-app.use('/logout', logout);
-app.use('/protected', protectedRoute);
-app.use('/siteUsers', usersRoute);
-app.use('/notes', notesRoute);
-app.use('/api/lasergame', apiLasergameRoute);
+app.use('/', routes.index);
+app.use('/lasergame', routes.lasergame);
+app.use('/login', routes.login);
+app.use('/user', routes.user);
+app.use('/register', routes.register);
+app.use('/logout', routes.logout);
+app.use('/protected', routes.protected);
+app.use('/siteUsers', routes.users);
+app.use('/notes', routes.notes);
+app.use('/api/', routes.api.index);
+app.use('/api/lasergame', routes.api.lasergame);
 
 class ErrorWithStatus extends Error {
   status?: number;
 }
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   let err = new ErrorWithStatus('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err: ErrorWithStatus, req: any, res: any, next: any) {
+app.use(function (err: ErrorWithStatus, req: any, res: any, next: any) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

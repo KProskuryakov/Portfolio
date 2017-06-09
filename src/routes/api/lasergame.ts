@@ -1,6 +1,7 @@
 /**
- * Created by kosty on 4/16/2017.
+ * Route: /api/lasergame/
  */
+
 import express = require('express');
 let router = express.Router();
 
