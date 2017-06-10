@@ -5,15 +5,11 @@ let router = express.Router();
 import * as db_su from '../db/SiteUserTable';
 import * as db_ll from '../db/LasergameLevelTable';
 
-router.get('/:user', function (req, res, next) {
-  db_su.getSiteUserByDisplayName(req.params.user, function onGetUser(err: Error, pageOwner) {
-    if (err) return next(err);
-    if (!pageOwner) next();
-    db_ll.getAllLasergameLevelsOfSiteUser(pageOwner.display_name, function onGetAllLevelsOfPlayer(err: Error, levelArray) {
-      if (err) return next(err);
-      res.render('user', { title: pageOwner.display_name, pageOwner: pageOwner, levelArray: levelArray });
-    });
-  });
+router.get('/:user', async function (req, res, next) {
+  let user = await db_su.getSiteUserByDisplayName(req.params.user)
+  if (!user) return next()
+  let levelArray = await db_ll.getAllLasergameLevelsOfSiteUser(user.display_name)
+  res.render('user', { title: user.display_name, pageOwner: user, levelArray: levelArray })
 });
 
 module.exports = router;

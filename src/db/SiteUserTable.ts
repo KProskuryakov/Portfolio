@@ -1,38 +1,35 @@
 import pool from './postgresdb';
 import SiteUser from './models/SiteUser';
 
-pool.query("CREATE TABLE IF NOT EXISTS site_users (email varchar(256) PRIMARY KEY, password varchar(80) NOT NULL, display_name varchar(64) UNIQUE NOT NULL);");
+pool.query(`CREATE TABLE IF NOT EXISTS site_users 
+  (
+    email varchar(256) PRIMARY KEY, 
+    password varchar(80) NOT NULL, 
+    display_name varchar(64) UNIQUE NOT NULL
+  );`
+);
 
-export function insertSiteUser(email: string, displayName: string, pass: string, callback: (err: Error, user: SiteUser) => void) {
-  pool.query("INSERT INTO site_users (email, password, display_name) VALUES ($1, $2, $3) RETURNING *", [email, pass, displayName], (err: Error, res: any) => {
-    if (res) return callback(err, <SiteUser>res.rows[0]);
-    return callback(err, null);
-  });
+export async function insertSiteUser(email: string, displayName: string, pass: string): Promise<SiteUser> {
+  let res = await pool.query("INSERT INTO site_users (email, password, display_name) VALUES ($1, $2, $3) RETURNING *", [email, pass, displayName])
+  return res.rows[0]
 }
 
-export function getSiteUserPasswordByEmail(email: string, callback: (err: Error, password: string) => void) {
-  pool.query('SELECT * FROM site_users WHERE email = $1', [email], (err: Error, res: any) => {
-    if (res) return callback(err, res.rows[0].password);
-    return callback(err, null);
-  });
-}
-export function getSiteUserByEmail(email: string, callback: (err: Error, user: SiteUser) => void) {
-  pool.query('SELECT * FROM site_users WHERE email = $1', [email], (err: Error, res: any) => {
-    if (res) return callback(err, res.rows[0]);
-    return callback(err, null);
-  });
+export async function getSiteUserPasswordByEmail(email: string): Promise<string> {
+  let res = await pool.query('SELECT * FROM site_users WHERE email = $1', [email])
+  return res.rows[0].password
 }
 
-export function getSiteUserByDisplayName(displayName: string, callback: (err: Error, user: SiteUser) => void) {
-  pool.query('SELECT * FROM site_users WHERE display_name = $1', [displayName], (err: Error, res: any) => {
-    if (res) return callback(err, res.rows[0]);
-    return callback(err, null);
-  });
+export async function getSiteUserByEmail(email: string): Promise<SiteUser> {
+  let res = await pool.query('SELECT * FROM site_users WHERE email = $1', [email])
+  return res.rows[0]
 }
 
-export function getAllSiteUsers(callback: (err: Error, allUsers: SiteUser[]) => void) {
-  pool.query('SELECT * FROM site_users', (err: Error, res: any) => {
-    if (res) return callback(err, res.rows);
-    return callback(err, null);
-  });
+export async function getSiteUserByDisplayName(displayName: string): Promise<SiteUser> {
+  let res = await pool.query('SELECT * FROM site_users WHERE display_name = $1', [displayName])
+  return res.rows[0]
+}
+
+export async function getAllSiteUsers(): Promise<SiteUser[]> {
+  let res = await pool.query('SELECT * FROM site_users')
+  return res.rows
 }

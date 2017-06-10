@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "./node_modules/.bin/nodemon ./bin/www",
+    "watchtsc": "./node_modules/.bin/tsc -w",
+    "watchwebpack": "./node_modules/.bin/webpack -w",
+    "prestart": ""
   },
   "dependencies": {
     "@types/bcrypt": "^1.0.0",
@@ -11,7 +14,7 @@
     "@types/express-session": "0.0.32",
     "@types/node": "^7.0.18",
     "@types/passport-local": "^1.0.30",
-    "@types/pg": "^6.1.40",
+    "@types/pg": "^6.1.41",
     "@types/pg-pool": "0.0.2",
     "@types/seedrandom": "^2.4.27",
     "bcrypt": "^1.0.2",
@@ -34,7 +37,8 @@
     "typescript": "^2.3.4"
   },
   "devDependencies": {
+    "nodemon": "^1.11.0",
     "ts-loader": "^2.0.3",
-    "webpack": "^2.5.0"
+    "webpack": "^2.6.1"
   }
 }

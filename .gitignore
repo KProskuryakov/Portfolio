@@ -3,4 +3,5 @@ node_modules/
 data/
 npm-debug.log
 public/lasergame/lasergame-bundle.js
+src/secret.ts
 js/

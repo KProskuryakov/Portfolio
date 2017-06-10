@@ -5,48 +5,54 @@
 import express = require('express');
 let router = express.Router();
 
-import * as db_ll from '../db/LasergameLevelTable';
-import { generateLevelFromSeed, getTodaysDailyLevel, getDailyLevel } from '../lasergame-backend/lasergame';
+import * as db_ll from '../../db/LasergameLevelTable';
+import * as db_ldl from '../../db/LasergameDailyLevelTable';
+import { generateLevelFromSeed, getTodaysDailyLevel } from '../../lasergame-backend/lasergame';
 
-router.get('/', (req, res, next) => {
+router.get('/random', (req, res, next) => {
   let seed = req.query.seed;
   let seededLevel = generateLevelFromSeed(seed);
   res.send(JSON.stringify(seededLevel));
 });
 
-router.get('/daily', (req, res, next) => {
-  getTodaysDailyLevel((err, level) => {
-    if (err) return next(err);
+router.get('/daily', async (req, res, next) => {
+  try {
+    let level = await getTodaysDailyLevel()
     res.send(JSON.stringify(level));
-  });
+  } catch (err) {
+    res.send(JSON.stringify(err));
+  }
 });
 
-router.get('/today/:date', (req, res, next) => {
-  getDailyLevel(req.params.date, (err, level) => {
+router.get('/daily/:date', async (req, res, next) => {
+  let level = await db_ldl.getDailyLevel(req.params.date);
+  if (!level) {
+    res.sendStatus(404);
+  } else {
     res.send(JSON.stringify(level));
-  });
+  }
 });
 
-router.get('/:id', function (req, res, next) {
-  let id = parseInt(req.params.id);
-  db_ll.getLasergameLevelByID(id, function (err, level) {
-    if (err) return next(err);
-    res.send(JSON.stringify(level));
-  });
+router.get('/level/:id', async (req, res, next) => {
+  try {
+    let id = parseInt(req.params.id)
+    let level = await db_ll.getLasergameLevelByID(id)
+    res.send(JSON.stringify(level))
+  } catch (err) {
+    next(err)
+  }
 });
 
-router.post('/upload', function (req, res, next) {
+router.post('/upload', async (req, res, next) => {
   if (req.user) {
     let content = req.body;
     console.log(content);
-    db_ll.insertLasergameLevel(content.level_data, content.name, req.user.display_name, function (err, id) {
-      if (err) return next(err);
-      console.log('Level inserted with id: ' + id);
-      res.send('Uploaded!');
-    });
+    let id = await db_ll.insertLasergameLevel(content.level_data, content.name, req.user.display_name)
+    console.log('Level inserted with id: ' + id)
+    res.send('Uploaded!')
   } else {
     res.status(401).send('You must be logged in to upload!');
   }
-});
+})
 
 export = router;

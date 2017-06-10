@@ -1,19 +1,25 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "alwaysStrict": true,
-        "allowSyntheticDefaultImports": false,
-        "outDir": "./js",
-        "rootDir": "./src/"
-    },
-    "include": [
-      "src/**/*"
-    ],
-    "exclude": [
-      "node_modules"
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "allowSyntheticDefaultImports": false,
+    "strict": true,
+    "strictNullChecks": false,
+    "sourceMap": true,
+    "outDir": "./js",
+    "rootDir": "./src/",
+    "lib": [
+      "dom",
+      "es5",
+      "es2015.promise"
     ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

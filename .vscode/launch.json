@@ -5,26 +5,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "chrome",
-      "request": "launch",
-      "name": "Launch Chrome",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceRoot}"
-    },
-    {
-      "name": "Launch server.js via nodemon",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceRoot}",
-      "runtimeExecutable": "nodemon",
-      "runtimeArgs": [
-        "--debug=5858"
-      ],
+      "name": "Launch Program",
       "program": "${workspaceRoot}/bin/www",
-      "restart": true,
-      "port": 5858,
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach",
+      "port": 5858
     }
   ]
 }

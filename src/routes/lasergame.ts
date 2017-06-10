@@ -16,6 +16,6 @@ router.get('/daily', (req, res) => {
 
 router.get('/:seed', (req, res) => {
   res.render('lasergame', { page: "Laser Game", seed: req.params.seed });
-})
+});
 
 module.exports = router;

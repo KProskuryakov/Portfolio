@@ -16,7 +16,7 @@ export function generateLevelFromSeed(seed = Date.now()) {
   let rng = seedrandom(seed);
 
   let success = false;
-  let cleansedEndings: Path[];
+  let cleansedEndings: Path[] = [];
   while (!success) {   // in case the random grid isn't interesting enough somehow
     let randomGrid = new Lasergrid();
 
@@ -64,29 +64,16 @@ export function generateLevelFromSeed(seed = Date.now()) {
   return { level_data: randomEndings, seed };
 }
 
-export function getTodaysDailyLevel(callback: (err: Error, level: LasergameDailyLevel) => void) {
-  db_ldl.getTodaysDailyLevel((err, level) => {
+export async function getTodaysDailyLevel(): Promise<LasergameDailyLevel> {
+  try {
+    let level = await db_ldl.getDailyLevel('today')
     if (!level) {
-      let randomLevel = generateLevelFromSeed();
-      db_ldl.insertDailyLevel(randomLevel.level_data, randomLevel.seed, (err, newLevel) => {
-        if (newLevel) {
-          console.log(`New lasergame daily level generated for date: ${newLevel.daily_date}`); // TODO Proper logging
-          callback(err, newLevel);
-        } else {
-          console.log('Lasergame daily level failed to be inserted for today');
-          console.log(err);
-        }
-      });
-    } else {
-      console.log(`Lasergame daily level fetched for date: ${level.daily_date}`);
-      callback(err, level);
+      let randomLevel = generateLevelFromSeed()
+      level = await db_ldl.insertDailyLevel(randomLevel.level_data, randomLevel.seed)
     }
-  });
-}
-
-export function getDailyLevel(date: string, callback: (err: Error, level: LasergameDailyLevel) => void) {
-  db_ldl.getDailyLevel(date, (err, level) => {
-    if (err) return callback(err, null);
-    return callback(null, level);
-  });
+    return Promise.resolve(level)
+  } catch (err) {
+    console.log("Err: getTodaysDailyLevel() - " + err.message)
+    return Promise.reject(err);
+  }
 }

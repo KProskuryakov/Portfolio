@@ -50,18 +50,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(secretkey));
-<<<<<<< HEAD
-app.use(express.static(path.join(__dirname, '../', 'public')));
-app.use(session({ secret: secretkey, resave: false, saveUninitialized: false }));
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.use(function (req: any, res: any, next: any) {
-  if (req.user) {
-    res.locals.user = req.user;
-  }
-  next();
-=======
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(session({secret: secretkey, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
@@ -73,7 +61,6 @@ app.use(function(req: any, res: any, next: any) {
     }
     res.locals.notesList = notesList;
     next();
->>>>>>> 2ff02a0f3d7e63f0924db47545e39c167c310e14
 });
 
 app.use('/', routes.index);
