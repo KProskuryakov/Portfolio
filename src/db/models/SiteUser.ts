@@ -8,9 +8,9 @@
  * password: varchar(256)
  */
 export interface SiteUser {
-  email: string;
-  display_name: string;
-  password: string;
+  email: string
+  display_name: string
+  password: string
 }
 
-export default SiteUser;
+export default SiteUser

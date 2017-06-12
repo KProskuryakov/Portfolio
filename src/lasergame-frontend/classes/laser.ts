@@ -1,16 +1,16 @@
-import { oppositeDirection } from '../const';
+import { oppositeDirection } from '../const'
 import { Direction } from '../enum'
-import Tile from './tile';
-import Color from './color';
+import Tile from './tile'
+import Color from './color'
 
 
 /**
  * A representation of the location/direction/color of the laser  in a specific tile
  */
 export default class Laser {
-    tile: Tile;
-    dir: Direction;
-    color: Color;
+    tile: Tile
+    dir: Direction
+    color: Color
 
     /**
      * Constructs a Laser
@@ -19,9 +19,9 @@ export default class Laser {
      * @param {Color} color
      */
     constructor(tile: Tile, dir: Direction, color = new Color()) {
-        this.tile = tile;
-        this.dir = dir;
-        this.color = color;
+        this.tile = tile
+        this.dir = dir
+        this.color = color
     }
 
     /**
@@ -29,7 +29,7 @@ export default class Laser {
      * @returns {Laser}
      */
     getOppositeLaser() {
-        return new Laser(this.tile.copy(), oppositeDirection[this.dir], this.color.copy());
+        return new Laser(this.tile.copy(), oppositeDirection[this.dir], this.color.copy())
     }
 
     /**
@@ -37,6 +37,6 @@ export default class Laser {
      * @returns {Laser}
      */
     copy() {
-        return new Laser(this.tile.copy(), this.dir, this.color.copy());
+        return new Laser(this.tile.copy(), this.dir, this.color.copy())
     }
 }

@@ -18,4 +18,4 @@ export interface LasergameLevel {
   user_display_name: string
 }
 
-export default LasergameLevel;
+export default LasergameLevel

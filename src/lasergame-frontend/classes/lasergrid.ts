@@ -1,91 +1,91 @@
-import Laser from "./laser";
-import { Direction, End } from '../enum';
-import Piece from './piece';
-import Tile from './tile';
-import Mirror from './mirror';
-import Swatch from './swatch';
-import Ending from './ending';
-import Path from './path';
+import Laser from "./laser"
+import { Direction, End } from '../enum'
+import Piece from './piece'
+import Tile from './tile'
+import Mirror from './mirror'
+import Swatch from './swatch'
+import Ending from './ending'
+import Path from './path'
 
 export default class LaserGrid {
-  grid: Piece[][];
-  paths: Path[];
+  grid: Piece[][]
+  paths: Path[]
 
   constructor() {
-    this.grid = [];
+    this.grid = []
     for (let i = 0; i < 5; i++) {
-      this.grid[i] = [];
+      this.grid[i] = []
       for (let j = 0; j < 5; j++) {
-        this.grid[i][j] = null;
+        this.grid[i][j] = null
       }
     }
   }   
 
   removePiece(piece: Piece) {
     if (piece.tile.isValid()) {
-      this.grid[piece.tile.tileY][piece.tile.tileX] = null;
-      piece.tile = new Tile(-1, -1);
+      this.grid[piece.tile.tileY][piece.tile.tileX] = null
+      piece.tile = new Tile(-1, -1)
     }
-    this.calculateAllEndings();
+    this.calculateAllEndings()
   }
 
   setPiece(piece: Piece, tile: Tile) {
-    this.removePiece(piece);
-    this.grid[tile.tileY][tile.tileX] = piece;
-    piece.tile = tile;
-    this.calculateAllEndings();
+    this.removePiece(piece)
+    this.grid[tile.tileY][tile.tileX] = piece
+    piece.tile = tile
+    this.calculateAllEndings()
   }
 
   getPiece(tile: Tile) {
-    return this.grid[tile.tileY][tile.tileX];
+    return this.grid[tile.tileY][tile.tileX]
   }
 
   calculateAllEndings() {
-    let endings: Path[] = [];
+    let endings: Path[] = []
     for (let i = 1; i <= 20; i++) {
-      endings[i] = new Path(i, this.calculateEndingList(i));
+      endings[i] = new Path(i, this.calculateEndingList(i))
     }
-    this.paths = endings;
+    this.paths = endings
   }
 
   calculateEndingList(edge: number) {
-    let ending: Ending[] = [];
+    let ending: Ending[] = []
 
     function trackOneEnding(grid: LaserGrid, laser: Laser) {
       for (let i = 0; i < 100; i++) {
-        laser.tile = laser.tile.nextTile(laser.dir);
+        laser.tile = laser.tile.nextTile(laser.dir)
         if (!laser.tile.isValid(5, 5)) {
-          let endEdge = LaserGrid.tileToEdgeNumber(laser.tile);
-          ending.push(new Ending(endEdge, laser.color));
-          return;
+          let endEdge = LaserGrid.tileToEdgeNumber(laser.tile)
+          ending.push(new Ending(endEdge, laser.color))
+          return
         }
-        let piece = grid.getPiece(laser.tile);
+        let piece = grid.getPiece(laser.tile)
         if (piece) {
           if (piece instanceof Mirror) {
-            laser.dir = piece.dirs[laser.dir];
+            laser.dir = piece.dirs[laser.dir]
             switch (laser.dir) {
               case Direction.SplitNorthSouth:
-                laser.dir = Direction.North;
-                trackOneEnding(grid, new Laser(laser.tile, Direction.South, laser.color));
-                break;
+                laser.dir = Direction.North
+                trackOneEnding(grid, new Laser(laser.tile, Direction.South, laser.color))
+                break
               case Direction.SplitEastWest:
-                laser.dir = Direction.East;
-                trackOneEnding(grid, new Laser(laser.tile, Direction.West, laser.color));
-                break;
+                laser.dir = Direction.East
+                trackOneEnding(grid, new Laser(laser.tile, Direction.West, laser.color))
+                break
               case Direction.None:
-                ending.push(new Ending(End.Blocked, laser.color));
-                return;
+                ending.push(new Ending(End.Blocked, laser.color))
+                return
             }
           } else if (piece instanceof Swatch) {
-            laser.color = laser.color.add(piece.color);
+            laser.color = laser.color.add(piece.color)
           }
         } // if piece is not null
       } // for
-      ending.push(new Ending(End.Loop, laser.color));
+      ending.push(new Ending(End.Loop, laser.color))
     } // trackOneEnding()
 
-    trackOneEnding(this, LaserGrid.edgeNumberToLaser(edge));
-    return ending;
+    trackOneEnding(this, LaserGrid.edgeNumberToLaser(edge))
+    return ending
   }
 
   /**
@@ -93,30 +93,30 @@ export default class LaserGrid {
    */
   static edgeNumberToLaser(edge: number) {
     if (edge < 6) {
-      return new Laser(new Tile(edge - 1, -1), Direction.South);
+      return new Laser(new Tile(edge - 1, -1), Direction.South)
     } else if (edge < 11) {
-      return new Laser(new Tile(5, edge - 6), Direction.West);
+      return new Laser(new Tile(5, edge - 6), Direction.West)
     } else if (edge < 16) {
-      return new Laser(new Tile(-edge + 15, 5), Direction.North);
+      return new Laser(new Tile(-edge + 15, 5), Direction.North)
     } else if (edge < 21) {
-      return new Laser(new Tile(-1, -edge + 20), Direction.East);
+      return new Laser(new Tile(-1, -edge + 20), Direction.East)
     }
   }
 
   /**
    */
   static tileToEdgeNumber(tile: Tile) {
-    let x = tile.tileX;
-    let y = tile.tileY;
+    let x = tile.tileX
+    let y = tile.tileY
     if (y === -1 && x > -1 && x < 5) {
-      return 1 + x;
+      return 1 + x
     } else if (x === 5 && y > -1 && y < 5) {
-      return 6 + y;
+      return 6 + y
     } else if (y === 5 && x > -1 && x < 5) {
-      return 15 - x;
+      return 15 - x
     } else if (x === -1 && y > -1 && y < 5) {
-      return 20 - y;
+      return 20 - y
     }
-    return 0;
+    return 0
   }
 }

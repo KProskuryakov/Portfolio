@@ -1,5 +1,5 @@
-import pool from './postgresdb';
-import SiteUser from './models/SiteUser';
+import pool from './postgresdb'
+import SiteUser from './models/SiteUser'
 
 pool.query(`CREATE TABLE IF NOT EXISTS site_users 
   (
@@ -7,25 +7,25 @@ pool.query(`CREATE TABLE IF NOT EXISTS site_users
     password varchar(80) NOT NULL, 
     display_name varchar(64) UNIQUE NOT NULL
   );`
-);
+)
 
 export async function insertSiteUser(email: string, displayName: string, pass: string): Promise<SiteUser> {
-  let res = await pool.query("INSERT INTO site_users (email, password, display_name) VALUES ($1, $2, $3) RETURNING *", [email, pass, displayName])
+  let res = await pool.query("INSERT INTO site_users (email, password, display_name) VALUES ($1, $2, $3) RETURNING *;", [email, pass, displayName])
   return res.rows[0]
 }
 
 export async function getSiteUserPasswordByEmail(email: string): Promise<string> {
-  let res = await pool.query('SELECT * FROM site_users WHERE email = $1', [email])
+  let res = await pool.query('SELECT * FROM site_users WHERE email = $1;', [email])
   return res.rows[0].password
 }
 
 export async function getSiteUserByEmail(email: string): Promise<SiteUser> {
-  let res = await pool.query('SELECT * FROM site_users WHERE email = $1', [email])
+  let res = await pool.query('SELECT * FROM site_users WHERE email = $1;', [email])
   return res.rows[0]
 }
 
 export async function getSiteUserByDisplayName(displayName: string): Promise<SiteUser> {
-  let res = await pool.query('SELECT * FROM site_users WHERE display_name = $1', [displayName])
+  let res = await pool.query('SELECT * FROM site_users WHERE display_name = $1;', [displayName])
   return res.rows[0]
 }
 

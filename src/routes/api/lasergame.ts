@@ -2,36 +2,36 @@
  * Route: /api/lasergame/
  */
 
-import express = require('express');
-let router = express.Router();
+import express = require('express')
+let router = express.Router()
 
-import * as db_ll from '../../db/LasergameLevelTable';
-import * as db_ldl from '../../db/LasergameDailyLevelTable';
-import { generateLevelFromSeed, getTodaysDailyLevel } from '../../lasergame-backend/lasergame';
+import * as db_ll from '../../db/LasergameLevelTable'
+import * as db_ldl from '../../db/LasergameDailyLevelTable'
+import { generateLevelFromSeed, getTodaysDailyLevel } from '../../lasergame-backend/lasergame'
 
 router.get('/random', (req, res, next) => {
-  let seed = req.query.seed;
-  let seededLevel = generateLevelFromSeed(seed);
-  res.send(JSON.stringify(seededLevel));
-});
+  let seed = req.query.seed
+  let seededLevel = generateLevelFromSeed(seed)
+  res.send(JSON.stringify(seededLevel))
+})
 
 router.get('/daily', async (req, res, next) => {
   try {
     let level = await getTodaysDailyLevel()
-    res.send(JSON.stringify(level));
+    return res.send(JSON.stringify(level))
   } catch (err) {
-    res.send(JSON.stringify(err));
+    return res.send(JSON.stringify(err))
   }
-});
+})
 
 router.get('/daily/:date', async (req, res, next) => {
-  let level = await db_ldl.getDailyLevel(req.params.date);
+  let level = await db_ldl.getDailyLevel(req.params.date)
   if (!level) {
-    res.sendStatus(404);
+    return res.sendStatus(404)
   } else {
-    res.send(JSON.stringify(level));
+    return res.send(JSON.stringify(level))
   }
-});
+})
 
 router.get('/level/:id', async (req, res, next) => {
   try {
@@ -41,18 +41,18 @@ router.get('/level/:id', async (req, res, next) => {
   } catch (err) {
     next(err)
   }
-});
+})
 
 router.post('/upload', async (req, res, next) => {
   if (req.user) {
-    let content = req.body;
-    console.log(content);
+    let content = req.body
+    console.log(content)
     let id = await db_ll.insertLasergameLevel(content.level_data, content.name, req.user.display_name)
     console.log('Level inserted with id: ' + id)
     res.send('Uploaded!')
   } else {
-    res.status(401).send('You must be logged in to upload!');
+    res.status(401).send('You must be logged in to upload!')
   }
 })
 
-export = router;
+export = router

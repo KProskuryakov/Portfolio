@@ -1,122 +1,122 @@
-import { canvas, importPre, pathsPre, victoryP, ctx } from './htmlelements';
-import { Direction, End, Pieces, LevelType } from './enum';
+import { canvas, importPre, pathsPre, victoryP, ctx } from './htmlelements'
+import { Direction, End, Pieces, LevelType } from './enum'
 import { PathsList } from './interfaces'
-import Toolbar from './classes/toolbar';
-import LaserGridComponent from './classes/lasergrid_component';
-import PieceComponent from './classes/piece_component';
-import Tile from './classes/tile';
-import Piece from './classes/piece';
-import Mirror from './classes/mirror';
-import Swatch from './classes/swatch';
-import Ending from './classes/ending';
-import Color from './classes/color';
-import Path from './classes/path';
-import { pieces } from './pieces';
+import Toolbar from './classes/toolbar'
+import LaserGridComponent from './classes/lasergrid_component'
+import PieceComponent from './classes/piece_component'
+import Tile from './classes/tile'
+import Piece from './classes/piece'
+import Mirror from './classes/mirror'
+import Swatch from './classes/swatch'
+import Ending from './classes/ending'
+import Color from './classes/color'
+import Path from './classes/path'
+import { pieces } from './pieces'
 
-import LasergameDailyLevel from '../db/models/LasergameDailyLevel';
+import LasergameDailyLevel from '../db/models/LasergameDailyLevel'
 
-export const toolbar = new Toolbar("toolbar.png", new Tile(0, 7), 8, 1, draw);
-export const lasergridComponent = new LaserGridComponent("lasergrid.png", new Tile(0, 0), 7, 7, draw);
+export const toolbar = new Toolbar("toolbar.png", new Tile(0, 7), 8, 1, draw)
+export const lasergridComponent = new LaserGridComponent("lasergrid.png", new Tile(0, 0), 7, 7, draw)
 
-export const pieceComponents: Array<PieceComponent> = [];
+export const pieceComponents: Array<PieceComponent> = []
 
-let currentLevel: Path[] = null;
-let levelType: LevelType = LevelType.Custom;
+let currentLevel: Path[] = null
+let levelType: LevelType = LevelType.Custom
 
 /**
  * Inits the things that aren't constants
  */
 function init() {
-  canvas.addEventListener("click", onClick, false);
+  canvas.addEventListener("click", onClick, false)
 
-  pieceComponents[Pieces.ForwardSlash] = new PieceComponent(pieces[Pieces.ForwardSlash], "pieces/mirror_forwardslash.png", draw);
-  pieceComponents[Pieces.BackSlash] = new PieceComponent(pieces[Pieces.BackSlash], "pieces/mirror_backslash.png", draw);
-  pieceComponents[Pieces.BlackHole] = new PieceComponent(pieces[Pieces.BlackHole], "pieces/mirror_blackhole.png", draw);
-  pieceComponents[Pieces.SideSplit] = new PieceComponent(pieces[Pieces.SideSplit], "pieces/mirror_sidesplit.png", draw);
-  pieceComponents[Pieces.UpSplit] = new PieceComponent(pieces[Pieces.UpSplit], "pieces/mirror_upsplit.png", draw);
-  pieceComponents[Pieces.Blue] = new PieceComponent(pieces[Pieces.Blue], "pieces/swatch_blue.png", draw);
-  pieceComponents[Pieces.Red] = new PieceComponent(pieces[Pieces.Red], "pieces/swatch_red.png", draw);
-  pieceComponents[Pieces.Green] = new PieceComponent(pieces[Pieces.Green], "pieces/swatch_green.png", draw);
+  pieceComponents[Pieces.ForwardSlash] = new PieceComponent(pieces[Pieces.ForwardSlash], "pieces/mirror_forwardslash.png", draw)
+  pieceComponents[Pieces.BackSlash] = new PieceComponent(pieces[Pieces.BackSlash], "pieces/mirror_backslash.png", draw)
+  pieceComponents[Pieces.BlackHole] = new PieceComponent(pieces[Pieces.BlackHole], "pieces/mirror_blackhole.png", draw)
+  pieceComponents[Pieces.SideSplit] = new PieceComponent(pieces[Pieces.SideSplit], "pieces/mirror_sidesplit.png", draw)
+  pieceComponents[Pieces.UpSplit] = new PieceComponent(pieces[Pieces.UpSplit], "pieces/mirror_upsplit.png", draw)
+  pieceComponents[Pieces.Blue] = new PieceComponent(pieces[Pieces.Blue], "pieces/swatch_blue.png", draw)
+  pieceComponents[Pieces.Red] = new PieceComponent(pieces[Pieces.Red], "pieces/swatch_red.png", draw)
+  pieceComponents[Pieces.Green] = new PieceComponent(pieces[Pieces.Green], "pieces/swatch_green.png", draw)
 
-  lasergridComponent.lasergrid.calculateAllEndings();
-  printPaths();
-  lasergridComponent.calculateDrawPathWrapper();
+  lasergridComponent.lasergrid.calculateAllEndings()
+  printPaths()
+  lasergridComponent.calculateDrawPathWrapper()
 }
  
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#9c9a9b";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = "#9c9a9b"
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  lasergridComponent.draw(ctx);
-  toolbar.draw(ctx);
+  lasergridComponent.draw(ctx)
+  toolbar.draw(ctx)
 }
 
 function onClick(event: any) {
-  let loc = windowToCanvas(event.clientX, event.clientY);
-  lasergridComponent.processMouseClick(loc.x, loc.y);
-  toolbar.processMouseClick(loc.x, loc.y);
-  draw();
+  let loc = windowToCanvas(event.clientX, event.clientY)
+  lasergridComponent.processMouseClick(loc.x, loc.y)
+  toolbar.processMouseClick(loc.x, loc.y)
+  draw()
   if (checkVictory()) {
     if (levelType === LevelType.Random) {
-      victoryP.textContent = "Incredible! You won! Refresh the page to generate a new random puzzle.";
+      victoryP.textContent = "Incredible! You won! Refresh the page to generate a new random puzzle."
     } else if (levelType === LevelType.Daily) {
-      victoryP.textContent = "Wow! You beat the daily level!";
+      victoryP.textContent = "Wow! You beat the daily level!"
     } else if (levelType === LevelType.Custom) {
-      victoryP.textContent = "Wow! You beat the custom level!";
+      victoryP.textContent = "Wow! You beat the custom level!"
     }
-    victoryP.hidden = false;
+    victoryP.hidden = false
   }
 }
 
 // TODO remove/change when importLevel needs new functionality
 export function importLevel(levelID: number) {
-  if (!levelID) return;
+  if (!levelID) return
   window.fetch(`/api/lasergame/${levelID}`, {
     method: 'GET',
     credentials: 'same-origin'
   }).then(function (response) {
-    return response.json();
+    return response.json()
   }).then(function (parsedJSON) {
-    let tempPathsList = parsedJSON.level_data;
-    let newPathsList: PathsList = [null];
+    let tempPathsList = parsedJSON.level_data
+    let newPathsList: PathsList = [null]
     for (let i = 1; i <= 20; i++) {
 
-      let arrayOfEndings = tempPathsList[i];
-      let newArrayOfEndings = [];
+      let arrayOfEndings = tempPathsList[i]
+      let newArrayOfEndings = []
       for (let j = 0; j < arrayOfEndings.length; j++) {
-        newArrayOfEndings[j] = Ending.fromJSON(arrayOfEndings[j]);
+        newArrayOfEndings[j] = Ending.fromJSON(arrayOfEndings[j])
       }
-      newPathsList[i] = newArrayOfEndings;
+      newPathsList[i] = newArrayOfEndings
     }
 
-    lasergridComponent.importedPathsList = newPathsList;
+    lasergridComponent.importedPathsList = newPathsList
 
-    printPaths();
+    printPaths()
   }).catch(function (err) {
-    alert('Import Level Failed!' + err); //TODO better error handling here
-  });
+    alert('Import Level Failed!' + err) //TODO better error handling here
+  })
 }
 
 function checkVictory(): boolean {
   for (let p = 0; p < currentLevel.length; p++) {
-    let path = currentLevel[p];
+    let path = currentLevel[p]
     if (!path.endingsEqual(lasergridComponent.lasergrid.paths[path.start])) {
-      return false;
+      return false
     }
   }
-  return true;
+  return true
 }
 
 export function printPaths() {
-  pathsPre.innerHTML = "";
-  let paths = lasergridComponent.lasergrid.paths;
-  let curLevelNum = 0;
+  pathsPre.innerHTML = ""
+  let paths = lasergridComponent.lasergrid.paths
+  let curLevelNum = 0
   for (let i = 1; i <= 20; i++) {
-    let curPath = paths[i];
-    let line = curPath.toString();
+    let curPath = paths[i]
+    let line = curPath.toString()
     if (currentLevel && curLevelNum < 5) {
-      let levelPath = currentLevel[curLevelNum];
+      let levelPath = currentLevel[curLevelNum]
       if (levelPath.start === i) {
         line += ` (${levelPath.endingListToString()})`
         if (curPath.endingsEqual(levelPath)) {
@@ -124,13 +124,13 @@ export function printPaths() {
         } else { 
           line = `<span style='color: red'>${line}</span>`
         }
-        curLevelNum++;
+        curLevelNum++
       }
     }
-    pathsPre.innerHTML += line;
+    pathsPre.innerHTML += line
 
     if (i < 20) {
-      pathsPre.innerHTML += "\n";
+      pathsPre.innerHTML += "\n"
     }
   }
 }
@@ -142,12 +142,12 @@ export function printPaths() {
  * @returns {{x: number, y: number}} a relative location to the canvas
  */
 function windowToCanvas(x: number, y: number) {
-  let bbox = canvas.getBoundingClientRect();
+  let bbox = canvas.getBoundingClientRect()
 
   return {
     x: x - bbox.left * (canvas.width / bbox.width),
     y: y - bbox.top * (canvas.height / bbox.height)
-  };
+  }
 }
 
 function uploadPaths() {
@@ -160,11 +160,11 @@ function uploadPaths() {
     body: JSON.stringify({ level_data: lasergridComponent.lasergrid.paths, name: "test" })
   }).then(function (response) {
     if (response.status === 401) {
-      alert('Must be logged in to upload a level!');
+      alert('Must be logged in to upload a level!')
     } else {
-      alert('Level uploaded! (Probably)');
+      alert('Level uploaded! (Probably)')
     }
-  });
+  })
 }
 
 export function getLevel(seed: string) {
@@ -173,17 +173,17 @@ export function getLevel(seed: string) {
     credentials: 'same-origin'
   }).then(function (response) {
     response.json().then((randomLevel: LasergameDailyLevel) => { // TODO change to LasergameLevel as soon as it's normalized
-      levelType = LevelType.Random;
-      let levelData = randomLevel.level_data;
-      let seed = randomLevel.seed;
-      console.log(seed);
-      currentLevel = [];
+      levelType = LevelType.Random
+      let levelData = randomLevel.level_data
+      let seed = randomLevel.seed
+      console.log(seed)
+      currentLevel = []
       for (let i = 0; i < levelData.length; i++) {
-        currentLevel.push(Path.fromJSONObject(levelData[i]));
+        currentLevel.push(Path.fromJSONObject(levelData[i]))
       }
-      printPaths();
-    });
-  });
+      printPaths()
+    })
+  })
 }
 
 export function getDailyLevel() {
@@ -192,17 +192,17 @@ export function getDailyLevel() {
     credentials: 'same-origin'
   }).then((response) => {
     response.json().then((dailyLevel: LasergameDailyLevel) => {
-      levelType = LevelType.Daily;
-      let levelData = dailyLevel.level_data;
-      let seed = dailyLevel.seed;
-      console.log(seed);
-      currentLevel = [];
+      levelType = LevelType.Daily
+      let levelData = dailyLevel.level_data
+      let seed = dailyLevel.seed
+      console.log(seed)
+      currentLevel = []
       for (let i = 0; i < levelData.length; i++) {
-        currentLevel.push(Path.fromJSONObject(levelData[i]));
+        currentLevel.push(Path.fromJSONObject(levelData[i]))
       }
-      printPaths();
-    });
+      printPaths()
+    })
   })
 }
 
-init();
+init()

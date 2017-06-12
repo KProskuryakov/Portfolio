@@ -1,12 +1,12 @@
-import { TILE_FULL, directionMapping } from '../const';
-import { Direction } from '../enum';
+import { TILE_FULL, directionMapping } from '../const'
+import { Direction } from '../enum'
 
 /**
  * A class that represents a tile, holds tileX and tileY
  */
 export default class Tile {
-    tileX: number;
-    tileY: number;
+    tileX: number
+    tileY: number
 
     /**
      *  Constructs a tile based on pixel location and the global TILE_FULL
@@ -15,7 +15,7 @@ export default class Tile {
      * @returns {Tile}
      */
     static TileFromPixels(x: number, y: number) {
-        return new Tile(Math.floor(x / TILE_FULL), Math.floor(y / TILE_FULL));
+        return new Tile(Math.floor(x / TILE_FULL), Math.floor(y / TILE_FULL))
     }
 
     /**
@@ -24,8 +24,8 @@ export default class Tile {
      * @param {number} tileY
      */
     constructor(tileX = -1, tileY = -1) {
-        this.tileX = tileX;
-        this.tileY = tileY;
+        this.tileX = tileX
+        this.tileY = tileY
     }
 
     /**
@@ -35,7 +35,7 @@ export default class Tile {
      * @returns {boolean}
      */
     isValid(maxX = Infinity, maxY = Infinity) {
-        return (this.tileX > -1 && this.tileY > -1 && this.tileX < maxX && this.tileY < maxY);
+        return (this.tileX > -1 && this.tileY > -1 && this.tileX < maxX && this.tileY < maxY)
     }
 
     /**
@@ -43,7 +43,7 @@ export default class Tile {
      * @returns {{x: number, y: number}}
      */
     toPixels() {
-        return {x: this.tileX * TILE_FULL, y: this.tileY * TILE_FULL};
+        return {x: this.tileX * TILE_FULL, y: this.tileY * TILE_FULL}
     }
 
     /**
@@ -53,7 +53,7 @@ export default class Tile {
      * @returns {boolean}
      */
     compare(tile: Tile, comparator: any) {
-        return (comparator(this.tileX, tile.tileX) && comparator(this.tileY, tile.tileY));
+        return (comparator(this.tileX, tile.tileX) && comparator(this.tileY, tile.tileY))
     }
 
     /**
@@ -62,7 +62,7 @@ export default class Tile {
      * @returns {Tile}
      */
     minus(tile: Tile) {
-        return new Tile(this.tileX - tile.tileX, this.tileY - tile.tileY);
+        return new Tile(this.tileX - tile.tileX, this.tileY - tile.tileY)
     }
 
     /**
@@ -71,23 +71,23 @@ export default class Tile {
      * @returns {Tile}
      */
     add(tile: Tile) {
-        return new Tile(this.tileX + tile.tileX, this.tileY + tile.tileY);
+        return new Tile(this.tileX + tile.tileX, this.tileY + tile.tileY)
     }
 
     /**
      */
     copy() {
-        return new Tile(this.tileX, this.tileY);
+        return new Tile(this.tileX, this.tileY)
     }
 
     /**
      * returns the next tile in a given direction
      */
     nextTile(dir: Direction) {
-        return this.add(directionMapping[dir]);
+        return this.add(directionMapping[dir])
     }
 
     toString() {
-        return `Tile: (${this.tileX}, ${this.tileY})`;
+        return `Tile: (${this.tileX}, ${this.tileY})`
     }
 }

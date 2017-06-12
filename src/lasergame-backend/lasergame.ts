@@ -1,67 +1,67 @@
-import Lasergrid from '../lasergame-frontend/classes/lasergrid';
-import { pieces } from '../lasergame-frontend/pieces';
-import Piece from '../lasergame-frontend/classes/piece';
-import Tile from '../lasergame-frontend/classes/tile';
-import Ending from '../lasergame-frontend/classes/ending';
-import Path from '../lasergame-frontend/classes/path';
+import Lasergrid from '../lasergame-frontend/classes/lasergrid'
+import { pieces } from '../lasergame-frontend/pieces'
+import Piece from '../lasergame-frontend/classes/piece'
+import Tile from '../lasergame-frontend/classes/tile'
+import Ending from '../lasergame-frontend/classes/ending'
+import Path from '../lasergame-frontend/classes/path'
 
-import * as db_ldl from '../db/LasergameDailyLevelTable';
-import LasergameDailyLevel from '../db/models/LasergameDailyLevel';
-let seedrandom = require('seedrandom');
+import * as db_ldl from '../db/LasergameDailyLevelTable'
+import LasergameDailyLevel from '../db/models/LasergameDailyLevel'
+let seedrandom = require('seedrandom')
 
-let defaultGrid = new Lasergrid();
-defaultGrid.calculateAllEndings();
+let defaultGrid = new Lasergrid()
+defaultGrid.calculateAllEndings()
 
 export function generateLevelFromSeed(seed = Date.now()) {
-  let rng = seedrandom(seed);
+  let rng = seedrandom(seed)
 
-  let success = false;
-  let cleansedEndings: Path[] = [];
+  let success = false
+  let cleansedEndings: Path[] = []
   while (!success) {   // in case the random grid isn't interesting enough somehow
-    let randomGrid = new Lasergrid();
+    let randomGrid = new Lasergrid()
 
     pieces.forEach((piece: Piece) => {
       while (true) {
-        let randTile = new Tile(Math.floor(rng() * 5), Math.floor(rng() * 5));
+        let randTile = new Tile(Math.floor(rng() * 5), Math.floor(rng() * 5))
         if (!randomGrid.getPiece(randTile)) {
-          randomGrid.setPiece(piece, randTile);
-          break;
+          randomGrid.setPiece(piece, randTile)
+          break
         }
       }
-    });
+    })
 
-    randomGrid.calculateAllEndings();
+    randomGrid.calculateAllEndings()
 
-    let gridEndings = randomGrid.paths;
+    let gridEndings = randomGrid.paths
 
-    cleansedEndings = [];
+    cleansedEndings = []
 
     for (let i = 1; i < gridEndings.length; i++) {
       if (!gridEndings[i].endingsEqual(defaultGrid.paths[i])) {
-        cleansedEndings.push(gridEndings[i]);
+        cleansedEndings.push(gridEndings[i])
       }
     }
     if (cleansedEndings.length >= 5) {
-      success = true;
+      success = true
     }
   } // while !success
 
   // shuffle cleansedEndings
-  let m = cleansedEndings.length;
-  let t: Path; let i: number;
+  let m = cleansedEndings.length
+  let t: Path; let i: number
   while (m) {
-    let i = Math.floor(rng() * m--);
+    let i = Math.floor(rng() * m--)
 
-    t = cleansedEndings[m];
-    cleansedEndings[m] = cleansedEndings[i];
-    cleansedEndings[i] = t;
+    t = cleansedEndings[m]
+    cleansedEndings[m] = cleansedEndings[i]
+    cleansedEndings[i] = t
   }
 
-  let randomEndings: Path[] = cleansedEndings.slice(0, 5);
+  let randomEndings: Path[] = cleansedEndings.slice(0, 5)
 
-  randomEndings.sort((a, b) => { return a.start < b.start ? -1 : 1 });
+  randomEndings.sort((a, b) => { return a.start < b.start ? -1 : 1 })
 
-  return { level_data: randomEndings, seed };
+  return { level_data: randomEndings, seed }
 }
 
 export async function getTodaysDailyLevel(): Promise<LasergameDailyLevel> {
@@ -74,6 +74,6 @@ export async function getTodaysDailyLevel(): Promise<LasergameDailyLevel> {
     return Promise.resolve(level)
   } catch (err) {
     console.log("Err: getTodaysDailyLevel() - " + err.message)
-    return Promise.reject(err);
+    return Promise.reject(err)
   }
 }

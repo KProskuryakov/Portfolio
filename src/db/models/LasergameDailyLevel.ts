@@ -15,4 +15,4 @@ export interface LasergameDailyLevel {
   times_beaten: number
 }
 
-export default LasergameDailyLevel;
+export default LasergameDailyLevel

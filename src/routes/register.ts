@@ -1,15 +1,15 @@
-import express = require('express');
-let router = express.Router();
+import express = require('express')
+let router = express.Router()
 
-let addresses = require('email-addresses');
+let addresses = require('email-addresses')
 
-import bcrypt = require('bcrypt');
-import * as db_su from '../db/SiteUserTable';
+import bcrypt = require('bcrypt')
+import * as db_su from '../db/SiteUserTable'
 
 router.get('/', function (req, res) {
-  let err = req.query.err;
-  res.render('register', { page: "Register", err: err });
-});
+  let err = req.query.err
+  res.render('register', { page: "Register", err: err })
+})
 
 /**
  * Register error strings:
@@ -19,7 +19,7 @@ router.get('/', function (req, res) {
  * DUPLICATE_EMAIL
  * DUPLICATE_DISPLAY_NAME
  */
-router.post('/', async function postRegister(req, res, next) {
+router.post('/', async (req, res, next) => {
   // Get our form values. These rely on the "name" attributes in the html tags
   let email = (<string>req.body.email).toLocaleLowerCase()
   if (!addresses.parseOneAddress(email) || email.length > 256) {
@@ -47,12 +47,12 @@ router.post('/', async function postRegister(req, res, next) {
     })
   } catch (err) {
     if (err.message === 'duplicate key value violates unique constraint "site_users_pkey"') {
-      return res.redirect('/register?err=DUPLICATE_EMAIL');
+      return res.redirect('/register?err=DUPLICATE_EMAIL')
     } else if (err.message === 'duplicate key value violates unique constraint "site_users_display_name_key"') {
-      return res.redirect('/register?err=DUPLICATE_DISPLAY_NAME');
+      return res.redirect('/register?err=DUPLICATE_DISPLAY_NAME')
     }
     return next(err)
   }
-});
+})
 
-module.exports = router;
+module.exports = router
