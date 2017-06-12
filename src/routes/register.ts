@@ -23,15 +23,15 @@ router.post('/', async function postRegister(req, res, next) {
   // Get our form values. These rely on the "name" attributes in the html tags
   let email = (<string>req.body.email).toLocaleLowerCase()
   if (!addresses.parseOneAddress(email) || email.length > 256) {
-    res.redirect('/register?err=INVALID_EMAIL')
+    return res.redirect('/register?err=INVALID_EMAIL')
   }
   let password = (<string>req.body.password)
   if (password.length < 6 || password.length > 256) {
-    res.redirect('/register?err=INVALID_PASSWORD')
+    return res.redirect('/register?err=INVALID_PASSWORD')
   }
   let displayName = (<string>req.body.display_name)
   if (displayName.length > 64) {
-    res.redirect('/register?err=INVALID_DISPLAY_NAME')
+    return res.redirect('/register?err=INVALID_DISPLAY_NAME')
   }
 
   console.log('User registering with data: ' + email + " " + displayName)
@@ -43,15 +43,15 @@ router.post('/', async function postRegister(req, res, next) {
     req.login(user, (err) => {
       if (err) throw err
       console.log('User logged in with email: ' + email)
-      res.redirect('/')
+      return res.redirect('/')
     })
   } catch (err) {
     if (err.message === 'duplicate key value violates unique constraint "site_users_pkey"') {
-      res.redirect('/register?err=DUPLICATE_EMAIL');
+      return res.redirect('/register?err=DUPLICATE_EMAIL');
     } else if (err.message === 'duplicate key value violates unique constraint "site_users_display_name_key"') {
-      res.redirect('/register?err=DUPLICATE_DISPLAY_NAME');
+      return res.redirect('/register?err=DUPLICATE_DISPLAY_NAME');
     }
-    next(err)
+    return next(err)
   }
 });
 
