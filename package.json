@@ -3,10 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "./node_modules/.bin/nodemon ./bin/www",
-    "watchtsc": "./node_modules/.bin/tsc -w",
-    "watchwebpack": "./node_modules/.bin/webpack -w",
-    "prestart": ""
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "@types/bcrypt": "^1.0.0",
@@ -34,11 +31,11 @@
     "pug": "^2.0.0-beta11",
     "seedrandom": "^2.4.3",
     "serve-favicon": "~2.3.2",
-    "typescript": "^2.3.4"
-  },
-  "devDependencies": {
-    "nodemon": "^1.11.0",
+    "typescript": "^2.3.4",
     "ts-loader": "^2.0.3",
     "webpack": "^2.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
