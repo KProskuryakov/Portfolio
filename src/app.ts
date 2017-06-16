@@ -28,7 +28,7 @@ let app = express()
 import { Passport } from 'passport'
 
 let passport: Passport = require('./passport')
-let secretkey = require('./secret').secretkey
+let secretkey = process.env.SECRET_KEY
 
 let notesList: string[] = []
 readdir('./notes', function (err, files) {
