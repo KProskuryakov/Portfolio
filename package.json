@@ -3,8 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "./node_modules/.bin/tsc && ./node_modules/.bin/webpack",
+    "postinstall": "tsc -p && webpack -p",
     "start": "node ./bin/www"
+  },
+  "engines": {
+    "node": "6.10.2",
+    "npm": "3.10.10"
   },
   "dependencies": {
     "@types/bcrypt": "^1.0.0",
