@@ -5,7 +5,7 @@ let passport = require('../passport')
 
 router.get('/', function (req, res) {
   let err = req.query.err
-  res.render('login', {page: "Login", err: err})
+  res.render('login', {title: 'Login', page: "Login", err: err})
 })
 
 router.post('/', passport.authenticate('local', {successRedirect: "/", failureRedirect: "/login?err=INVALID"}))

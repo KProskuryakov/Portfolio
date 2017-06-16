@@ -36,7 +36,7 @@ export function generateLevelFromSeed(seed = Date.now()) {
 
     cleansedEndings = []
 
-    for (let i = 1; i < gridEndings.length; i++) {
+    for (let i = 0; i < gridEndings.length; i++) {
       if (!gridEndings[i].endingsEqual(defaultGrid.paths[i])) {
         cleansedEndings.push(gridEndings[i])
       }

@@ -33,7 +33,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function strategy(ema
   })
 }))
 
-passport.serializeUser(function (user: SiteUser, done: (err: Error, email: string) => void) {
+passport.serializeUser(function (user: SiteUser, done: (err: any, email: string) => void) {
   done(null, user.email)
 })
 

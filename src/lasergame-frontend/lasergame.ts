@@ -15,12 +15,12 @@ import { pieces } from './pieces'
 
 import LasergameDailyLevel from '../db/models/LasergameDailyLevel'
 
-export const toolbar = new Toolbar("toolbar.png", new Tile(0, 7), 8, 1, draw)
-export const lasergridComponent = new LaserGridComponent("lasergrid.png", new Tile(0, 0), 7, 7, draw)
+export const toolbar = new Toolbar("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw)
+export const lasergridComponent = new LaserGridComponent("/lasergame/lasergrid.png", new Tile(0, 0), 7, 7, draw)
 
 export const pieceComponents: Array<PieceComponent> = []
 
-let currentLevel: Path[] = null
+let currentLevel: Path[]
 let levelType: LevelType = LevelType.Custom
 
 /**
@@ -29,14 +29,14 @@ let levelType: LevelType = LevelType.Custom
 function init() {
   canvas.addEventListener("click", onClick, false)
 
-  pieceComponents[Pieces.ForwardSlash] = new PieceComponent(pieces[Pieces.ForwardSlash], "pieces/mirror_forwardslash.png", draw)
-  pieceComponents[Pieces.BackSlash] = new PieceComponent(pieces[Pieces.BackSlash], "pieces/mirror_backslash.png", draw)
-  pieceComponents[Pieces.BlackHole] = new PieceComponent(pieces[Pieces.BlackHole], "pieces/mirror_blackhole.png", draw)
-  pieceComponents[Pieces.SideSplit] = new PieceComponent(pieces[Pieces.SideSplit], "pieces/mirror_sidesplit.png", draw)
-  pieceComponents[Pieces.UpSplit] = new PieceComponent(pieces[Pieces.UpSplit], "pieces/mirror_upsplit.png", draw)
-  pieceComponents[Pieces.Blue] = new PieceComponent(pieces[Pieces.Blue], "pieces/swatch_blue.png", draw)
-  pieceComponents[Pieces.Red] = new PieceComponent(pieces[Pieces.Red], "pieces/swatch_red.png", draw)
-  pieceComponents[Pieces.Green] = new PieceComponent(pieces[Pieces.Green], "pieces/swatch_green.png", draw)
+  pieceComponents[Pieces.ForwardSlash] = new PieceComponent(pieces[Pieces.ForwardSlash], "/lasergame/pieces/mirror_forwardslash.png", draw)
+  pieceComponents[Pieces.BackSlash] = new PieceComponent(pieces[Pieces.BackSlash], "/lasergame/pieces/mirror_backslash.png", draw)
+  pieceComponents[Pieces.BlackHole] = new PieceComponent(pieces[Pieces.BlackHole], "/lasergame/pieces/mirror_blackhole.png", draw)
+  pieceComponents[Pieces.SideSplit] = new PieceComponent(pieces[Pieces.SideSplit], "/lasergame/pieces/mirror_sidesplit.png", draw)
+  pieceComponents[Pieces.UpSplit] = new PieceComponent(pieces[Pieces.UpSplit], "/lasergame/pieces/mirror_upsplit.png", draw)
+  pieceComponents[Pieces.Blue] = new PieceComponent(pieces[Pieces.Blue], "/lasergame/pieces/swatch_blue.png", draw)
+  pieceComponents[Pieces.Red] = new PieceComponent(pieces[Pieces.Red], "/lasergame/pieces/swatch_red.png", draw)
+  pieceComponents[Pieces.Green] = new PieceComponent(pieces[Pieces.Green], "/lasergame/pieces/swatch_green.png", draw)
 
   lasergridComponent.lasergrid.calculateAllEndings()
   printPaths()
@@ -79,8 +79,8 @@ export function importLevel(levelID: number) {
     return response.json()
   }).then(function (parsedJSON) {
     let tempPathsList = parsedJSON.level_data
-    let newPathsList: PathsList = [null]
-    for (let i = 1; i <= 20; i++) {
+    let newPathsList: PathsList = []
+    for (let i = 0; i < 20; i++) {
 
       let arrayOfEndings = tempPathsList[i]
       let newArrayOfEndings = []
@@ -101,7 +101,7 @@ export function importLevel(levelID: number) {
 function checkVictory(): boolean {
   for (let p = 0; p < currentLevel.length; p++) {
     let path = currentLevel[p]
-    if (!path.endingsEqual(lasergridComponent.lasergrid.paths[path.start])) {
+    if (!path.endingsEqual(lasergridComponent.lasergrid.paths[path.start-1])) {
       return false
     }
   }
@@ -112,12 +112,12 @@ export function printPaths() {
   pathsPre.innerHTML = ""
   let paths = lasergridComponent.lasergrid.paths
   let curLevelNum = 0
-  for (let i = 1; i <= 20; i++) {
+  for (let i = 0; i < 20; i++) {
     let curPath = paths[i]
     let line = curPath.toString()
     if (currentLevel && curLevelNum < 5) {
       let levelPath = currentLevel[curLevelNum]
-      if (levelPath.start === i) {
+      if (levelPath.start === i+1) {
         line += ` (${levelPath.endingListToString()})`
         if (curPath.endingsEqual(levelPath)) {
           line = `<span style='color: green'>${line}</span>`
@@ -168,7 +168,7 @@ function uploadPaths() {
 }
 
 export function getLevel(seed: string) {
-  window.fetch(`/api/lasergame?seed=${seed}`, {
+  window.fetch(`/api/lasergame/seed/${seed}`, {
     method: 'GET',
     credentials: 'same-origin'
   }).then(function (response) {

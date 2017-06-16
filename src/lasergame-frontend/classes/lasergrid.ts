@@ -8,7 +8,7 @@ import Ending from './ending'
 import Path from './path'
 
 export default class LaserGrid {
-  grid: Piece[][]
+  grid: Piece[][] | null[][]
   paths: Path[]
 
   constructor() {
@@ -42,21 +42,21 @@ export default class LaserGrid {
 
   calculateAllEndings() {
     let endings: Path[] = []
-    for (let i = 1; i <= 20; i++) {
-      endings[i] = new Path(i, this.calculateEndingList(i))
+    for (let i = 0; i < 20; i++) {
+      endings[i] = new Path(i+1, this.calculateEndingList(i+1))
     }
     this.paths = endings
   }
 
   calculateEndingList(edge: number) {
-    let ending: Ending[] = []
+    let endingList: Ending[] = []
 
     function trackOneEnding(grid: LaserGrid, laser: Laser) {
       for (let i = 0; i < 100; i++) {
         laser.tile = laser.tile.nextTile(laser.dir)
         if (!laser.tile.isValid(5, 5)) {
           let endEdge = LaserGrid.tileToEdgeNumber(laser.tile)
-          ending.push(new Ending(endEdge, laser.color))
+          endingList.push(new Ending(endEdge, laser.color))
           return
         }
         let piece = grid.getPiece(laser.tile)
@@ -73,7 +73,7 @@ export default class LaserGrid {
                 trackOneEnding(grid, new Laser(laser.tile, Direction.West, laser.color))
                 break
               case Direction.None:
-                ending.push(new Ending(End.Blocked, laser.color))
+                endingList.push(new Ending(End.Blocked, laser.color))
                 return
             }
           } else if (piece instanceof Swatch) {
@@ -81,11 +81,11 @@ export default class LaserGrid {
           }
         } // if piece is not null
       } // for
-      ending.push(new Ending(End.Loop, laser.color))
+      endingList.push(new Ending(End.Loop, laser.color))
     } // trackOneEnding()
 
     trackOneEnding(this, LaserGrid.edgeNumberToLaser(edge))
-    return ending
+    return endingList
   }
 
   /**
@@ -101,6 +101,7 @@ export default class LaserGrid {
     } else if (edge < 21) {
       return new Laser(new Tile(-1, -edge + 20), Direction.East)
     }
+    throw Error(`Edge ${edge} is invalid to turn into a laser.`)
   }
 
   /**

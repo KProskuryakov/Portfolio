@@ -6,7 +6,6 @@
     "preserveConstEnums": true,
     "allowSyntheticDefaultImports": false,
     "strict": true,
-    "strictNullChecks": false,
     "sourceMap": true,
     "outDir": "./js",
     "rootDir": "./src/",

@@ -25,7 +25,9 @@ const routes = {
 
 let app = express()
 
-let passport = require('./passport')
+import { Passport } from 'passport'
+
+let passport: Passport = require('./passport')
 let secretkey = require('./secret').secretkey
 
 let notesList: string[] = []
