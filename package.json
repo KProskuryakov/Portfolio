@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "postinstall": "tsc -p && webpack -p",
+    "postinstall": "tsc && webpack",
     "start": "node ./bin/www"
   },
   "engines": {
