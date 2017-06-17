@@ -7,15 +7,32 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "nodemon",
+      "runtimeExecutable": "nodemon",
+      "runtimeArgs": [
+        "--debug=5858"
+      ],
       "program": "${workspaceRoot}/bin/www",
-      "outFiles": [ "${workspaceRoot}/js/**/*.js" ]
+      "restart": true,
+      "port": 5858,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "envFile": "${workspaceRoot}/.env"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "node",
+      "program": "${workspaceRoot}/bin/www",
+      "outFiles": [ "${workspaceRoot}/js/**/*.js" ],
+      "envFile": "${workspaceRoot}/.env"
     },
     {
       "type": "node",
       "request": "attach",
       "name": "Attach",
-      "port": 5858
+      "port": 5858,
+      "restart": true
     }
   ]
 }

@@ -11,7 +11,9 @@ const config = {
   host: params.hostname,
   port: params.port,
   database: params.pathname.split('/')[1],
-  ssl: true
+  ssl: process.env.IS_DATABASE_SSL === "true",
+  max: 10,
+  idleTimeoutMillis: 30000
 };
 
 let pool: Pool = new pg.Pool(config)

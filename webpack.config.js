@@ -5,8 +5,8 @@ module.exports = {
     lasergame: "./src/lasergame-frontend/lasergame.ts",
   },
   output: {
-    filename: "[name]/[name]-bundle.js",
-    path: path.resolve(__dirname, './public/'),
+    filename: "[name]-bundle.js",
+    path: path.resolve(__dirname, './public/bundles/'),
     library: "[name]"
   },
   resolve: {
