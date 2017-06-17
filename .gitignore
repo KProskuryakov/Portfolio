@@ -2,7 +2,7 @@ node_modules/
 .idea/
 data/
 npm-debug.log
-public/lasergame/lasergame-bundle.js
+public/bundles/
 src/secret.ts 
 js/
 .DS_Store

@@ -1,9 +1,9 @@
 {
   "name": "portfolio",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "postinstall": "tsc && webpack",
+    "postinstall": "tsc && webpack -p",
     "start": "node ./bin/www"
   },
   "engines": {
