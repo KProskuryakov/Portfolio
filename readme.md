@@ -1,6 +1,6 @@
 # Readme
 This project is a way for me to demonstrate my skills as a programmer. 
-As I learn more, this will be updated to reflect what I've learned. 
+As I acquire more skill, this will be updated to reflect what I've learned. 
 
 ## Current goals
 * Figure out how to debug browser code in VSCode.

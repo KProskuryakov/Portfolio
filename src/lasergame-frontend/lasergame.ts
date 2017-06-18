@@ -13,7 +13,7 @@ import Color from './classes/color'
 import Path from './classes/path'
 import { pieces } from './pieces'
 
-import LasergameDailyLevel from '../db/models/LasergameDailyLevel'
+import LasergameDailyLevel from '../db/models/lasergame-daily-level'
 
 export const toolbar = new Toolbar("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw)
 export const lasergridComponent = new LaserGridComponent("/lasergame/lasergrid.png", new Tile(0, 0), 7, 7, draw)

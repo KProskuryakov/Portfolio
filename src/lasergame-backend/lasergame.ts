@@ -5,8 +5,8 @@ import Tile from '../lasergame-frontend/classes/tile'
 import Ending from '../lasergame-frontend/classes/ending'
 import Path from '../lasergame-frontend/classes/path'
 
-import * as db_ldl from '../db/LasergameDailyLevelTable'
-import LasergameDailyLevel from '../db/models/LasergameDailyLevel'
+import * as db_ldl from '../db/lasergame-daily-level-table'
+import LasergameDailyLevel from '../db/models/lasergame-daily-level'
 let seedrandom = require('seedrandom')
 
 let defaultGrid = new Lasergrid()

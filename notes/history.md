@@ -1,5 +1,5 @@
 # History
-This is an area to mark significant changes to this portfolio.
+This is an area to mark significant changes to the site.
 
 ## MongoDB to PostgreSQL
 I much prefer SQL to MongoDB simply because I can very clearly define what kind of data I expect. The change wasn't too hard either, I'm using the default pg/pg-pool setup and manually defining my access methods in `postgresdb.ts`. I looked a little into sequilize and it's definitely worthwhile but not really what I need right this moment. I need to really know what SQL statements look like and what they do.
@@ -11,3 +11,7 @@ I also looked into gulp to automate the webpack process but that grew too compli
 
 ## Javascript to Typescript for Backend
 Now, the hardest part about transitioning my entire codebase to Typescript was the seperation between frontend and backend. It puzzled me for a while because you could only have one `tsconfig.js` file in a project and I really didn't want to split the code into two projects, because a lot of the lasergame code relies on the same data structures on both sides of the API. Now I'm relying on two commands to properly generate code for either side: `tsc` for the backend and `webpack` for the frontend.
+
+## ngrok
+
+## A real production server! Heroku

@@ -4,7 +4,7 @@ let router = express.Router()
 let addresses = require('email-addresses')
 
 import bcrypt = require('bcrypt')
-import * as db_su from '../db/SiteUserTable'
+import * as db_su from '../db/site-user-table'
 
 router.get('/', function (req, res) {
   let err = req.query.err

@@ -1,5 +1,5 @@
 import pool from './postgresdb'
-import LasergameDailyLevel from './models/LasergameDailyLevel'
+import LasergameDailyLevel from './models/lasergame-daily-level'
 
 import Path from '../lasergame-frontend/classes/path'
 

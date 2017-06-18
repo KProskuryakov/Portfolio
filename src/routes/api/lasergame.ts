@@ -5,8 +5,8 @@
 import express = require('express')
 let router = express.Router()
 
-import * as db_ll from '../../db/LasergameLevelTable'
-import * as db_ldl from '../../db/LasergameDailyLevelTable'
+import * as db_ll from '../../db/lasergame-level-table'
+import * as db_ldl from '../../db/lasergame-daily-level-table'
 import { generateLevelFromSeed, getTodaysDailyLevel } from '../../lasergame-backend/lasergame'
 
 router.get('/seed/:seed', (req, res, next) => {

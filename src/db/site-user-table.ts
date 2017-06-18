@@ -1,5 +1,5 @@
 import pool from './postgresdb'
-import SiteUser from './models/SiteUser'
+import SiteUser from './models/site-user'
 
 pool.query(`CREATE TABLE IF NOT EXISTS site_users 
   (
@@ -30,6 +30,6 @@ export async function getSiteUserByDisplayName(displayName: string): Promise<Sit
 }
 
 export async function getAllSiteUsers(): Promise<SiteUser[]> {
-  let res = await pool.query('SELECT * FROM site_users')
+  let res = await pool.query('SELECT * FROM site_users;')
   return res.rows
 }

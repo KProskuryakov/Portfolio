@@ -1,5 +1,5 @@
 import pool from './postgresdb'
-import LasergameLevel from './models/LasergameLevel'
+import LasergameLevel from './models/lasergame-level'
 
 pool.query(`CREATE TABLE IF NOT EXISTS lasergame_levels 
   (

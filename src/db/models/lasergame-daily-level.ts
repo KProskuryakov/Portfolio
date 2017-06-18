@@ -9,9 +9,9 @@
  * times_beaten: integer
  */
 export interface LasergameDailyLevel {
-  daily_date: string,
-  seed: number,
-  level_data: any,
+  daily_date: string
+  seed: number
+  level_data: any
   times_beaten: number
 }
 

@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+  table
+    tr
+      th Title
+      th Keywords
+      th Description
+    each webData in webDataArray
+      tr
+        td
+          a(href= webData.url) #{webData.title}
+        td #{webData.keywords}
+        td #{webData.description}

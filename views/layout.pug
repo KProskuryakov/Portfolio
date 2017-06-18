@@ -41,6 +41,8 @@ html
                     each file in notesList
                       li
                         a(href='/notes/' + file) #{file}
+            li(class=page=='Web Data'?'active':undefined) 
+              a(href="/webdata") Web Data
           ul.nav.navbar-nav.navbar-right
             li.dropdown
               a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")= !user?'Log in':user.display_name

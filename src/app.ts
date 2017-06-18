@@ -17,9 +17,11 @@ const routes = {
   protected: require('./routes/protected'),
   users: require('./routes/users'),
   notes: require('./routes/notes'),
+  webdata: require('./routes/webdata'),
   api: {
     index: require('./routes/api/index'),
-    lasergame: require('./routes/api/lasergame')
+    lasergame: require('./routes/api/lasergame'),
+    webdata: require('./routes/api/webdata')
   }
 }
 
@@ -74,8 +76,11 @@ app.use('/logout', routes.logout)
 app.use('/protected', routes.protected)
 app.use('/siteUsers', routes.users)
 app.use('/notes', routes.notes)
+app.use('/webdata', routes.webdata)
+
 app.use('/api/', routes.api.index)
 app.use('/api/lasergame', routes.api.lasergame)
+app.use('/api/webdata', routes.api.webdata)
 
 class ErrorWithStatus extends Error {
   status?: number
