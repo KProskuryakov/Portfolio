@@ -10,7 +10,10 @@ router.post("/insert", async (req, res, next) => {
     await webDataTable.insertWebData(webData)
     return res.send("Woo!")
   } catch (err) {
-    return res.status(401).send("Error!")
+    if (err.message === "duplicate key value violates unique constraint \"web_data_pkey\"") {
+      return res.status(519).send()
+    }
+    return next(err);
   }
 })
 
