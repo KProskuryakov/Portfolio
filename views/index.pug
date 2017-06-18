@@ -2,9 +2,8 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
-  p There's supposed to be stuff here, I guess.
+  p This website is Kostyantyn Proskuryakov's portfolio. Please check out the links up above. The whole site's code can be found at #[a(href="https://github.com/KProskuryakov/Portfolio") this Github repository].
   if user
     p= "Welcome " + user.display_name
   else
-    p Please log in!
+    p Please log in or register.
