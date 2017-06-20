@@ -109,6 +109,14 @@ function checkVictory(): boolean {
 }
 
 export function printPaths() {
+  if (currentLevel) {
+    printLevelPaths();
+  } else {
+    printAllPaths();
+  }
+}
+
+function printAllPaths() {
   pathsPre.innerHTML = ""
   let paths = lasergridComponent.lasergrid.paths
   let curLevelNum = 0
@@ -130,6 +138,26 @@ export function printPaths() {
     pathsPre.innerHTML += line
 
     if (i < 20) {
+      pathsPre.innerHTML += "\n"
+    }
+  }
+}
+
+function printLevelPaths() {
+  pathsPre.innerHTML = ""
+  let paths = lasergridComponent.lasergrid.paths
+  for (let i = 0; i < currentLevel.length; i++) {
+    let levelPath = currentLevel[i]
+    let curPath = paths[levelPath.start-1]
+    let line = levelPath.toString()
+    if (curPath.endingsEqual(levelPath)) {
+      line = `<span style='color: green'>${line}</span>`
+    } else { 
+      line = `<span style='color: red'>${line}</span>`
+    }
+    pathsPre.innerHTML += line
+
+    if (i < currentLevel.length - 1) {
       pathsPre.innerHTML += "\n"
     }
   }

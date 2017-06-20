@@ -8,12 +8,14 @@
  * title: text
  * keywords: text
  * description: text
+ * upload: timestamptz DEFAULT current_timestamp
  */
 export interface WebData {
   url: string
   title: string
   keywords: string
   description: string
+  upload: string
 }
 
 export default WebData

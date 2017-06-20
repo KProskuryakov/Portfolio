@@ -10,13 +10,16 @@ export default class Path {
   }
 
   toString() {
+    return this.startToString() + this.endingListToString()
+  }
+
+  startToString() {
     let string = `${this.start}`
     if (this.start < 10) {
       string += "  -> "
     } else {
       string += " -> "
     }
-    string += this.endingListToString()
     return string
   }
 

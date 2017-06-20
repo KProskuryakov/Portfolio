@@ -6,7 +6,8 @@ pool.query(`CREATE TABLE IF NOT EXISTS web_data
     url text PRIMARY KEY,
     title text,
     keywords text,
-    description text
+    description text,
+    upload timestamptz DEFAULT current_timestamp
   );`
 )
 
