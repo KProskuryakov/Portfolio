@@ -7,14 +7,9 @@ As I acquire more skill, this will be updated to reflect what I've learned.
 * Update lasergame to be more user friendly
 
 ## Lasergame
-### Cool level
-```
-2  -> {20 black, 14 blue, blocked blue} ({20 black, 14 blue, blocked blue})
-6  -> 4 black (4 black)
-13 -> blocked magenta (blocked magenta)
-14 -> 2 blue (2 blue)
-17 -> blocked black (blocked black)
-```
+### Cool levels
+https://kostyapro.herokuapp.com/lasergame/seed/1497995208658
+https://kostyapro.herokuapp.com/lasergame/seed/1498000079304
 
 ## Environment
 This section describes my dev environment and production pipeline.

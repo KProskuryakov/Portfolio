@@ -15,12 +15,13 @@ import { pieces } from './pieces'
 
 import LasergameDailyLevel from '../db/models/lasergame-daily-level'
 
-export const toolbar = new Toolbar("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw)
-export const lasergridComponent = new LaserGridComponent("/lasergame/lasergrid.png", new Tile(0, 0), 7, 7, draw)
+export const toolbar: Toolbar = new Toolbar("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw)
+export const lasergridComponent: LaserGridComponent = new LaserGridComponent("/lasergame/lasergrid.png", new Tile(0, 0), 7, 7, draw)
 
 export const pieceComponents: Array<PieceComponent> = []
 
 let currentLevel: Path[]
+export let edgeLevelData: {edge: number, solved: boolean}[]
 let levelType: LevelType = LevelType.Custom
 
 /**
@@ -56,10 +57,10 @@ function onClick(event: any) {
   let loc = windowToCanvas(event.clientX, event.clientY)
   lasergridComponent.processMouseClick(loc.x, loc.y)
   toolbar.processMouseClick(loc.x, loc.y)
-  draw()
-  if (checkVictory()) {
+  printPaths()
+  if (currentLevel && checkVictory()) {
     if (levelType === LevelType.Random) {
-      victoryP.textContent = "Incredible! You won! Refresh the page to generate a new random puzzle."
+      victoryP.innerHTML = "Incredible! You won! <a href=\"/lasergame/random\">Click here to generate a new random puzzle!</a>"
     } else if (levelType === LevelType.Daily) {
       victoryP.textContent = "Wow! You beat the daily level!"
     } else if (levelType === LevelType.Custom) {
@@ -67,41 +68,27 @@ function onClick(event: any) {
     }
     victoryP.hidden = false
   }
+  draw()
 }
 
-// TODO remove/change when importLevel needs new functionality
-export function importLevel(levelID: number) {
-  if (!levelID) return
-  window.fetch(`/api/lasergame/${levelID}`, {
-    method: 'GET',
-    credentials: 'same-origin'
-  }).then(function (response) {
-    return response.json()
-  }).then(function (parsedJSON) {
-    let tempPathsList = parsedJSON.level_data
-    let newPathsList: PathsList = []
-    for (let i = 0; i < 20; i++) {
-
-      let arrayOfEndings = tempPathsList[i]
-      let newArrayOfEndings = []
-      for (let j = 0; j < arrayOfEndings.length; j++) {
-        newArrayOfEndings[j] = Ending.fromJSON(arrayOfEndings[j])
+function populateEdgeLevelData() {
+  if (currentLevel) {
+    edgeLevelData = []
+    for (let p = 0; p < currentLevel.length; p++) {
+      let path = currentLevel[p]
+      let edge = path.start
+      let solved = false
+      if (path.endingsEqual(lasergridComponent.lasergrid.paths[path.start-1])) {
+        solved = true
       }
-      newPathsList[i] = newArrayOfEndings
+      edgeLevelData.push({edge, solved})
     }
-
-    lasergridComponent.importedPathsList = newPathsList
-
-    printPaths()
-  }).catch(function (err) {
-    alert('Import Level Failed!' + err) //TODO better error handling here
-  })
+  }
 }
 
 function checkVictory(): boolean {
-  for (let p = 0; p < currentLevel.length; p++) {
-    let path = currentLevel[p]
-    if (!path.endingsEqual(lasergridComponent.lasergrid.paths[path.start-1])) {
+  for (let p = 0; p < edgeLevelData.length; p++) {
+    if (!edgeLevelData[p].solved) {
       return false
     }
   }
@@ -110,34 +97,24 @@ function checkVictory(): boolean {
 
 export function printPaths() {
   if (currentLevel) {
-    printLevelPaths();
+    populateEdgeLevelData()
+    printLevelPaths()
   } else {
-    printAllPaths();
+    printAllPaths()
   }
 }
 
 function printAllPaths() {
   pathsPre.innerHTML = ""
   let paths = lasergridComponent.lasergrid.paths
-  let curLevelNum = 0
   for (let i = 0; i < 20; i++) {
     let curPath = paths[i]
     let line = curPath.toString()
-    if (currentLevel && curLevelNum < 5) {
-      let levelPath = currentLevel[curLevelNum]
-      if (levelPath.start === i+1) {
-        line += ` (${levelPath.endingListToString()})`
-        if (curPath.endingsEqual(levelPath)) {
-          line = `<span style='color: green'>${line}</span>`
-        } else { 
-          line = `<span style='color: red'>${line}</span>`
-        }
-        curLevelNum++
-      }
+    if (lasergridComponent.selectedEdge === i+1) {
+      line = `><b>${line}</b>`
     }
     pathsPre.innerHTML += line
-
-    if (i < 20) {
+    if (i < 19) {
       pathsPre.innerHTML += "\n"
     }
   }
@@ -154,6 +131,9 @@ function printLevelPaths() {
       line = `<span style='color: green'>${line}</span>`
     } else { 
       line = `<span style='color: red'>${line}</span>`
+    }
+    if (lasergridComponent.selectedEdge === levelPath.start) {
+      line = `><b>${line}</b>`
     }
     pathsPre.innerHTML += line
 
@@ -210,6 +190,7 @@ export function getLevel(seed: string) {
         currentLevel.push(Path.fromJSONObject(levelData[i]))
       }
       printPaths()
+      draw()
     })
   })
 }
@@ -229,6 +210,7 @@ export function getDailyLevel() {
         currentLevel.push(Path.fromJSONObject(levelData[i]))
       }
       printPaths()
+      draw()
     })
   })
 }

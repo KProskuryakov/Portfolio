@@ -39,7 +39,7 @@ export default class Tile {
     }
 
     /**
-     *
+     * The top left corner of the tile
      * @returns {{x: number, y: number}}
      */
     toPixels() {

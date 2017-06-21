@@ -3,8 +3,8 @@ import { PathsList } from '../interfaces'
 import Laser from "./laser"
 import CanvasComponent from './canvas_component'
 import Tile from './tile'
-import { TILE_HALF, directionMapping } from '../const'
-import { toolbar, printPaths, pieceComponents } from '../lasergame'
+import { TILE_HALF, TILE_FULL, directionMapping } from '../const'
+import { toolbar, printPaths, pieceComponents, edgeLevelData } from '../lasergame'
 import Mirror from './mirror'
 import Swatch from './swatch'
 import { Direction, End } from '../enum'
@@ -28,6 +28,7 @@ export default class LaserGridComponent extends CanvasComponent {
   draw(ctx: CanvasRenderingContext2D) {
     super.draw(ctx)
 
+    // Draw pieces on grid
     for (let i = 0; i < pieceComponents.length; i++) {
       let pieceComponent = pieceComponents[i]
       let piece = pieceComponent.piece
@@ -36,6 +37,7 @@ export default class LaserGridComponent extends CanvasComponent {
       }
     }
 
+    // Draw laser path on grid
     for (let i = 0; i < this.drawPath.length; i++) {
       ctx.beginPath()
       let laser = this.drawPath[i]
@@ -47,6 +49,53 @@ export default class LaserGridComponent extends CanvasComponent {
       let tilemap = directionMapping[laser.dir]
       ctx.lineTo(loc.x + tilemap.tileX * TILE_HALF, loc.y + tilemap.tileY * TILE_HALF)
       ctx.stroke()
+    }
+
+    // Draw selected edge marker on grid
+    let selectedEdgePixels = LaserGrid.edgeNumberToLaser(this.selectedEdge).tile.add(new Tile(1, 1)).toPixels()
+    ctx.strokeStyle = '#FFFFFF'
+    ctx.beginPath()
+    if (this.selectedEdge < 6) {
+      ctx.moveTo(selectedEdgePixels.x + TILE_HALF - 5, selectedEdgePixels.y + TILE_FULL - 5)
+      ctx.lineTo(selectedEdgePixels.x + TILE_HALF, selectedEdgePixels.y + TILE_FULL)
+      ctx.lineTo(selectedEdgePixels.x + TILE_HALF + 5, selectedEdgePixels.y + TILE_FULL - 5)
+    } else if (this.selectedEdge < 11) {
+      ctx.moveTo(selectedEdgePixels.x + 5, selectedEdgePixels.y + TILE_HALF - 5)
+      ctx.lineTo(selectedEdgePixels.x, selectedEdgePixels.y + TILE_HALF)
+      ctx.lineTo(selectedEdgePixels.x + 5, selectedEdgePixels.y + TILE_HALF + 5)
+    } else if (this.selectedEdge < 16) {
+      ctx.moveTo(selectedEdgePixels.x + TILE_HALF - 5, selectedEdgePixels.y + 5)
+      ctx.lineTo(selectedEdgePixels.x + TILE_HALF, selectedEdgePixels.y)
+      ctx.lineTo(selectedEdgePixels.x + TILE_HALF + 5, selectedEdgePixels.y + 5)
+    } else if (this.selectedEdge < 21) {
+      ctx.moveTo(selectedEdgePixels.x + TILE_FULL - 5, selectedEdgePixels.y + TILE_HALF - 5)
+      ctx.lineTo(selectedEdgePixels.x + TILE_FULL, selectedEdgePixels.y + TILE_HALF)
+      ctx.lineTo(selectedEdgePixels.x + TILE_FULL - 5, selectedEdgePixels.y + TILE_HALF + 5)
+    }
+    ctx.stroke()
+
+    // Draw level edge hints
+    if (edgeLevelData) {
+      ctx.globalAlpha = 0.1
+      for (let e = 0; e < edgeLevelData.length; e++) {
+        let edgeData = edgeLevelData[e]
+        let selectedEdgePixels = LaserGrid.edgeNumberToLaser(edgeData.edge).tile.add(new Tile(1, 1)).toPixels()
+        if (edgeData.solved) {
+          ctx.fillStyle = "#00FF00"
+        } else {
+          ctx.fillStyle = "#FF0000"
+        }
+        ctx.fillRect(selectedEdgePixels.x, selectedEdgePixels.y, TILE_FULL, TILE_FULL)
+      }
+      ctx.globalAlpha = 1.0
+    }
+
+    for (let e = 1; e <= 20; e++) {
+      let selectedEdgePixels = LaserGrid.edgeNumberToLaser(e).tile.add(new Tile(1, 1)).toPixels()
+      ctx.fillStyle = "#000000"
+      ctx.font = "24px sans-serif"
+      ctx.textBaseline = "middle"
+      ctx.fillText(e.toString(), selectedEdgePixels.x + TILE_HALF - ctx.measureText(e.toString()).width / 2, selectedEdgePixels.y + TILE_HALF)
     }
   }
 
