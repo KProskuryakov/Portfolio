@@ -31,6 +31,7 @@ export function generateLevelFromSeed(seed = Date.now(), difficulty = "medium") 
       numPaths =  15
       break
     case "godlike":
+    case "nightmare":
       numPaths = 20
       break
   }

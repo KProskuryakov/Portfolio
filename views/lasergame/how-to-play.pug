@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+  h1 Learn to Play!
+  p The goal of the game is to get every laser generated from each of the red edges to go to the correct edge by placing the pieces in the appropriate squares.
+  p This is what a game looks like when you first start it. The red text on the right shows where the laser generated from the edge needs to go.
+  img(src="/lasergame/howtoplay/unsolved.png")
+  p
+  p Let's take edge 7 for example. We can click on the edge number on the grid to show us where the laser is currently going. We can also see that the line on the right side is bold, so we know it's selected.
+  img(src="/lasergame/howtoplay/click-on-edge.png")
+  p
+  p Looks like the laser is already going to edge 19, but to satisfy the condition, the laser has to be green. So we put a green color swatch into the path of the laser and we satisfy the condition.
+  img(src="/lasergame/howtoplay/placed-green.png")
+  p
+  p This is what it looks like when it is solved.
+  img(src="/lasergame/howtoplay/solved.png")
+  p
+  p Solved edges turn green and the corresponding lines on the right side also turn green.
+  p When all conditions are met, you beat the level!
+  p Hop into Free Play to test out what all the pieces do and how they interact
+  img(src="/lasergame/howtoplay/freeplay.png")

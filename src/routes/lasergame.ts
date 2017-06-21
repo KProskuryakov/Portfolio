@@ -14,6 +14,10 @@ router.get('/daily', (req, res) => {
   res.render('lasergame', { title: 'Lasergame', page: "Lasergame", daily: true })
 })
 
+router.get('/how-to-play', (req, res) => {
+  res.render('lasergame/how-to-play', {title: 'How To Play', page: "Lasergame" })
+})
+
 router.get('/seed/:difficulty/:seed', (req, res) => {
   res.render('lasergame', { title: 'Lasergame', page: "Lasergame", difficulty: req.params.difficulty, seed: req.params.seed })
 })
