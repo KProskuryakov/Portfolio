@@ -28,8 +28,17 @@ html
                   ul.dropdown-menu
                     li
                       a(href="/lasergame") Free Play
+                    li.divider(role="seperator")
+                    li.dropdown-header Random Level
                     li
-                      a(href="/lasergame/random") Random Level
+                      a(href="/lasergame/random/easy") Easy
+                    li
+                      a(href="/lasergame/random/medium") Medium
+                    li
+                      a(href="/lasergame/random/hard") Hard
+                    li
+                      a(href="/lasergame/random/expert") Expert
+                    li.divider(role="seperator")
                     li
                       a(href="/lasergame/daily") Today's Daily Level
             li(class=page=='All Users'?'active':undefined)

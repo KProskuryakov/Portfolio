@@ -12,11 +12,27 @@ let seedrandom = require('seedrandom')
 let defaultGrid = new Lasergrid()
 defaultGrid.calculateAllEndings()
 
-export function generateLevelFromSeed(seed = Date.now()) {
+export function generateLevelFromSeed(seed = Date.now(), difficulty = "medium") {
+  let numPaths = 5
+  switch (difficulty) {
+    case "easy":
+      numPaths = 3
+      break
+    case "hard":
+      numPaths = 7
+      break
+    case "expert":
+      numPaths = 9
+      break
+    case "godlike":
+      numPaths = 11
+      break
+  }
+
   let rng = seedrandom(seed)
 
   let success = false
-  let cleansedEndings: Path[] = []
+  let cleansedPaths: Path[] = []
   while (!success) {   // in case the random grid isn't interesting enough somehow
     let randomGrid = new Lasergrid()
 
@@ -32,36 +48,36 @@ export function generateLevelFromSeed(seed = Date.now()) {
 
     randomGrid.calculateAllEndings()
 
-    let gridEndings = randomGrid.paths
+    let gridPaths = randomGrid.paths
 
-    cleansedEndings = []
+    cleansedPaths = []
 
-    for (let i = 0; i < gridEndings.length; i++) {
-      if (!gridEndings[i].endingsEqual(defaultGrid.paths[i])) {
-        cleansedEndings.push(gridEndings[i])
+    for (let i = 0; i < gridPaths.length; i++) {
+      if (!gridPaths[i].endingsEqual(defaultGrid.paths[i])) {
+        cleansedPaths.push(gridPaths[i])
       }
     }
-    if (cleansedEndings.length >= 5) {
+    if (cleansedPaths.length >= numPaths) {
       success = true
     }
   } // while !success
 
   // shuffle cleansedEndings
-  let m = cleansedEndings.length
+  let m = cleansedPaths.length
   let t: Path; let i: number
   while (m) {
     let i = Math.floor(rng() * m--)
 
-    t = cleansedEndings[m]
-    cleansedEndings[m] = cleansedEndings[i]
-    cleansedEndings[i] = t
+    t = cleansedPaths[m]
+    cleansedPaths[m] = cleansedPaths[i]
+    cleansedPaths[i] = t
   }
 
-  let randomEndings: Path[] = cleansedEndings.slice(0, 5)
+  let randomPaths: Path[] = cleansedPaths.slice(0, numPaths)
 
-  randomEndings.sort((a, b) => { return a.start < b.start ? -1 : 1 })
+  randomPaths.sort((a, b) => { return a.start < b.start ? -1 : 1 })
 
-  return { level_data: randomEndings, seed }
+  return { level_data: randomPaths, seed }
 }
 
 export async function getTodaysDailyLevel(): Promise<LasergameDailyLevel> {

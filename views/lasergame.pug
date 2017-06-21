@@ -14,6 +14,6 @@ block content
 
   script(type="text/javascript", src="/bundles/lasergame-bundle.js")
   if seed
-    script lasergame.getLevel("#{seed}");
+    script lasergame.getLevel("#{seed}", "#{difficulty}");
   if daily
     script lasergame.getDailyLevel();

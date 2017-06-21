@@ -9,9 +9,10 @@ import * as db_ll from '../../db/lasergame-level-table'
 import * as db_ldl from '../../db/lasergame-daily-level-table'
 import { generateLevelFromSeed, getTodaysDailyLevel } from '../../lasergame-backend/lasergame'
 
-router.get('/seed/:seed', (req, res, next) => {
+router.get('/seed/:difficulty/:seed', (req, res, next) => {
   let seed = req.params.seed
-  let seededLevel = generateLevelFromSeed(seed)
+  let difficulty = req.params.difficulty
+  let seededLevel = generateLevelFromSeed(seed, difficulty)
   res.send(JSON.stringify(seededLevel))
 })
 

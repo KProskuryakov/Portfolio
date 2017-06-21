@@ -90,6 +90,7 @@ export default class LaserGridComponent extends CanvasComponent {
       ctx.globalAlpha = 1.0
     }
 
+    // Draw edge numbers
     for (let e = 1; e <= 20; e++) {
       let selectedEdgePixels = LaserGrid.edgeNumberToLaser(e).tile.add(new Tile(1, 1)).toPixels()
       ctx.fillStyle = "#000000"

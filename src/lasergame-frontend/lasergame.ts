@@ -23,6 +23,7 @@ export const pieceComponents: Array<PieceComponent> = []
 let currentLevel: Path[]
 export let edgeLevelData: {edge: number, solved: boolean}[]
 let levelType: LevelType = LevelType.Custom
+let difficulty = "medium"
 
 /**
  * Inits the things that aren't constants
@@ -60,7 +61,7 @@ function onClick(event: any) {
   printPaths()
   if (currentLevel && checkVictory()) {
     if (levelType === LevelType.Random) {
-      victoryP.innerHTML = "Incredible! You won! <a href=\"/lasergame/random\">Click here to generate a new random puzzle!</a>"
+      victoryP.innerHTML = `Incredible! You won! <a href=\"/lasergame/random/${difficulty}\">Click here to generate a new random puzzle!</a>`
     } else if (levelType === LevelType.Daily) {
       victoryP.textContent = "Wow! You beat the daily level!"
     } else if (levelType === LevelType.Custom) {
@@ -175,8 +176,9 @@ function uploadPaths() {
   })
 }
 
-export function getLevel(seed: string) {
-  window.fetch(`/api/lasergame/seed/${seed}`, {
+export function getLevel(seed: string, difficultyString: string) {
+  difficulty = difficultyString
+  window.fetch(`/api/lasergame/seed/${difficultyString}/${seed}`, {
     method: 'GET',
     credentials: 'same-origin'
   }).then(function (response) {
