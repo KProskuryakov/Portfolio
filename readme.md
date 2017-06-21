@@ -8,8 +8,8 @@ As I acquire more skill, this will be updated to reflect what I've learned.
 
 ## Lasergame
 ### Cool levels
-https://kostyapro.herokuapp.com/lasergame/seed/1497995208658
-https://kostyapro.herokuapp.com/lasergame/seed/1498000079304
+https://kostyapro.herokuapp.com/lasergame/seed/medium/1497995208658
+https://kostyapro.herokuapp.com/lasergame/seed/medium/1498000079304
 
 ## Environment
 This section describes my dev environment and production pipeline.
