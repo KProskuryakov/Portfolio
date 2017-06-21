@@ -41,6 +41,8 @@ In VSCode, there is a debug routine called `nodemon` which spins up the dev serv
 
 Then open up two shell windows, both navigated to the root folder of the project. In the first window execute `tsc -w` and in the second execute `webpack -w`.
 
+Running `heroku local` is a way to test whether the code will work on the heroku server.
+
 ### ENV variables
 Create a `.env` file in the root folder for the vscode debugger and `heroku local` to work.
 

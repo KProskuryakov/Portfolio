@@ -24,60 +24,60 @@ export function generateLevelFromSeed(seed = Date.now(), difficulty = "medium") 
     case "expert":
       numPaths = 9
       break
-    case "godlike":
+    case "super-expert":
       numPaths = 11
+      break
+    case "monster":
+      numPaths =  15
+      break
+    case "godlike":
+      numPaths = 20
       break
   }
 
   let rng = seedrandom(seed)
 
-  let success = false
-  let cleansedPaths: Path[] = []
-  while (!success) {   // in case the random grid isn't interesting enough somehow
-    let randomGrid = new Lasergrid()
+  let interestingPaths: Path[] = []
+  let boringPaths: Path[] = []
 
-    pieces.forEach((piece: Piece) => {
-      while (true) {
-        let randTile = new Tile(Math.floor(rng() * 5), Math.floor(rng() * 5))
-        if (!randomGrid.getPiece(randTile)) {
-          randomGrid.setPiece(piece, randTile)
-          break
-        }
-      }
-    })
+  let randomGrid = new Lasergrid()
 
-    randomGrid.calculateAllEndings()
-
-    let gridPaths = randomGrid.paths
-
-    cleansedPaths = []
-
-    for (let i = 0; i < gridPaths.length; i++) {
-      if (!gridPaths[i].endingsEqual(defaultGrid.paths[i])) {
-        cleansedPaths.push(gridPaths[i])
+  pieces.forEach((piece: Piece) => {
+    while (true) {
+      let randTile = new Tile(Math.floor(rng() * 5), Math.floor(rng() * 5))
+      if (!randomGrid.getPiece(randTile)) {
+        randomGrid.setPiece(piece, randTile)
+        break
       }
     }
-    if (cleansedPaths.length >= numPaths) {
-      success = true
+  })
+
+  randomGrid.calculateAllEndings()
+
+  let gridPaths = randomGrid.paths
+
+  for (let i = 0; i < gridPaths.length; i++) {
+    if (!gridPaths[i].endingsEqual(defaultGrid.paths[i])) {
+      interestingPaths.push(gridPaths[i])
+    } else {
+      boringPaths.push(gridPaths[i])
     }
-  } // while !success
-
-  // shuffle cleansedEndings
-  let m = cleansedPaths.length
-  let t: Path; let i: number
-  while (m) {
-    let i = Math.floor(rng() * m--)
-
-    t = cleansedPaths[m]
-    cleansedPaths[m] = cleansedPaths[i]
-    cleansedPaths[i] = t
   }
 
-  let randomPaths: Path[] = cleansedPaths.slice(0, numPaths)
+  // shuffle cleansedEndings
+  shuffle(interestingPaths, rng)
+  
+
+  let randomPaths: Path[] = interestingPaths.slice(0, numPaths)
+
+  if (randomPaths.length < numPaths) {
+    shuffle(boringPaths, rng)
+    randomPaths = randomPaths.concat(boringPaths.slice(0, numPaths - randomPaths.length))
+  }
 
   randomPaths.sort((a, b) => { return a.start < b.start ? -1 : 1 })
 
-  return { level_data: randomPaths, seed }
+  return { level_data: randomPaths, seed, difficulty }
 }
 
 export async function getTodaysDailyLevel(): Promise<LasergameDailyLevel> {
@@ -91,5 +91,17 @@ export async function getTodaysDailyLevel(): Promise<LasergameDailyLevel> {
   } catch (err) {
     console.log("Err: getTodaysDailyLevel() - " + err.message)
     return Promise.reject(err)
+  }
+}
+
+function shuffle(paths: Path[], rng: any) {
+  let m = paths.length
+  let t: Path; let i: number
+  while (m) {
+    let i = Math.floor(rng() * m--)
+
+    t = paths[m]
+    paths[m] = paths[i]
+    paths[i] = t
   }
 }
