@@ -1,7 +1,7 @@
 import { canvas, importPre, pathsPre, victoryP, ctx } from './htmlelements'
 import { Direction, End, Pieces, LevelType } from './enum'
 import { PathsList } from './interfaces'
-import Toolbar from './classes/toolbar'
+import ToolbarComponent from './classes/toolbar_component'
 import LaserGridComponent from './classes/lasergrid_component'
 import PieceComponent from './classes/piece_component'
 import Tile from './classes/tile'
@@ -15,7 +15,7 @@ import { pieces } from './pieces'
 
 import LasergameDailyLevel from '../db/models/lasergame-daily-level'
 
-export const toolbar: Toolbar = new Toolbar("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw)
+export const toolbarComponent: ToolbarComponent = new ToolbarComponent("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw)
 export const lasergridComponent: LaserGridComponent = new LaserGridComponent("/lasergame/lasergrid.png", new Tile(0, 0), 7, 7, draw)
 
 export const pieceComponents: Array<PieceComponent> = []
@@ -51,21 +51,21 @@ function draw() {
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
   lasergridComponent.draw(ctx)
-  toolbar.draw(ctx)
+  toolbarComponent.draw(ctx)
 }
 
-function onClick(event: any) {
+function onClick(event: MouseEvent) {
   let loc = windowToCanvas(event.clientX, event.clientY)
-  lasergridComponent.processMouseClick(loc.x, loc.y)
-  toolbar.processMouseClick(loc.x, loc.y)
+  lasergridComponent.processMouseClick(loc.x, loc.y, event.button)
+  toolbarComponent.processMouseClick(loc.x, loc.y)
   printPaths()
   if (currentLevel && checkVictory()) {
     if (levelType === LevelType.Random) {
       victoryP.innerHTML = `Incredible! You won! <a href=\"/lasergame/random/${difficulty}\">Click here to generate a new random puzzle!</a>`
     } else if (levelType === LevelType.Daily) {
-      victoryP.textContent = "Wow! You beat the daily level!"
+      victoryP.innerHTML = "Wow! You beat the daily level!"
     } else if (levelType === LevelType.Custom) {
-      victoryP.textContent = "Wow! You beat the custom level!"
+      victoryP.innerHTML = "Wow! You beat the custom level!"
     }
     victoryP.hidden = false
   }

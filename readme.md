@@ -3,8 +3,11 @@ This project is a way for me to demonstrate my skills as a programmer.
 As I acquire more skill, this will be updated to reflect what I've learned. 
 
 ## Current goals
-* Figure out how to debug browser code in VSCode.
-* Update lasergame to be more user friendly
+* Feature updates to Lasergame
+* Start a new game project
+* Build a simple secret santa manager
+* Test out my dev environment setup instructions below
+
 
 ## Lasergame
 ### Cool levels

@@ -34,9 +34,9 @@ export default class CanvasComponent {
     }
 
     /**
-     * Figures out whether a button press happened inside the component and returns it. If it didn't, returns null.
+     * Figures out whether a button press happened inside the component and returns the tile. If it didn't, returns null.
      */
-    processMouseClick(x: number, y: number) {
+    protected getClickedTile(x: number, y: number) {
         let relativeTile = Tile.TileFromPixels(x, y).minus(this.tile)
         if (relativeTile.isValid(this.widthInTiles, this.heightInTiles)) {
             return relativeTile

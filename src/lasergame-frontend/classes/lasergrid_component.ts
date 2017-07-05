@@ -4,7 +4,7 @@ import Laser from "./laser"
 import CanvasComponent from './canvas_component'
 import Tile from './tile'
 import { TILE_HALF, TILE_FULL, directionMapping } from '../const'
-import { toolbar, printPaths, pieceComponents, edgeLevelData } from '../lasergame'
+import { toolbarComponent, printPaths, pieceComponents, edgeLevelData } from '../lasergame'
 import Mirror from './mirror'
 import Swatch from './swatch'
 import { Direction, End } from '../enum'
@@ -100,16 +100,19 @@ export default class LaserGridComponent extends CanvasComponent {
     }
   }
 
-  processMouseClick(x: number, y: number) {
-    let relativeTile = super.processMouseClick(x, y)
+  processMouseClick(x: number, y: number, button: number) {
+    let relativeTile = this.getClickedTile(x, y)
     if (relativeTile !== null) {
       if (relativeTile.compare(new Tile(1, 1), (v1: number, v2: number) => v1 >= v2) && relativeTile.compare(new Tile(5, 5), (v1: number, v2: number) => v1 <= v2)) {
         let loc = relativeTile.minus(new Tile(1, 1))
         let piece = this.lasergrid.getPiece(loc)
         if (piece !== null) {
           this.lasergrid.removePiece(piece)
+          if (button === 0) {
+            toolbarComponent.setSelectedPiece()
+          }
         } else {
-          this.lasergrid.setPiece(toolbar.getSelectedPieceComponent().piece, loc)
+          this.lasergrid.setPiece(toolbarComponent.getSelectedPieceComponent().piece, loc)
         }
         printPaths()
         
