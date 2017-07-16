@@ -18,7 +18,9 @@ https://kostyapro.herokuapp.com/lasergame/seed/medium/1498000079304
 This section describes my dev environment and production pipeline.
 
 ### Setting up the dev environment
-Download [Node.js](https://nodejs.org/) (I try to stay on the latest LTS version)
+Download [Node.js](https://nodejs.org/) (I try to stay on the latest version)
+
+Download [git](https://git-scm.com/) (Needed for github integration in vscode)
 
 Download [Visual Studio Code](https://code.visualstudio.com/) (My code editor of choice. Keep up to date)
 
@@ -26,7 +28,7 @@ Download [PostgreSQL](https://www.postgresql.org/) (The database I use)
 
 Download [Heroku](https://www.heroku.com/) (The production service I use)
 
-These installations should also install npm and git.
+Download [Python 2](https://www.python.org/) (Needed for node.gyp)
 
 Optionally install [Github Desktop](https://desktop.github.com/)
 
@@ -37,6 +39,10 @@ npm update
 tsc
 webpack
 ```
+
+In Windows, I had to add the PostgreSQL `bin` folder to PATH.
+
+
 
 Create the `.env` file as shown in the section below. Make sure the db info is correct.
 
