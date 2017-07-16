@@ -1,6 +1,6 @@
 let pg = require('pg')
 const url = require('url')
-import { Pool } from '@types/pg'
+import { Pool } from 'pg'
 
 const params = url.parse(process.env.DATABASE_URL);
 const auth = params.auth.split(':');
