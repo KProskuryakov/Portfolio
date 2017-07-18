@@ -1,6 +1,6 @@
-export const importPre = <HTMLPreElement>document.getElementById("imported-pre")
-export const pathsPre = <HTMLPreElement>document.getElementById("paths-pre")
-export const canvas = <HTMLCanvasElement>document.getElementById("laser-game-canvas")
-export const victoryP = <HTMLParagraphElement>document.getElementById("victory-p")
+export const importPre = document.getElementById("imported-pre") as HTMLPreElement;
+export const pathsPre = document.getElementById("paths-pre") as HTMLPreElement;
+export const canvas = document.getElementById("laser-game-canvas") as HTMLCanvasElement;
+export const victoryP = document.getElementById("victory-p") as HTMLParagraphElement;
 
-export const ctx = <CanvasRenderingContext2D>canvas.getContext("2d")
+export const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;

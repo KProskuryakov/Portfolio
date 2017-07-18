@@ -1,13 +1,13 @@
-import express = require('express')
-let router = express.Router()
+import express = require("express");
+const router = express.Router();
 
-let passport = require('../passport')
+import passport = require("../passport");
 
-router.get('/', function (req, res) {
-  let err = req.query.err
-  res.render('login', {title: 'Login', page: "Login", err: err})
-})
+router.get("/", (req, res) => {
+  const err = req.query.err;
+  res.render("login", { title: "Login", page: "Login", err });
+});
 
-router.post('/', passport.authenticate('local', {successRedirect: "/", failureRedirect: "/login?err=INVALID"}))
+router.post("/", passport.authenticate("local", { successRedirect: "/", failureRedirect: "/login?err=INVALID" }));
 
-module.exports = router
+module.exports = router;

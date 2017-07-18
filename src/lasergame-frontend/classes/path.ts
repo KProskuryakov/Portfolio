@@ -1,57 +1,57 @@
-import Ending from './ending'
+import Ending from "./ending";
 
 export default class Path {
-  start: number
-  endings: Ending[]
+  public static fromJSONObject(json: Path) {
+    const endingsList: Ending[] = [];
+    for (const ending of json.endings) {
+      endingsList.push(Ending.fromJSON(ending));
+    }
+    return new Path(json.start, endingsList);
+  }
+
+  public start: number;
+  public endings: Ending[];
 
   constructor(start: number, endings: Ending[]) {
-    this.start = start
-    this.endings = endings
+    this.start = start;
+    this.endings = endings;
   }
 
-  toString() {
-    return this.startToString() + this.endingListToString()
+  public toString() {
+    return this.startToString() + this.endingListToString();
   }
 
-  startToString() {
-    let string = `${this.start}`
+  public startToString() {
+    let str = `${this.start}`;
     if (this.start < 10) {
-      string += "  -> "
+      str += "  -> ";
     } else {
-      string += " -> "
+      str += " -> ";
     }
-    return string
+    return str;
   }
 
-  endingListToString() {
+  public endingListToString() {
     if (this.endings.length > 1) {
-      let string = `{${this.endings[0].toString()}, `
+      let str = `{${this.endings[0].toString()}, `;
       for (let curEnding = 1; curEnding < this.endings.length - 1; curEnding++) {
-        string += `${this.endings[curEnding].toString()}, `
+        str += `${this.endings[curEnding].toString()}, `;
       }
-      string += `${this.endings[this.endings.length - 1].toString()}}`
-      return string
+      str += `${this.endings[this.endings.length - 1].toString()}}`;
+      return str;
     }
-    return this.endings[0].toString()
+    return this.endings[0].toString();
   }
 
-  endingsEqual(otherPath: Path) {
+  public endingsEqual(otherPath: Path) {
     if (this.endings.length === otherPath.endings.length) {
       for (let i = 0; i < this.endings.length; i++) {
         if (!this.endings[i].equals(otherPath.endings[i])) {
-          return false
+          return false;
         }
       }
-      return true
+      return true;
     }
-    return false
-  }
-
-  static fromJSONObject(json: Path) {
-    let endingsList: Ending[] = []
-    for (let i = 0; i < json.endings.length; i++) {
-      endingsList.push(Ending.fromJSON(json.endings[i]))
-    }
-    return new Path(json.start, endingsList)
+    return false;
   }
 }

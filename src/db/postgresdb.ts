@@ -1,25 +1,27 @@
-let pg = require('pg')
-const url = require('url')
-import { Pool } from 'pg'
+import pg = require("pg");
+import url = require("url");
+import { Pool } from "pg";
+
+import winston from "winston";
 
 const params = url.parse(process.env.DATABASE_URL);
-const auth = params.auth.split(':');
+const auth = params.auth.split(":");
 
 const config = {
-  user: auth[0],
-  password: auth[1],
+  database: params.pathname.split("/")[1],
   host: params.hostname,
-  port: params.port,
-  database: params.pathname.split('/')[1],
-  ssl: process.env.IS_DATABASE_SSL === "true",
+  idleTimeoutMillis: 30000,
   max: 10,
-  idleTimeoutMillis: 30000
+  password: auth[1],
+  port: parseInt(params.port, 10),
+  ssl: process.env.IS_DATABASE_SSL === "true",
+  user: auth[0],
 };
 
-let pool: Pool = new pg.Pool(config)
+const pool: Pool = new pg.Pool(config);
 
-process.on('unhandledRejection', function (e: Error) {
-  console.log(e.message, e.stack)
-})
+process.on("unhandledRejection", (e: Error) => {
+  winston.error(e.message, e.stack);
+});
 
-export default pool
+export default pool;

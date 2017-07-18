@@ -1,19 +1,19 @@
-import Piece from './piece'
-import Tile from './tile'
+import Piece from "./piece";
+import Tile from "./tile";
 
 export default class PieceComponent {
-  piece: Piece
-  img: HTMLImageElement
+  public piece: Piece;
+  private img: HTMLImageElement;
 
   constructor(piece: Piece, src: string, draw: () => void) {
-    this.piece = piece
-    this.img = new Image()
-    this.img.onload = () => { draw() }
-    this.img.src = src
+    this.piece = piece;
+    this.img = new Image();
+    this.img.onload = () => { draw(); };
+    this.img.src = src;
   }
 
-  drawAt(tile: Tile, ctx: CanvasRenderingContext2D) {
-    let pos = tile.toPixels()
-    ctx.drawImage(this.img, pos.x, pos.y)
+  public drawAt(tile: Tile, ctx: CanvasRenderingContext2D) {
+    const pos = tile.toPixels();
+    ctx.drawImage(this.img, pos.x, pos.y);
   }
 }

@@ -1,7 +1,7 @@
 
 /**
  * Represents the little bit of data for each website that gets sent
- * 
+ *
  * @export
  * @interface WebData
  * url: text PRIMARY KEY
@@ -10,12 +10,12 @@
  * description: text
  * upload: timestamptz DEFAULT current_timestamp
  */
-export interface WebData {
-  url: string
-  title: string
-  keywords: string
-  description: string
-  upload: string
+export interface IWebData {
+  url: string;
+  title: string;
+  keywords: string;
+  description: string;
+  upload: string;
 }
 
-export default WebData
+export default IWebData;

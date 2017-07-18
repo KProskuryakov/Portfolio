@@ -70,7 +70,7 @@ IS_DATABASE_SSL=false
 These are all extensions that I use specifically for this project.
 
 * Document This
-* gitignore
+* gitignore (CodeZombie)
 * HTML CSS Support
 * Markdown Shortcuts
 * Move TS
