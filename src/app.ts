@@ -2,6 +2,7 @@ import express = require("express");
 import { readdir } from "fs";
 import path = require("path");
 import favicon = require("serve-favicon");
+import morgan = require("morgan");
 import winston = require("winston");
 import cookieParser = require("cookie-parser");
 import bodyParser = require("body-parser");
@@ -48,21 +49,21 @@ app.set("view engine", "pug");
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, "../public", "favicon.ico")));
-
+app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(secretkey));
 app.use(express.static(path.join(__dirname, "../public")));
-app.use(session({secret: secretkey, resave: false, saveUninitialized: false }));
+app.use(session({ secret: secretkey, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req: any, res: any, next: any) => {
-    if (req.user) {
-        res.locals.user = req.user;
-    }
-    res.locals.notesList = notesList;
-    next();
+  if (req.user) {
+    res.locals.user = req.user;
+  }
+  res.locals.notesList = notesList;
+  next();
 });
 
 app.use("/", routes.index);
