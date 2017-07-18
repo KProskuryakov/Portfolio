@@ -18,7 +18,7 @@ export default class Toolbar extends CanvasComponent {
    * @param {number} [offsetX = 0] pixel offset for the image
    * @param {number} [offsetY = 0] pixel offset for the image
    */
-  constructor(src: string, tile: Tile, widthInTiles: number, heightInTiles: number, 
+  constructor(src: string, tile: Tile, widthInTiles: number, heightInTiles: number,
               draw: () => void, offsetX = 0, offsetY = 0) {
     super(src, tile, widthInTiles, heightInTiles, draw, offsetX, offsetY);
     this.selectedPiece = 0;
@@ -38,7 +38,7 @@ export default class Toolbar extends CanvasComponent {
     // draw the green highlight
     ctx.fillStyle = "green";
     ctx.globalAlpha = 0.2;
-    const loc = new Tile(this.tile.add(new Tile(this.selectedPiece, 0)).tileX, this.tile.tileY).toPixels();
+    let loc = new Tile(this.tile.add(new Tile(this.selectedPiece, 0)).tileX, this.tile.tileY).toPixels();
     ctx.fillRect(loc.x, loc.y, TILE_FULL, TILE_FULL);
     ctx.globalAlpha = 1;
 
@@ -48,7 +48,7 @@ export default class Toolbar extends CanvasComponent {
     for (let i = 0; i < pieceComponents.length; i++) {
       const piece = pieceComponents[i].piece;
       if (i !== this.selectedPiece && piece.tile.isValid()) {
-        const loc = new Tile(this.tile.add(new Tile(i, 0)).tileX, this.tile.tileY).toPixels();
+        loc = new Tile(this.tile.add(new Tile(i, 0)).tileX, this.tile.tileY).toPixels();
         ctx.fillRect(loc.x, loc.y, TILE_FULL, TILE_FULL);
       }
     }
