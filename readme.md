@@ -61,6 +61,12 @@ DATABASE_URL=postgres://postgres:password@localhost:5432/portfolio
 IS_DATABASE_SSL=false
 ```
 
+### TSLint
+
+I use TSLint's `recommended` setting to lint all of my code. It does the job and it does it well.
+For consistencies sake, 2 spaces are used throughout the whole project. I highly recommend the TSLint extension fo
+vscode. It was a lifesaver when linting my codebase.
+
 ### Current settings in vscode:
 ```
 {
@@ -71,7 +77,16 @@ IS_DATABASE_SSL=false
   "editor.renderControlCharacters": false,
   "git.confirmSync": false,
   "editor.tabSize": 2,
-  "editor.detectIndentation": false
+  "editor.detectIndentation": false,
+  "TodoParser": {
+    "exclude": ["cpp", "c", "js"],
+    "folderExclude": ["node_modules", ".vscode"],
+    "only": ["sub-folder/sub-sub-folder"],
+    "showInProblems": false,
+    "markers": ["NOTE:", "REMINDER:", ["FIXME", "Warning"]],
+    "autoDefaultMarkers": true
+  },
+  "tslint.enable": true
 }
 ```
 
@@ -79,10 +94,13 @@ IS_DATABASE_SSL=false
 These are all extensions that I use specifically for this project.
 
 * Document This
-* gitignore
+* gitignore (CodeZombie)
 * HTML CSS Support
 * Markdown Shortcuts
 * Move TS
+* npm
 * TODO Parser
+* TSLint
+* Untabify
 * VS Color Picker
 * vscode-icons

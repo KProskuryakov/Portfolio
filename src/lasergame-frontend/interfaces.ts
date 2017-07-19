@@ -1,6 +1,6 @@
-import Ending from './classes/ending'
+import Ending from "./classes/ending";
 
-export interface PathsList {
-    [index: number]: Array<Ending>
-    length: number
+export interface IPathsList {
+    [index: number]: Ending[];
+    length: number;
 }

@@ -1,14 +1,14 @@
-import express = require('express')
-let router = express.Router()
+import express = require("express");
+const router = express.Router();
 
-let passport = require('../passport')
+import passport = require("../passport");
 
-router.get('/', function(req, res) {
-    if (req.user) {
-        res.send('woo!')
-    } else {
-        res.status(401).send('Not logged in!')
-    }
-})
+router.get("/", (req, res) => {
+  if (req.user) {
+    res.send("woo!");
+  } else {
+    res.status(401).send("Not logged in!");
+  }
+});
 
-module.exports = router
+module.exports = router;

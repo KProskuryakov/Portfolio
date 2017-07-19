@@ -5,12 +5,12 @@ export enum Direction {
   West,
   None,
   SplitEastWest,
-  SplitNorthSouth
+  SplitNorthSouth,
 }
 
 export enum End {
   Blocked = -2,
-  Loop
+  Loop,
 }
 
 export enum Pieces {
@@ -21,11 +21,11 @@ export enum Pieces {
   UpSplit,
   Blue,
   Red,
-  Green
+  Green,
 }
 
 export enum LevelType {
   Daily,
   Random,
-  Custom
+  Custom,
 }

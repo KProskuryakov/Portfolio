@@ -6,4 +6,4 @@ public/bundles/
 src/secret.ts 
 js/
 .DS_Store
-/*.env
+.env
