@@ -6,7 +6,7 @@ import Tile from "./tile";
 /**
  * The toolbar to select the pieces to put in the grid
  */
-export default class Toolbar extends CanvasComponent {
+export default class ToolbarComponent extends CanvasComponent {
   public selectedPiece: number;
 
   /**

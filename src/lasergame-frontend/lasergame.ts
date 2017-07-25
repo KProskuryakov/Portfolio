@@ -7,7 +7,7 @@ import Piece from "./classes/piece";
 import PieceComponent from "./classes/piece_component";
 import Swatch from "./classes/swatch";
 import Tile from "./classes/tile";
-import Toolbar from "./classes/toolbar";
+import ToolbarComponent from "./classes/toolbar_component";
 import { Direction, End, LevelType, Pieces } from "./enum";
 import { canvas, ctx, importPre, pathsPre, victoryP } from "./htmlelements";
 import { IPathsList } from "./interfaces";
@@ -15,9 +15,8 @@ import { pieces } from "./pieces";
 
 import ILasergameDailyLevel from "../db/models/lasergame-daily-level";
 
-export const toolbar: Toolbar = new Toolbar("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw);
-export const lasergridComponent: LaserGridComponent = new LaserGridComponent("/lasergame/lasergrid.png",
-new Tile(0, 0), 7, 7, draw);
+export const toolbar = new ToolbarComponent("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw);
+export const lasergridComponent = new LaserGridComponent("/lasergame/lasergrid.png", new Tile(0, 0), 7, 7, draw);
 
 export const pieceComponents: PieceComponent[] = [];
 

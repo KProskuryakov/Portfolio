@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "postinstall": "tsc & webpack -p",
@@ -34,6 +34,7 @@
     "express-session": "^1.15.1",
     "jstransformer-markdown-it": "^2.0.0",
     "morgan": "~1.7.0",
+    "nodemon": "^1.11.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^6.4.1",

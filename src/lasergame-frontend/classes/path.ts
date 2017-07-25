@@ -12,6 +12,12 @@ export default class Path {
   public start: number;
   public endings: Ending[];
 
+  /**
+   * Ending list is guaranteed to be sorted (as long as endings aren't messed with)
+   * @param {number} start
+   * @param {Ending[]} endings
+   * @memberof Path
+   */
   constructor(start: number, endings: Ending[]) {
     this.start = start;
     this.endings = endings;
