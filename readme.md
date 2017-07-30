@@ -56,16 +56,31 @@ Running `heroku local` is a way to test whether the code will work on the heroku
 Create a `.env` file in the root folder for the vscode debugger and `heroku local` to work.
 
 ```
-SECRET_KEY=ForDevPurposes
+SECRET_KEY=SuperSecretKey
 DATABASE_URL=postgres://postgres:password@localhost:5432/portfolio
 IS_DATABASE_SSL=false
 ```
 
 ### TSLint
 
-I use TSLint's `recommended` setting to lint all of my code. It does the job and it does it well.
+I use TSLint's `latest` setting to lint all of my code. It does the job and it does it well.
 For consistencies sake, 2 spaces are used throughout the whole project. I highly recommend the TSLint extension fo
 vscode. It was a lifesaver when linting my codebase.
+
+### PostgreSQL
+
+These commands should be run on the database before running the app for the first time.
+
+In the heroku production environment, connect to the db by running `heroku pg:psql` and then execute the commands.
+
+```
+CREATE TABLE IF NOT EXISTS "session" (
+  "sid" varchar NOT NULL COLLATE "default" PRIMARY KEY NOT DEFERRABLE INITIALLY IMMEDIATE,
+	"sess" json NOT NULL,
+	"expire" timestamp(6) NOT NULL
+)
+WITH (OIDS=FALSE);
+```
 
 ### Current settings in vscode:
 ```

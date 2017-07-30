@@ -10,7 +10,7 @@
       "name": "nodemon",
       "runtimeExecutable": "nodemon",
       "runtimeArgs": [
-        "--debug=5858"
+        "--inspect=5858"
       ],
       "program": "${workspaceRoot}/bin/www",
       "restart": true,
@@ -24,7 +24,9 @@
       "request": "launch",
       "name": "node",
       "program": "${workspaceRoot}/bin/www",
-      "outFiles": [ "${workspaceRoot}/js/**/*.js" ],
+      "outFiles": [
+        "${workspaceRoot}/js/**/*.js"
+      ],
       "envFile": "${workspaceRoot}/.env"
     },
     {

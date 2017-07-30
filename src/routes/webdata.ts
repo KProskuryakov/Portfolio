@@ -8,4 +8,4 @@ router.get("/", async (req, res, next) => {
   res.render("webdata", { title: "Web Data", page: "Web Data", webDataArray });
 });
 
-module.exports = router;
+export default router;

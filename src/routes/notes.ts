@@ -8,4 +8,4 @@ router.get("/:note", (req, res, next) => {
   res.render("notes/" + req.params.note, { title: req.params.note, page: "Notes" });
 });
 
-module.exports = router;
+export default router;

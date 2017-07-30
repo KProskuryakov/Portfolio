@@ -2,7 +2,7 @@ import pg = require("pg");
 import url = require("url");
 import { Pool } from "pg";
 
-import winston from "winston";
+import winston = require("winston");
 
 const params = url.parse(process.env.DATABASE_URL);
 const auth = params.auth.split(":");
@@ -21,7 +21,7 @@ const config = {
 const pool: Pool = new pg.Pool(config);
 
 process.on("unhandledRejection", (e: Error) => {
-  winston.error(e.message, e.stack);
+  winston.error(e.message, { stack: e.stack });
 });
 
 export default pool;

@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "command": "npm",
+  "type":"shell",
+  "suppressTaskName": true,
+  "tasks": [
+    {
+      "taskName": "lint",
+      "args": ["run", "lint"],
+      "problemMatcher": "$tslint5"
+    }
+  ]
+}

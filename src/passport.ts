@@ -12,23 +12,24 @@ import * as db_su from "./db/site-user-table";
 passport.use(new LocalStrategy({ usernameField: "email" },
   function strategy(email: string, password: string, done: any) {
   email = email.toLocaleLowerCase();
-  winston.info("Strategy activated with email: " + email);
+  winston.info(`Strategy activated with email: ${email}`);
   db_su.getSiteUserByEmail(email).then((siteUser) => {
     if (!siteUser) {
-      winston.info("Existing user not found for email: " + email);
+      winston.info(`Existing user not found for email: ${email}`);
       return done(null, false, { message: "Incorrect username." });
     }
-    winston.info("Existing user found for email: " + email);
+    winston.info(`Existing user found for email: ${email}`);
     bcrypt.compare(password, siteUser.password).then((result) => {
       if (result === false) {
-        winston.info("Incorrect password for email: " + email);
+        winston.info(`Incorrect password for email: ${email}`);
         return done(null, false, { message: "Incorrect password." });
       }
-      winston.info("Password accepted for email: " + email);
+      winston.info(`Password accepted for email: ${email}`);
       return done(null, siteUser);
     });
   })
   .catch((err) => {
+    winston.error(`Error processing user with email: ${email}`);
     return done(err);
   });
 }));

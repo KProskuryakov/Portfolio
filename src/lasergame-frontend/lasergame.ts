@@ -133,11 +133,8 @@ function printLevelPaths() {
     const levelPath = currentLevel[i];
     const curPath = paths[levelPath.start - 1];
     let line = levelPath.toString();
-    if (curPath.endingsEqual(levelPath)) {
-      line = `<span style='color: green'>${line}</span>`;
-    } else {
-      line = `<span style='color: red'>${line}</span>`;
-    }
+    line = curPath.endingsEqual(levelPath) ? `<span style='color: green'>${line}</span>`
+      : `<span style='color: red'>${line}</span>`;
     if (lasergridComponent.selectedEdge === levelPath.start) {
       line = `><b>${line}</b>`;
     }

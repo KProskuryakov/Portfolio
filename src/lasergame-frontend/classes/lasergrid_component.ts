@@ -78,11 +78,7 @@ export default class LaserGridComponent extends CanvasComponent {
       ctx.globalAlpha = 0.1;
       for (const edgeData of edgeLevelData) {
         selectedEdgePixels = LaserGrid.edgeNumberToLaser(edgeData.edge).tile.add(new Tile(1, 1)).toPixels();
-        if (edgeData.solved) {
-          ctx.fillStyle = "#00FF00";
-        } else {
-          ctx.fillStyle = "#FF0000";
-        }
+        ctx.fillStyle = edgeData.solved ? "#00FF00" : "#FF0000";
         ctx.fillRect(selectedEdgePixels.x, selectedEdgePixels.y, TILE_FULL, TILE_FULL);
       }
       ctx.globalAlpha = 1.0;
