@@ -9,12 +9,8 @@
       "request": "launch",
       "name": "nodemon",
       "runtimeExecutable": "nodemon",
-      "runtimeArgs": [
-        "--inspect=5858"
-      ],
       "program": "${workspaceRoot}/bin/www",
       "restart": true,
-      "port": 5858,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "envFile": "${workspaceRoot}/.env"
@@ -33,7 +29,6 @@
       "type": "node",
       "request": "attach",
       "name": "Attach",
-      "port": 5858,
       "restart": true
     }
   ]
