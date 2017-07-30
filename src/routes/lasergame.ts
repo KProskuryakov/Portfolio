@@ -27,4 +27,4 @@ router.get("/seed/:difficulty/:seed", (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

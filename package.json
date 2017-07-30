@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "postinstall": "tsc & webpack -p",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "lint": "tslint 'src/**/*.ts'"
   },
   "engines": {
     "node": "8.1.4",
@@ -27,6 +28,7 @@
     "@types/winston": "^2.3.4",
     "bcrypt": "^1.0.2",
     "body-parser": "~1.16.0",
+    "connect-pg-simple": "^4.2.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
     "email-addresses": "^2.0.2",
@@ -34,7 +36,6 @@
     "express-session": "^1.15.4",
     "jstransformer-markdown-it": "^2.0.0",
     "morgan": "~1.7.0",
-    "nodemon": "^1.11.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^6.4.1",
@@ -43,7 +44,7 @@
     "pug": "^2.0.0-beta11",
     "seedrandom": "^2.4.3",
     "serve-favicon": "~2.3.2",
-    "ts-loader": "^2.3.1",
+    "ts-loader": "^2.3.2",
     "typescript": "^2.4.2",
     "webpack": "^2.7.0",
     "winston": "^2.3.1"

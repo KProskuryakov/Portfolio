@@ -10,4 +10,4 @@ router.get("/", (req, res) => {
 
 router.post("/", passport.authenticate("local", { successRedirect: "/", failureRedirect: "/login?err=INVALID" }));
 
-module.exports = router;
+export default router;

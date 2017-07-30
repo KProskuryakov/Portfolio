@@ -63,6 +63,8 @@ html
                     each file in notesList
                       li
                         a(href='/notes/' + file) #{file}
+                    else
+                      li No Notes.
             li(class=page=='Web Data'?'active':undefined) 
               a(href="/webdata") Web Data
           ul.nav.navbar-nav.navbar-right

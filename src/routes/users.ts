@@ -9,4 +9,4 @@ router.get("/", async (req, res, next) => {
   res.render("users", { title: "All Users", page: "All Users", userArray });
 });
 
-module.exports = router;
+export default router;

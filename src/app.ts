@@ -7,33 +7,31 @@ import winston = require("winston");
 import cookieParser = require("cookie-parser");
 import bodyParser = require("body-parser");
 import session = require("express-session");
+import connectPG = require("connect-pg-simple");
+import { Passport } from "passport";
+import passport = require("./passport");
+import pool from "./db/postgresdb";
 
-const routes = {
-  api: {
-    index: require("./routes/api/index"),
-    lasergame: require("./routes/api/lasergame"),
-    webdata: require("./routes/api/webdata"),
-  },
-  index: require("./routes/index"),
-  lasergame: require("./routes/lasergame"),
-  login: require("./routes/login"),
-  logout: require("./routes/logout"),
-  notes: require("./routes/notes"),
-  protected: require("./routes/protected"),
-  register: require("./routes/register"),
-  user: require("./routes/user"),
-  users: require("./routes/users"),
-  webdata: require("./routes/webdata"),
-};
+import apiIndex from "./routes/api/index";
+import apiLasergame from "./routes/api/lasergame";
+import apiWebdata from "./routes/api/webdata";
+import index from "./routes/index";
+import lasergame from "./routes/lasergame";
+import login from "./routes/login";
+import logout from "./routes/logout";
+import notes from "./routes/notes";
+import protect from "./routes/protected";
+import register from "./routes/register";
+import user from "./routes/user";
+import users from "./routes/users";
+import webdata from "./routes/webdata";
 
 const app = express();
-
-import { Passport } from "passport";
-
-import passport = require("./passport");
 const secretkey = process.env.SECRET_KEY;
+const pgSession = connectPG(session);
 
 const notesList: string[] = [];
+
 readdir("./notes", (err, files) => {
   if (err) {
     throw err;
@@ -47,18 +45,25 @@ readdir("./notes", (err, files) => {
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "pug");
 
-// uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, "../public", "favicon.ico")));
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(secretkey));
 app.use(express.static(path.join(__dirname, "../public")));
-app.use(session({ secret: secretkey, resave: false, saveUninitialized: false }));
+app.use(session({
+  cookie: { maxAge: 24 * 60 * 60 * 1000 },
+  resave: false,
+  saveUninitialized: false,
+  secret: secretkey,
+  store: new pgSession({
+    pool,
+  }),
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((req: any, res: any, next: any) => {
+app.use((req, res, next) => {
   if (req.user) {
     res.locals.user = req.user;
   }
@@ -66,20 +71,20 @@ app.use((req: any, res: any, next: any) => {
   next();
 });
 
-app.use("/", routes.index);
-app.use("/lasergame", routes.lasergame);
-app.use("/login", routes.login);
-app.use("/user", routes.user);
-app.use("/register", routes.register);
-app.use("/logout", routes.logout);
-app.use("/protected", routes.protected);
-app.use("/siteUsers", routes.users);
-app.use("/notes", routes.notes);
-app.use("/webdata", routes.webdata);
+app.use("/", index);
+app.use("/lasergame", lasergame);
+app.use("/login", login);
+app.use("/user", user);
+app.use("/register", register);
+app.use("/logout", logout);
+app.use("/protected", protect);
+app.use("/siteUsers", users);
+app.use("/notes", notes);
+app.use("/webdata", webdata);
 
-app.use("/api/", routes.api.index);
-app.use("/api/lasergame", routes.api.lasergame);
-app.use("/api/webdata", routes.api.webdata);
+app.use("/api/", apiIndex);
+app.use("/api/lasergame", apiLasergame);
+app.use("/api/webdata", apiWebdata);
 
 class ErrorWithStatus extends Error {
   public status?: number;

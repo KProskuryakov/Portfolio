@@ -12,4 +12,4 @@ router.get("/:user", async (req, res, next) => {
   res.render("user", { title: user.display_name, pageOwner: user, levelArray });
 });
 
-module.exports = router;
+export default router;
