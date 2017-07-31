@@ -1,4 +1,4 @@
-import Tile from "./tile";
+import Tile from "lasergame/tile";
 
 /**
  * An abstract class representing a smaller section of the canvas

@@ -1,4 +1,4 @@
-import Ending from "./classes/ending";
+import Ending from "lasergame/ending";
 
 export interface IPathsList {
     [index: number]: Ending[];

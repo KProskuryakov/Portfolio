@@ -6,8 +6,8 @@ import passport = require("passport");
 import local = require("passport-local");
 const LocalStrategy = local.Strategy;
 
-import SiteUser from "./db/models/site-user";
-import * as db_su from "./db/site-user-table";
+import SiteUser from "db/models/site-user";
+import * as db_su from "db/site-user-table";
 
 passport.use(new LocalStrategy({ usernameField: "email" },
   function strategy(email: string, password: string, done: any) {

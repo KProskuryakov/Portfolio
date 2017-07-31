@@ -1,5 +1,5 @@
-import Color from "./color";
-import Piece from "./piece";
+import Color from "lasergame/color";
+import Piece from "lasergame/piece";
 
 /**
  * Swatches represent pieces on the board that can change a laser's color

@@ -1,7 +1,7 @@
-import Piece from "./classes/piece";
-import Swatch from "./classes/swatch";
-import Tile from "./classes/tile";
-import { Direction } from "./enum";
+import { Direction } from "lasergame/enum";
+import Piece from "lasergame/piece";
+import Swatch from "lasergame/swatch";
+import Tile from "lasergame/tile";
 
 export const TILE_FULL = 50;
 export const TILE_HALF = TILE_FULL / 2;

@@ -1,5 +1,5 @@
-import SiteUser from "./models/site-user";
-import pool from "./postgresdb";
+import SiteUser from "db/models/site-user";
+import pool from "db/postgresdb";
 
 pool.query(`
 CREATE TABLE IF NOT EXISTS site_users

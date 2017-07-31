@@ -1,5 +1,5 @@
-import IWebData from "./models/web-data";
-import pool from "./postgresdb";
+import IWebData from "db/models/web-data";
+import pool from "db/postgresdb";
 
 pool.query(`
 CREATE TABLE IF NOT EXISTS web_data

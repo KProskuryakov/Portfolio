@@ -1,14 +1,15 @@
-import Ending from "../lasergame-frontend/classes/ending";
-import Lasergrid from "../lasergame-frontend/classes/lasergrid";
-import Path from "../lasergame-frontend/classes/path";
-import Piece from "../lasergame-frontend/classes/piece";
-import Tile from "../lasergame-frontend/classes/tile";
-import { pieces } from "../lasergame-frontend/pieces";
-
-import * as db_ldl from "../db/lasergame-daily-level-table";
-import ILasergameDailyLevel from "../db/models/lasergame-daily-level";
 import seedrandom = require("seedrandom");
 import winston = require("winston");
+
+import Ending from "lasergame/ending";
+import Lasergrid from "lasergame/lasergrid";
+import Path from "lasergame/path";
+import Piece from "lasergame/piece";
+import { pieces } from "lasergame/pieces";
+import Tile from "lasergame/tile";
+
+import * as db_ldl from "db/lasergame-daily-level-table";
+import ILasergameDailyLevel from "db/models/lasergame-daily-level";
 
 const defaultGrid = new Lasergrid();
 defaultGrid.calculateAllEndings();

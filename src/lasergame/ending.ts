@@ -1,5 +1,5 @@
-import { End } from "../enum";
-import Color from "./color";
+import Color from "lasergame/color";
+import { End } from "lasergame/enum";
 
 /**
  * A data point for the paths list holding a color and an ending edge number

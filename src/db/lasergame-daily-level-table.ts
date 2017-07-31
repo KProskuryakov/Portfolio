@@ -1,7 +1,7 @@
-import ILasergameDailyLevel from "./models/lasergame-daily-level";
-import pool from "./postgresdb";
+import ILasergameDailyLevel from "db/models/lasergame-daily-level";
+import pool from "db/postgresdb";
 
-import Path from "../lasergame-frontend/classes/path";
+import Path from "lasergame/path";
 
 pool.query(`
 CREATE TABLE IF NOT EXISTS lasergame_daily_levels

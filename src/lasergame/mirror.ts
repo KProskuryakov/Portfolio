@@ -1,4 +1,4 @@
-import { Direction } from "../enum";
+import { Direction } from "lasergame/enum";
 import Piece from "./piece";
 
 /**

@@ -1,4 +1,4 @@
-import { Direction, End } from "../enum";
+import { Direction, End } from "lasergame/enum";
 import Ending from "./ending";
 import Laser from "./laser";
 import Mirror from "./mirror";

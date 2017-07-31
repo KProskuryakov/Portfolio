@@ -1,8 +1,8 @@
-import Color from "./classes/color";
-import Mirror from "./classes/mirror";
-import Piece from "./classes/piece";
-import Swatch from "./classes/swatch";
-import { Direction, Pieces } from "./enum";
+import Color from "lasergame/color";
+import { Direction, Pieces } from "lasergame/enum";
+import Mirror from "lasergame/mirror";
+import Piece from "lasergame/piece";
+import Swatch from "lasergame/swatch";
 
 export const pieces: Piece[] = [];
 

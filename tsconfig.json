@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "amd",
+    "moduleResolution": "node",
     "target": "es5",
     "removeComments": true,
     "preserveConstEnums": true,
@@ -8,8 +9,9 @@
     "strict": true,
     "strictNullChecks": false,
     "sourceMap": true,
+    "baseUrl": "./src",
     "outDir": "./js",
-    "rootDir": "./src/",
+    "rootDir": "./src",
     "lib": [
       "dom",
       "es5",

@@ -1,4 +1,4 @@
-import Ending from "./ending";
+import Ending from "lasergame/ending";
 
 export default class Path {
   public static fromJSONObject(json: Path) {

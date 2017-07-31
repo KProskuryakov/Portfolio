@@ -1,5 +1,5 @@
-import { oppositeDirection } from "../const";
-import { Direction } from "../enum";
+import { oppositeDirection } from "lasergame/const";
+import { Direction } from "lasergame/enum";
 import Color from "./color";
 import Tile from "./tile";
 

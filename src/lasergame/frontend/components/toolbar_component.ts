@@ -1,7 +1,7 @@
-import { TILE_FULL } from "../const";
-import { pieceComponents } from "../lasergame";
-import CanvasComponent from "./canvas_component";
-import Tile from "./tile";
+import { TILE_FULL } from "lasergame/const";
+import CanvasComponent from "lasergame/frontend/components/canvas_component";
+import { pieceComponents } from "lasergame/frontend/lasergame";
+import Tile from "lasergame/tile";
 
 /**
  * The toolbar to select the pieces to put in the grid

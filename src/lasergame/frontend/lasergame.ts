@@ -1,19 +1,20 @@
-import Color from "./classes/color";
-import Ending from "./classes/ending";
-import LaserGridComponent from "./classes/lasergrid_component";
-import Mirror from "./classes/mirror";
-import Path from "./classes/path";
-import Piece from "./classes/piece";
-import PieceComponent from "./classes/piece_component";
-import Swatch from "./classes/swatch";
-import Tile from "./classes/tile";
-import ToolbarComponent from "./classes/toolbar_component";
-import { Direction, End, LevelType, Pieces } from "./enum";
-import { canvas, ctx, importPre, pathsPre, victoryP } from "./htmlelements";
-import { IPathsList } from "./interfaces";
-import { pieces } from "./pieces";
+import Color from "lasergame/color";
+import Ending from "lasergame/ending";
+import { Direction, End, LevelType, Pieces } from "lasergame/enum";
+import { IPathsList } from "lasergame/interfaces";
+import Mirror from "lasergame/mirror";
+import Path from "lasergame/path";
+import Piece from "lasergame/piece";
+import { pieces } from "lasergame/pieces";
+import Swatch from "lasergame/swatch";
+import Tile from "lasergame/tile";
 
-import ILasergameDailyLevel from "../db/models/lasergame-daily-level";
+import LaserGridComponent from "lasergame/frontend/components/lasergrid_component";
+import PieceComponent from "lasergame/frontend/components/piece_component";
+import ToolbarComponent from "lasergame/frontend/components/toolbar_component";
+import { canvas, ctx, importPre, pathsPre, victoryP } from "lasergame/frontend/htmlelements";
+
+import ILasergameDailyLevel from "db/models/lasergame-daily-level";
 
 export const toolbar = new ToolbarComponent("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw);
 export const lasergridComponent = new LaserGridComponent("/lasergame/lasergrid.png", new Tile(0, 0), 7, 7, draw);

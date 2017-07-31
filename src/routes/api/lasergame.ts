@@ -7,7 +7,7 @@ const router = express.Router();
 
 import * as db_ldl from "../../db/lasergame-daily-level-table";
 import * as db_ll from "../../db/lasergame-level-table";
-import { generateLevelFromSeed, getTodaysDailyLevel } from "../../lasergame-backend/lasergame";
+import { generateLevelFromSeed, getTodaysDailyLevel } from "../../lasergame/backend/lasergame";
 
 import winston from "winston";
 

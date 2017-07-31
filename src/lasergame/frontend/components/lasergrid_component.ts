@@ -1,13 +1,13 @@
-import { directionMapping, TILE_FULL, TILE_HALF } from "../const";
-import { Direction, End } from "../enum";
-import { IPathsList } from "../interfaces";
-import { edgeLevelData, pieceComponents, printPaths, toolbar } from "../lasergame";
-import CanvasComponent from "./canvas_component";
-import Laser from "./laser";
-import LaserGrid from "./lasergrid";
-import Mirror from "./mirror";
-import Swatch from "./swatch";
-import Tile from "./tile";
+import { directionMapping, TILE_FULL, TILE_HALF } from "lasergame/const";
+import { Direction, End } from "lasergame/enum";
+import CanvasComponent from "lasergame/frontend/components/canvas_component";
+import { edgeLevelData, pieceComponents, printPaths, toolbar } from "lasergame/frontend/lasergame";
+import { IPathsList } from "lasergame/interfaces";
+import Laser from "lasergame/laser";
+import LaserGrid from "lasergame/lasergrid";
+import Mirror from "lasergame/mirror";
+import Swatch from "lasergame/swatch";
+import Tile from "lasergame/tile";
 
 export default class LaserGridComponent extends CanvasComponent {
   public lasergrid: LaserGrid;
