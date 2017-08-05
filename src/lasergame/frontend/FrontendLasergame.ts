@@ -1,20 +1,24 @@
-import Color from "lasergame/color";
-import Ending from "lasergame/ending";
-import { Direction, End, LevelType, Pieces } from "lasergame/enum";
-import { IPathsList } from "lasergame/interfaces";
-import Mirror from "lasergame/mirror";
-import Path from "lasergame/path";
-import Piece from "lasergame/piece";
-import { pieces } from "lasergame/pieces";
-import Swatch from "lasergame/swatch";
-import Tile from "lasergame/tile";
+import ILasergameDailyLevel from "../../db/models/LasergameDailyLevel";
 
-import LaserGridComponent from "lasergame/frontend/components/lasergrid_component";
-import PieceComponent from "lasergame/frontend/components/piece_component";
-import ToolbarComponent from "lasergame/frontend/components/toolbar_component";
-import { canvas, ctx, importPre, pathsPre, victoryP } from "lasergame/frontend/htmlelements";
+import Color from "../Color";
+import Direction from "../Direction";
+import Ending from "../Ending";
+import EndType from "../EndType";
+import LevelType from "../LevelType";
+import Mirror from "../Mirror";
+import Path from "../Path";
+import PathsList from "../PathsList";
+import Piece from "../Piece";
+import Pieces from "../Pieces";
+import PieceType from "../PieceType";
+import Swatch from "../Swatch";
+import Tile from "../Tile";
 
-import ILasergameDailyLevel from "db/models/lasergame-daily-level";
+import LaserGridComponent from "./components/LaserGridComponent";
+import PieceComponent from "./components/PieceComponent";
+import ToolbarComponent from "./components/ToolbarComponent";
+
+import { canvas, ctx, importPre, pathsPre, victoryP } from "./HTMLElements";
 
 export const toolbar = new ToolbarComponent("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw);
 export const lasergridComponent = new LaserGridComponent("/lasergame/lasergrid.png", new Tile(0, 0), 7, 7, draw);
@@ -32,19 +36,22 @@ let difficulty = "medium";
 function init() {
   canvas.addEventListener("click", onClick, false);
 
-  pieceComponents[Pieces.ForwardSlash] = new PieceComponent(pieces[Pieces.ForwardSlash],
+  pieceComponents[PieceType.ForwardSlash] = new PieceComponent(Pieces[PieceType.ForwardSlash],
     "/lasergame/pieces/mirror_forwardslash.png", draw);
-  pieceComponents[Pieces.BackSlash] = new PieceComponent(pieces[Pieces.BackSlash],
+  pieceComponents[PieceType.BackSlash] = new PieceComponent(Pieces[PieceType.BackSlash],
   "/lasergame/pieces/mirror_backslash.png", draw);
-  pieceComponents[Pieces.BlackHole] = new PieceComponent(pieces[Pieces.BlackHole],
+  pieceComponents[PieceType.BlackHole] = new PieceComponent(Pieces[PieceType.BlackHole],
     "/lasergame/pieces/mirror_blackhole.png", draw);
-  pieceComponents[Pieces.SideSplit] = new PieceComponent(pieces[Pieces.SideSplit],
+  pieceComponents[PieceType.SideSplit] = new PieceComponent(Pieces[PieceType.SideSplit],
     "/lasergame/pieces/mirror_sidesplit.png", draw);
-  pieceComponents[Pieces.UpSplit] = new PieceComponent(pieces[Pieces.UpSplit],
+  pieceComponents[PieceType.UpSplit] = new PieceComponent(Pieces[PieceType.UpSplit],
     "/lasergame/pieces/mirror_upsplit.png", draw);
-  pieceComponents[Pieces.Blue] = new PieceComponent(pieces[Pieces.Blue], "/lasergame/pieces/swatch_blue.png", draw);
-  pieceComponents[Pieces.Red] = new PieceComponent(pieces[Pieces.Red], "/lasergame/pieces/swatch_red.png", draw);
-  pieceComponents[Pieces.Green] = new PieceComponent(pieces[Pieces.Green], "/lasergame/pieces/swatch_green.png", draw);
+  pieceComponents[PieceType.Blue] = new PieceComponent(Pieces[PieceType.Blue],
+    "/lasergame/pieces/swatch_blue.png", draw);
+  pieceComponents[PieceType.Red] = new PieceComponent(Pieces[PieceType.Red],
+    "/lasergame/pieces/swatch_red.png", draw);
+  pieceComponents[PieceType.Green] = new PieceComponent(Pieces[PieceType.Green],
+    "/lasergame/pieces/swatch_green.png", draw);
 
   lasergridComponent.lasergrid.calculateAllEndings();
   printPaths();

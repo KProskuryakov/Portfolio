@@ -1,11 +1,12 @@
-import { Direction, End } from "lasergame/enum";
-import Ending from "./ending";
-import Laser from "./laser";
-import Mirror from "./mirror";
-import Path from "./path";
-import Piece from "./piece";
-import Swatch from "./swatch";
-import Tile from "./tile";
+import Direction from "./Direction";
+import Ending from "./Ending";
+import EndType from "./EndType";
+import Laser from "./Laser";
+import Mirror from "./Mirror";
+import Path from "./Path";
+import Piece from "./Piece";
+import Swatch from "./Swatch";
+import Tile from "./Tile";
 
 export default class LaserGrid {
   /**
@@ -105,7 +106,7 @@ export default class LaserGrid {
                 trackOneEnding(grid, new Laser(laser.tile, Direction.West, laser.color));
                 break;
               case Direction.None:
-                endingList.push(new Ending(End.Blocked, laser.color));
+                endingList.push(new Ending(EndType.Blocked, laser.color));
                 return;
             }
           } else if (piece instanceof Swatch) {
@@ -113,7 +114,7 @@ export default class LaserGrid {
           }
         } // if piece is not null
       } // for
-      endingList.push(new Ending(End.Loop, laser.color));
+      endingList.push(new Ending(EndType.Loop, laser.color));
     } // trackOneEnding()
 
     trackOneEnding(this, LaserGrid.edgeNumberToLaser(edge));

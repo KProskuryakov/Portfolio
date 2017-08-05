@@ -1,19 +1,21 @@
-import { directionMapping, TILE_FULL, TILE_HALF } from "lasergame/const";
-import { Direction, End } from "lasergame/enum";
-import CanvasComponent from "lasergame/frontend/components/canvas_component";
-import { edgeLevelData, pieceComponents, printPaths, toolbar } from "lasergame/frontend/lasergame";
-import { IPathsList } from "lasergame/interfaces";
-import Laser from "lasergame/laser";
-import LaserGrid from "lasergame/lasergrid";
-import Mirror from "lasergame/mirror";
-import Swatch from "lasergame/swatch";
-import Tile from "lasergame/tile";
+import { TILE_FULL, TILE_HALF } from "../../Const";
+import Direction from "../../Direction";
+import Laser from "../../Laser";
+import LaserGrid from "../../LaserGrid";
+import Mirror from "../../Mirror";
+import PathsList from "../../PathsList";
+import Swatch from "../../Swatch";
+import Tile from "../../Tile";
+
+import { edgeLevelData, pieceComponents, printPaths, toolbar } from "../FrontendLasergame";
+
+import CanvasComponent from "./CanvasComponent";
 
 export default class LaserGridComponent extends CanvasComponent {
   public lasergrid: LaserGrid;
   public selectedEdge: number;
   public drawPath: Laser[];
-  public importedPathsList: IPathsList;
+  public importedPathsList: PathsList;
 
   constructor(src: string, tile: Tile, widthInTiles: number, heightInTiles: number, draw: () => void,
               offsetX = 0, offsetY = 0) {
@@ -45,7 +47,7 @@ export default class LaserGridComponent extends CanvasComponent {
       loc.x += TILE_HALF;
       loc.y += TILE_HALF;
       ctx.moveTo(loc.x, loc.y);
-      const tilemap = directionMapping[laser.dir];
+      const tilemap = Tile.directionMapping(laser.dir);
       ctx.lineTo(loc.x + tilemap.tileX * TILE_HALF, loc.y + tilemap.tileY * TILE_HALF);
       ctx.stroke();
     }

@@ -1,4 +1,4 @@
-import Tile from "lasergame/tile";
+import Tile from "./Tile";
 
 /**
  * A superclass that exposes a basic drawing function for mirrors and swatches

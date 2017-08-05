@@ -1,10 +1,23 @@
-import { directionMapping, TILE_FULL } from "lasergame/const";
-import { Direction } from "lasergame/enum";
+import { TILE_FULL } from "./Const";
+import Direction from "./Direction";
 
 /**
  * A class that represents a tile, holds tileX and tileY
  */
 export default class Tile {
+  public static directionMapping(direction: Direction): Tile {
+    switch (direction) {
+      case Direction.North:
+        return new Tile(0, -1);
+      case Direction.East:
+        return new Tile(1, 0);
+      case Direction.South:
+        return new Tile(0, 1);
+      case Direction.West:
+        return new Tile(-1, 0);
+    }
+  }
+
   /**
    *  Constructs a tile based on pixel location and the global TILE_FULL
    * @param {number} x
@@ -84,7 +97,7 @@ export default class Tile {
    * returns the next tile in a given direction
    */
   public nextTile(dir: Direction) {
-    return this.add(directionMapping[dir]);
+    return this.add(Tile.directionMapping(dir));
   }
 
   public toString() {

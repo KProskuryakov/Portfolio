@@ -1,15 +1,15 @@
 import seedrandom = require("seedrandom");
 import winston = require("winston");
 
-import Ending from "lasergame/ending";
-import Lasergrid from "lasergame/lasergrid";
-import Path from "lasergame/path";
-import Piece from "lasergame/piece";
-import { pieces } from "lasergame/pieces";
-import Tile from "lasergame/tile";
+import Ending from "../Ending";
+import Lasergrid from "../LaserGrid";
+import Path from "../Path";
+import Piece from "../Piece";
+import Pieces from "../Pieces";
+import Tile from "../Tile";
 
-import * as db_ldl from "db/lasergame-daily-level-table";
-import ILasergameDailyLevel from "db/models/lasergame-daily-level";
+import * as db_ldl from "../../db/LasergameDailyLevelTable";
+import ILasergameDailyLevel from "../../db/models/LasergameDailyLevel";
 
 const defaultGrid = new Lasergrid();
 defaultGrid.calculateAllEndings();
@@ -45,7 +45,7 @@ export function generateLevelFromSeed(seed = Date.now(), difficulty = "medium") 
 
   const randomGrid = new Lasergrid();
 
-  pieces.forEach((piece: Piece) => {
+  Pieces.forEach((piece: Piece) => {
     while (true) {
       const randTile = new Tile(Math.floor(rng() * 5), Math.floor(rng() * 5));
       if (!randomGrid.getPiece(randTile)) {

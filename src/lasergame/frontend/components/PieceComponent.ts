@@ -1,5 +1,5 @@
-import Piece from "lasergame/piece";
-import Tile from "lasergame/tile";
+import Piece from "../../Piece";
+import Tile from "../../Tile";
 
 export default class PieceComponent {
   public piece: Piece;

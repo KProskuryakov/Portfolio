@@ -1,7 +1,7 @@
-import { oppositeDirection } from "lasergame/const";
-import { Direction } from "lasergame/enum";
-import Color from "./color";
-import Tile from "./tile";
+import Color from "./Color";
+import { oppositeDirection } from "./Const";
+import Direction from "./Direction";
+import Tile from "./Tile";
 
 /**
  * A representation of the location/direction/color of the laser  in a specific tile

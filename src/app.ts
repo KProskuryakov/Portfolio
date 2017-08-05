@@ -9,22 +9,23 @@ import bodyParser = require("body-parser");
 import session = require("express-session");
 import connectPG = require("connect-pg-simple");
 import { Passport } from "passport";
-import passport = require("kp-passport");
-import pool from "db/postgresdb";
 
-import apiIndex from "routes/api/index";
-import apiLasergame from "routes/api/lasergame";
-import apiWebdata from "routes/api/webdata";
-import index from "routes/index";
-import lasergame from "routes/lasergame";
-import login from "routes/login";
-import logout from "routes/logout";
-import notes from "routes/notes";
-import protect from "routes/protected";
-import register from "routes/register";
-import user from "routes/user";
-import users from "routes/users";
-import webdata from "routes/webdata";
+import passport = require("./kp-passport");
+import pool from "./db/Postgres";
+
+import apiIndex from "./routes/api/index";
+import apiLasergame from "./routes/api/lasergame";
+import apiWebdata from "./routes/api/webdata";
+import index from "./routes/index";
+import lasergame from "./routes/lasergame";
+import login from "./routes/login";
+import logout from "./routes/logout";
+import notes from "./routes/notes";
+import protect from "./routes/protected";
+import register from "./routes/register";
+import user from "./routes/user";
+import users from "./routes/users";
+import webdata from "./routes/webdata";
 
 const app = express();
 const secretkey = process.env.SECRET_KEY;

@@ -1,15 +1,15 @@
-import Color from "lasergame/color";
-import { End } from "lasergame/enum";
+import Color from "./Color";
+import EndType from "./EndType";
 
 /**
  * A data point for the paths list holding a color and an ending edge number
  */
 export default class Ending {
   public static fromJSON(ending: Ending) {
-    if (ending.end === End.Blocked) {
-      return new Ending(End.Blocked, Color.fromJSON(ending.color));
-    } else if (ending.end === End.Loop) {
-      return new Ending(End.Loop, Color.fromJSON(ending.color));
+    if (ending.end === EndType.Blocked) {
+      return new Ending(EndType.Blocked, Color.fromJSON(ending.color));
+    } else if (ending.end === EndType.Loop) {
+      return new Ending(EndType.Loop, Color.fromJSON(ending.color));
     } else {
       return new Ending(ending.end, Color.fromJSON(ending.color));
     }

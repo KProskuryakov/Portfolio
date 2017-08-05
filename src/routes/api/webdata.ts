@@ -1,8 +1,8 @@
 import express = require("express");
 const router = express.Router();
 
-import IWebData from "../../db/models/web-data";
-import * as webDataTable from "../../db/web-data-table";
+import IWebData from "../../db/models/WebData";
+import * as webDataTable from "../../db/WebDataTable";
 
 router.post("/insert", async (req, res, next) => {
   try {

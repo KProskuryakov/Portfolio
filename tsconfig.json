@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "module": "amd",
-    "moduleResolution": "node",
+    "module": "commonjs",
     "target": "es5",
     "removeComments": true,
     "preserveConstEnums": true,
     "allowSyntheticDefaultImports": false,
     "strict": true,
     "strictNullChecks": false,
+    "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "baseUrl": "./src",
     "outDir": "./js",
     "rootDir": "./src",
     "lib": [
