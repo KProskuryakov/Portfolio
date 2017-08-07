@@ -3,15 +3,6 @@ import pool from "./Postgres";
 
 import Path from "../lasergame/Path";
 
-pool.query(`
-CREATE TABLE IF NOT EXISTS lasergame_daily_levels
-(
-  daily_date date PRIMARY KEY DEFAULT CURRENT_DATE,
-  level_data jsonb NOT NULL,
-  seed bigint NOT NULL,
-  times_beaten int DEFAULT 0
-);`);
-
 export async function getDailyLevel(date: string): Promise<LasergameDailyLevel> {
   const res = await pool.query("SELECT * FROM lasergame_daily_levels WHERE daily_date = $1", [date]);
   return res.rows[0];

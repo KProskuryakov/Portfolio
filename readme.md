@@ -71,19 +71,50 @@ vscode. It was a lifesaver when linting my codebase.
 
 These commands should be run on the database before running the app for the first time.
 
-In the heroku production environment, connect to the db by running `heroku pg:psql` and then execute the commands.
+In the heroku production environment, connect to the db by running `heroku pg:psql` and then execute the commands. 
+Postgres has to be installed for this to work
 
-```
-CREATE TABLE IF NOT EXISTS "session" (
+```sql
+CREATE TABLE IF "session" (
   "sid" varchar NOT NULL COLLATE "default" PRIMARY KEY NOT DEFERRABLE INITIALLY IMMEDIATE,
 	"sess" json NOT NULL,
 	"expire" timestamp(6) NOT NULL
 )
 WITH (OIDS=FALSE);
+CREATE TABLE lasergame_daily_levels
+(
+  daily_date date PRIMARY KEY DEFAULT CURRENT_DATE,
+  level_data jsonb NOT NULL,
+  seed bigint NOT NULL,
+  times_beaten int DEFAULT 0
+);
+CREATE TABLE IF lasergame_levels
+(
+  id serial PRIMARY KEY,
+  name varchar(64) NOT NULL,
+  level_data jsonb NOT NULL,
+  upload_timestamp timestamptz DEFAULT current_timestamp,
+  times_beaten int DEFAULT 0,
+  user_display_name varchar(64) references site_users (display_name)
+);
+CREATE TABLE IF site_users
+(
+  email varchar(256) PRIMARY KEY,
+  password varchar(80) NOT NULL,
+  display_name varchar(64) UNIQUE NOT NULL
+);
+CREATE TABLE IF NOT EXISTS web_data
+(
+  url text PRIMARY KEY,
+  title text,
+  keywords text,
+  description text,
+  upload timestamptz DEFAULT current_timestamp
+);
 ```
 
 ### Current settings in vscode:
-```
+```json
 {
   "editor.renderWhitespace": "boundary",
   "editor.minimap.enabled": true,

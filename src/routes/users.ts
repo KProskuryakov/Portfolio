@@ -1,7 +1,6 @@
 import express = require("express");
 const router = express.Router();
 
-import SiteUser from "../db/models/SiteUser";
 import * as db_su from "../db/SiteUserTable";
 
 router.get("/", async (req, res, next) => {

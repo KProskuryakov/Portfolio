@@ -7,13 +7,13 @@ import local = require("passport-local");
 const LocalStrategy = local.Strategy;
 
 import SiteUser from "./db/models/SiteUser";
-import * as db_su from "./db/SiteUserTable";
+import * as siteUserTable from "./db/SiteUserTable";
 
 passport.use(new LocalStrategy({ usernameField: "email" },
   function strategy(email: string, password: string, done: any) {
   email = email.toLocaleLowerCase();
   winston.info(`Strategy activated with email: ${email}`);
-  db_su.getSiteUserByEmail(email).then((siteUser) => {
+  siteUserTable.getSiteUserByEmail(email).then((siteUser) => {
     if (!siteUser) {
       winston.info(`Existing user not found for email: ${email}`);
       return done(null, false, { message: "Incorrect username." });
@@ -35,13 +35,16 @@ passport.use(new LocalStrategy({ usernameField: "email" },
 }));
 
 passport.serializeUser((user: SiteUser, done: (err: any, email: string) => void) => {
+  winston.info(`User serialized with email: ${user.email}`);
   done(null, user.email);
 });
 
 passport.deserializeUser(async (email: string, done: (err: Error | null, user: SiteUser | null) => void) => {
-  db_su.getSiteUserByEmail(email).then((user) => {
+  siteUserTable.getSiteUserByEmail(email).then((user) => {
+    winston.info(`User deserialized with email: ${email}`);
     done(null, user);
   }).catch((err) => {
+    winston.error(`User failed to deserialize with email: ${email}`);
     done(err, null);
   });
 });

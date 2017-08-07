@@ -15,6 +15,8 @@ export default class Tile {
         return new Tile(0, 1);
       case Direction.West:
         return new Tile(-1, 0);
+      default:
+        return new Tile(0, 0);
     }
   }
 

@@ -1,17 +1,6 @@
 import LasergameLevel from "./models/LasergameLevel";
 import pool from "./Postgres";
 
-pool.query(`
-CREATE TABLE IF NOT EXISTS lasergame_levels
-(
-  id serial PRIMARY KEY,
-  name varchar(64) NOT NULL,
-  level_data jsonb NOT NULL,
-  upload_timestamp timestamptz DEFAULT current_timestamp,
-  times_beaten int DEFAULT 0,
-  user_display_name varchar(64) references site_users (display_name)
-);`);
-
 export async function getAllLasergameLevelsOfSiteUser(playerName: string): Promise<LasergameLevel[]> {
   const res = await pool.query("SELECT * FROM lasergame_levels WHERE user_display_name = $1 ORDER BY id ASC;",
     [playerName]);

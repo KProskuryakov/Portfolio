@@ -1,14 +1,6 @@
 import SiteUser from "./models/SiteUser";
 import pool from "./Postgres";
 
-pool.query(`
-CREATE TABLE IF NOT EXISTS site_users
-(
-  email varchar(256) PRIMARY KEY,
-  password varchar(80) NOT NULL,
-  display_name varchar(64) UNIQUE NOT NULL
-);`);
-
 export async function insertSiteUser(email: string, displayName: string, pass: string): Promise<SiteUser> {
   const res = await pool.query(`INSERT INTO site_users (email, password, display_name)
                                 VALUES ($1, $2, $3)
