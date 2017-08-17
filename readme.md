@@ -42,8 +42,6 @@ webpack
 
 In Windows, I had to add the PostgreSQL `bin` folder to PATH.
 
-
-
 Create the `.env` file as shown in the section below. Make sure the db info is correct.
 
 In VSCode, there is a debug routine called `nodemon` which spins up the dev server.
@@ -103,7 +101,7 @@ CREATE TABLE IF site_users
   password varchar(80) NOT NULL,
   display_name varchar(64) UNIQUE NOT NULL
 );
-CREATE TABLE IF NOT EXISTS web_data
+CREATE TABLE IF web_data
 (
   url text PRIMARY KEY,
   title text,

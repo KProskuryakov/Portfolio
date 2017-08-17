@@ -1,4 +1,4 @@
-import ILasergameDailyLevel from "../../db/models/LasergameDailyLevel";
+import LasergameDailyLevel from "../../db/models/LasergameDailyLevel";
 
 import Color from "../Color";
 import Direction from "../Direction";
@@ -192,7 +192,7 @@ export function getLevel(seed: string, difficultyString: string) {
     credentials: "same-origin",
     method: "GET",
   }).then((response) => {
-    response.json().then((randomLevel: ILasergameDailyLevel) => {
+    response.json().then((randomLevel: LasergameDailyLevel) => {
       levelType = LevelType.Random;
       const levelData = randomLevel.level_data;
       const newSeed = randomLevel.seed;
@@ -211,7 +211,7 @@ export function getDailyLevel() {
     credentials: "same-origin",
     method: "GET",
   }).then((response) => {
-    response.json().then((dailyLevel: ILasergameDailyLevel) => {
+    response.json().then((dailyLevel: LasergameDailyLevel) => {
       levelType = LevelType.Daily;
       const levelData = dailyLevel.level_data;
       const seed = dailyLevel.seed;

@@ -10,7 +10,7 @@
  * description: text
  * upload: timestamptz DEFAULT current_timestamp
  */
-export interface IWebData {
+export interface WebData {
   url: string;
   title: string;
   keywords: string;
@@ -18,4 +18,4 @@ export interface IWebData {
   upload: string;
 }
 
-export default IWebData;
+export default WebData;

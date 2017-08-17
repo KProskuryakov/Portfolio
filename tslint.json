@@ -3,6 +3,9 @@
   "rules": {
     "interface-name": [
       "never-prefix"
+    ],
+    "only-arrow-functions": [
+      false
     ]
   }
 }

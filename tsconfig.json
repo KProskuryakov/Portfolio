@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "outDir": "./js",
-    "rootDir": "./src",
+    "rootDirs": ["./src", "./test"],
     "lib": [
       "dom",
       "es5",
@@ -21,6 +21,6 @@
     "src/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "src/**/*.spec.ts"
   ]
 }

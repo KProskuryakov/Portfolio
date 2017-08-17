@@ -9,7 +9,7 @@ import Pieces from "../Pieces";
 import Tile from "../Tile";
 
 import * as db_ldl from "../../db/LasergameDailyLevelTable";
-import ILasergameDailyLevel from "../../db/models/LasergameDailyLevel";
+import LasergameDailyLevel from "../../db/models/LasergameDailyLevel";
 
 const defaultGrid = new Lasergrid();
 defaultGrid.calculateAllEndings();
@@ -82,7 +82,7 @@ export function generateLevelFromSeed(seed = Date.now(), difficulty = "medium") 
   return { level_data: randomPaths, seed, difficulty };
 }
 
-export async function getTodaysDailyLevel(): Promise<ILasergameDailyLevel> {
+export async function getTodaysDailyLevel(): Promise<LasergameDailyLevel> {
   try {
     let level = await db_ldl.getDailyLevel("today");
     if (!level) {

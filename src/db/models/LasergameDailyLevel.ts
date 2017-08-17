@@ -2,17 +2,17 @@
  * Represents a daily lasergame level in the database
  *
  * @export
- * @interface ILasergameDailyLevel
+ * @interface LasergameDailyLevel
  * daily_date: Date PRIMARY KEY
  * seed: bigint NOT NULL
  * level_data: jsonb
  * times_beaten: integer
  */
-export interface ILasergameDailyLevel {
+export interface LasergameDailyLevel {
   daily_date: string;
   seed: number;
   level_data: any;
   times_beaten: number;
 }
 
-export default ILasergameDailyLevel;
+export default LasergameDailyLevel;

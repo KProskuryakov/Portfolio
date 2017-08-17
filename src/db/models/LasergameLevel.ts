@@ -1,7 +1,7 @@
 /**
  * Represents a LasergameLevel in the database
  *
- * @interface ILasergameLevel
+ * @interface LasergameLevel
  * id: SERIAL PRIMARY KEY
  * name: varchar(64)
  * level_data: jsonb
@@ -9,7 +9,7 @@
  * times_beaten: integer?
  * user_display_name: varchar(64) fkey to site_users.display_name
  */
-export interface ILasergameLevel {
+export interface LasergameLevel {
   id: number;
   name: string;
   level_data: any;
@@ -18,4 +18,4 @@ export interface ILasergameLevel {
   user_display_name: string;
 }
 
-export default ILasergameLevel;
+export default LasergameLevel;
