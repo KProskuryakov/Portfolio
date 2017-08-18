@@ -148,3 +148,47 @@ These are all extensions that I use specifically for this project.
 * Untabify
 * VS Color Picker
 * vscode-icons
+
+### Snippets:
+```json
+{
+/*
+  // Place your snippets for TypeScript here. Each snippet is defined under a snippet name and has a prefix, body and 
+  // description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+  // same ids are connected.
+  // Example:
+  "Print to console": {
+    "prefix": "log",
+    "body": [
+      "console.log('$1');",
+      "$2"
+    ],
+    "description": "Log output to console"
+  }
+*/
+  "Mocha Describe": {
+    "prefix": "mdesc",
+    "body": [
+      "describe(\"When$1\", function() {",
+      "  $0",
+      "});"
+    ],
+    "description": "Create a describe() block for Mocha."
+  },
+  "Mocha It": {
+    "prefix": "mit",
+    "body": [
+      "it(\"Can$1\", function() {",
+      "  ${2:// TODO}",
+      "});"
+    ],
+    "description": "Create an it() block for Mocha."
+  },
+  "TODO": {
+    "prefix": "todo",
+    "body": "// TODO $0",
+    "description": "Create a todo comment even faster."
+  }
+}
+```
