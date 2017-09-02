@@ -1,4 +1,4 @@
-import Ending from "./Ending";
+import Ending, {endingsEqual} from "./Ending";
 
 export default interface Path {
   start: number;
@@ -8,7 +8,7 @@ export default interface Path {
 export function equalPaths(a: Path, b: Path) {
   if (a.endings.length !== b.endings.length) return false;
   for (let i = 0; i < a.endings.length; i++) {
-    if (!(a.endings[i] === b.endings[i])) {
+    if (!endingsEqual(a.endings[i], b.endings[i])) {
       return false;
     }
   }

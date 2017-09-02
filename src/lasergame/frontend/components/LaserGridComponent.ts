@@ -13,7 +13,7 @@ import LaserGrid, {
   makeDefaultGrid, removePieceFromGrid, setPieceInGrid, tileToEdgeNumber,
 } from "../../LaserGrid";
 
-import { edgeLevelData, pieceComponents, printPaths, toolbar } from "../FrontendLasergame";
+import { edgeLevelData, pieceComponents, printPaths, toolbar, availablePieces } from "../FrontendLasergame";
 import { TILE_FULL, TILE_HALF, tileToPixels } from "../FrontendTile";
 import CanvasComponent from "./CanvasComponent";
 
@@ -39,10 +39,9 @@ export default class LaserGridComponent extends CanvasComponent {
     super.draw(ctx);
 
     // Draw pieces on grid
-    for (const pieceComponent of pieceComponents) {
-      if ((pieceComponent.isPlaced)) {
-        const piece = pieceComponent.piece;
-        pieceComponent.drawAt(addTiles(this.tile, piece.tile, { x: 1, y: 1 }), ctx);
+    for (const piece of availablePieces) {
+      if ((tileWithinAreaInclusive(piece.tile, {x: 0, y: 0}, {x: 4, y: 4}))) {
+        pieceComponents[piece.pieceID].drawAt(addTiles(this.tile, piece.tile, { x: 1, y: 1 }), ctx);
       }
     }
 
@@ -112,10 +111,8 @@ export default class LaserGridComponent extends CanvasComponent {
         const piece = getPieceFromGrid(this.lasergrid, loc);
         if (piece) {
           removePieceFromGrid(this.lasergrid, piece);
-          pieceComponents[piece.pieceID].isPlaced = false;
         } else {
-          setPieceInGrid(this.lasergrid, toolbar.getSelectedPieceComponent().piece, loc);
-          toolbar.getSelectedPieceComponent().isPlaced = true;
+          setPieceInGrid(this.lasergrid, availablePieces[toolbar.selectedPiece], loc);
         }
         printPaths();
 

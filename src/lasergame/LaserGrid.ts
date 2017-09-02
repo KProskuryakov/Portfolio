@@ -77,7 +77,10 @@ export function edgeNumberToLaser(edge: number): LaserSegment {
 }
 
 export function getPieceFromGrid(laserGrid: LaserGrid, tile: Tile) {
-  return laserGrid.grid[tile.y][tile.x];
+  if (laserGrid.grid[tile.y]) {
+    return laserGrid.grid[tile.y][tile.x];
+  }
+  return undefined;
 }
 
 export function isValidSpace(laserGrid: LaserGrid, tile: Tile) {
@@ -144,5 +147,6 @@ function calculateEndingList(laserGrid: LaserGrid, edge: number) {
   } // trackOneEnding()
 
   trackOneEnding(laserGrid, edgeNumberToLaser(edge));
+  endingList.sort((a, b) => a.end < b.end ? -1 : 1);
   return endingList;
 }

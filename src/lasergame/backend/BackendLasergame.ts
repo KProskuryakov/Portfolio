@@ -80,6 +80,10 @@ export function generateLevelFromSeed(seed = Date.now(), difficulty = "medium") 
 
   randomPaths.sort((a, b) => a.start < b.start ? -1 : 1);
 
+  for (const piece of availablePieces) {
+    piece.tile = {x: -1, y: -1};
+  }
+
   return { levelData: {paths: randomPaths, availablePieces}, seed, difficulty };
 }
 

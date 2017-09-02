@@ -1,5 +1,5 @@
-import Tile, { addTiles } from "../../Tile";
-import { pieceComponents } from "../FrontendLasergame";
+import Tile, { addTiles, tileNotNegative } from "../../Tile";
+import { availablePieces, pieceComponents } from "../FrontendLasergame";
 import { TILE_FULL, tileToPixels } from "../FrontendTile";
 import CanvasComponent from "./CanvasComponent";
 
@@ -32,23 +32,20 @@ export default class ToolbarComponent extends CanvasComponent {
     super.draw(ctx);
 
     // draw pieces in each box
-    for (let i = 0; i < pieceComponents.length; i++) {
-      pieceComponents[i].drawAt(addTiles(this.tile, {x: i, y: 0}), ctx);
+    for (let i = 0; i < availablePieces.length; i++) {
+      pieceComponents[availablePieces[i].pieceID].drawAt(addTiles(this.tile, {x: i, y: 0}), ctx);
     }
 
-    // draw the green highlight
+    // draw the green and red highlights
     ctx.fillStyle = "green";
     ctx.globalAlpha = 0.2;
     let loc = tileToPixels(addTiles(this.tile, {x: this.selectedPiece, y: 0}));
     ctx.fillRect(loc.px, loc.py, TILE_FULL, TILE_FULL);
-    ctx.globalAlpha = 1;
 
-    // draw the red highlight
     ctx.fillStyle = "red";
-    ctx.globalAlpha = 0.2;
-    for (let i = 0; i < pieceComponents.length; i++) {
-      const pieceComponent = pieceComponents[i];
-      if (i !== this.selectedPiece && pieceComponent.isPlaced) {
+    for (let i = 0; i < availablePieces.length; i++) {
+      const piece = availablePieces[i];
+      if (i !== this.selectedPiece && tileNotNegative(piece.tile)) {
         loc = tileToPixels(addTiles(this.tile, {x: i, y: 0}));
         ctx.fillRect(loc.px, loc.py, TILE_FULL, TILE_FULL);
       }
