@@ -1,12 +1,12 @@
 import express = require("express");
 const router = express.Router();
 
-import IWebData from "../../db/models/web-data";
-import * as webDataTable from "../../db/web-data-table";
+import WebData from "../../db/WebDataTable";
+import * as webDataTable from "../../db/WebDataTable";
 
 router.post("/insert", async (req, res, next) => {
   try {
-    const webData = req.body as IWebData;
+    const webData = req.body as WebData;
     await webDataTable.insertWebData(webData);
     return res.send("Woo!");
   } catch (err) {

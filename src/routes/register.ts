@@ -5,7 +5,7 @@ import addresses = require("email-addresses");
 import winston = require("winston");
 
 import bcrypt = require("bcrypt");
-import * as db_su from "../db/site-user-table";
+import * as db_su from "../db/SiteUserTable";
 
 router.get("/", (req, res) => {
   const err = req.query.err;

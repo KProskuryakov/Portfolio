@@ -1,26 +1,29 @@
-import Color from "./classes/color";
-import Ending from "./classes/ending";
-import LaserGridComponent from "./classes/lasergrid_component";
-import Mirror from "./classes/mirror";
-import Path from "./classes/path";
-import Piece from "./classes/piece";
-import PieceComponent from "./classes/piece_component";
-import Swatch from "./classes/swatch";
-import Tile from "./classes/tile";
-import ToolbarComponent from "./classes/toolbar_component";
-import { Direction, End, LevelType, Pieces } from "./enum";
-import { canvas, ctx, importPre, pathsPre, victoryP } from "./htmlelements";
-import { IPathsList } from "./interfaces";
-import { pieces } from "./pieces";
+import LasergameDailyLevel from "../backend/LasergameDailyLevelTable";
 
-import ILasergameDailyLevel from "../db/models/lasergame-daily-level";
+import Color from "../Color";
+import Direction from "../Direction";
+import Ending, { endingsEqual } from "../Ending";
+import LevelType from "../LevelType";
+import Path, { equalPaths } from "../Path";
+import PathsList from "../PathsList";
+import PieceID from "../PieceID";
+import Tile from "../Tile";
 
-export const toolbar = new ToolbarComponent("/lasergame/toolbar.png", new Tile(0, 7), 8, 1, draw);
-export const lasergridComponent = new LaserGridComponent("/lasergame/lasergrid.png", new Tile(0, 0), 7, 7, draw);
+import LaserGridComponent from "./components/LaserGridComponent";
+import PieceComponent from "./components/PieceComponent";
+import ToolbarComponent from "./components/ToolbarComponent";
+
+import { calculateAllEndings, GridPiece } from "../LaserGrid";
+import { pathToString } from "./FrontendPath";
+import { canvas, ctx, importPre, pathsPre, victoryP } from "./HTMLElements";
+
+export const toolbar = new ToolbarComponent("/lasergame/toolbar.png", { x: 0, y: 7 }, 8, 1, draw);
+export const lasergridComponent = new LaserGridComponent("/lasergame/lasergrid.png", { x: 0, y: 0 }, 7, 7, draw);
 
 export const pieceComponents: PieceComponent[] = [];
 
 let currentLevel: Path[];
+export let availablePieces: GridPiece[] = [];
 export let edgeLevelData: Array<{ edge: number, solved: boolean }>;
 let levelType: LevelType = LevelType.Custom;
 let difficulty = "medium";
@@ -31,21 +34,29 @@ let difficulty = "medium";
 function init() {
   canvas.addEventListener("click", onClick, false);
 
-  pieceComponents[Pieces.ForwardSlash] = new PieceComponent(pieces[Pieces.ForwardSlash],
+  pieceComponents[PieceID.FORWARD_SLASH] = new PieceComponent(PieceID.FORWARD_SLASH,
     "/lasergame/pieces/mirror_forwardslash.png", draw);
-  pieceComponents[Pieces.BackSlash] = new PieceComponent(pieces[Pieces.BackSlash],
-  "/lasergame/pieces/mirror_backslash.png", draw);
-  pieceComponents[Pieces.BlackHole] = new PieceComponent(pieces[Pieces.BlackHole],
+  pieceComponents[PieceID.BACK_SLASH] = new PieceComponent(PieceID.BACK_SLASH,
+    "/lasergame/pieces/mirror_backslash.png", draw);
+  pieceComponents[PieceID.BLACK_HOLE] = new PieceComponent(PieceID.BLACK_HOLE,
     "/lasergame/pieces/mirror_blackhole.png", draw);
-  pieceComponents[Pieces.SideSplit] = new PieceComponent(pieces[Pieces.SideSplit],
+  pieceComponents[PieceID.HORI_SPLIT] = new PieceComponent(PieceID.HORI_SPLIT,
     "/lasergame/pieces/mirror_sidesplit.png", draw);
-  pieceComponents[Pieces.UpSplit] = new PieceComponent(pieces[Pieces.UpSplit],
+  pieceComponents[PieceID.VERT_SPLIT] = new PieceComponent(PieceID.VERT_SPLIT,
     "/lasergame/pieces/mirror_upsplit.png", draw);
-  pieceComponents[Pieces.Blue] = new PieceComponent(pieces[Pieces.Blue], "/lasergame/pieces/swatch_blue.png", draw);
-  pieceComponents[Pieces.Red] = new PieceComponent(pieces[Pieces.Red], "/lasergame/pieces/swatch_red.png", draw);
-  pieceComponents[Pieces.Green] = new PieceComponent(pieces[Pieces.Green], "/lasergame/pieces/swatch_green.png", draw);
 
-  lasergridComponent.lasergrid.calculateAllEndings();
+  pieceComponents[PieceID.BLUE] = new PieceComponent(PieceID.BLUE,
+    "/lasergame/pieces/swatch_blue.png", draw);
+  pieceComponents[PieceID.RED] = new PieceComponent(PieceID.RED,
+    "/lasergame/pieces/swatch_red.png", draw);
+  pieceComponents[PieceID.GREEN] = new PieceComponent(PieceID.GREEN,
+    "/lasergame/pieces/swatch_green.png", draw);
+
+  for (let i = 0; i < 8; i++) {
+    availablePieces[i] = {pieceID: i, tile: {x: -1, y: -1}};
+  }
+
+  calculateAllEndings(lasergridComponent.lasergrid);
   printPaths();
   lasergridComponent.calculateDrawPathWrapper();
 }
@@ -84,7 +95,7 @@ function populateEdgeLevelData() {
     for (const path of currentLevel) {
       const edge = path.start;
       let solved = false;
-      if (path.endingsEqual(lasergridComponent.lasergrid.paths[path.start - 1])) {
+      if (equalPaths(path, lasergridComponent.lasergrid.paths[path.start - 1])) {
         solved = true;
       }
       edgeLevelData.push({ edge, solved });
@@ -115,7 +126,7 @@ function printAllPaths() {
   const paths = lasergridComponent.lasergrid.paths;
   for (let i = 0; i < 20; i++) {
     const curPath = paths[i];
-    let line = curPath.toString();
+    let line = pathToString(curPath);
     if (lasergridComponent.selectedEdge === i + 1) {
       line = `><b>${line}</b>`;
     }
@@ -132,8 +143,8 @@ function printLevelPaths() {
   for (let i = 0; i < currentLevel.length; i++) {
     const levelPath = currentLevel[i];
     const curPath = paths[levelPath.start - 1];
-    let line = levelPath.toString();
-    line = curPath.endingsEqual(levelPath) ? `<span style='color: green'>${line}</span>`
+    let line = pathToString(levelPath);
+    line = equalPaths(curPath, levelPath) ? `<span style='color: green'>${line}</span>`
       : `<span style='color: red'>${line}</span>`;
     if (lasergridComponent.selectedEdge === levelPath.start) {
       line = `><b>${line}</b>`;
@@ -184,14 +195,15 @@ export function getLevel(seed: string, difficultyString: string) {
     credentials: "same-origin",
     method: "GET",
   }).then((response) => {
-    response.json().then((randomLevel: ILasergameDailyLevel) => {
+    response.json().then((randomLevel) => {
       levelType = LevelType.Random;
-      const levelData = randomLevel.level_data;
+      const levelData = randomLevel.levelData;
       const newSeed = randomLevel.seed;
       currentLevel = [];
-      for (const data of levelData) {
-        currentLevel.push(Path.fromJSONObject(data));
+      for (const data of levelData.paths) {
+        currentLevel.push(data);
       }
+      availablePieces = levelData.availablePieces;
       printPaths();
       draw();
     });
@@ -203,13 +215,13 @@ export function getDailyLevel() {
     credentials: "same-origin",
     method: "GET",
   }).then((response) => {
-    response.json().then((dailyLevel: ILasergameDailyLevel) => {
+    response.json().then((dailyLevel: LasergameDailyLevel) => {
       levelType = LevelType.Daily;
       const levelData = dailyLevel.level_data;
       const seed = dailyLevel.seed;
       currentLevel = [];
       for (const data of levelData) {
-        currentLevel.push(Path.fromJSONObject(data));
+        currentLevel.push(data);
       }
       printPaths();
       draw();

@@ -9,8 +9,9 @@ import bodyParser = require("body-parser");
 import session = require("express-session");
 import connectPG = require("connect-pg-simple");
 import { Passport } from "passport";
-import passport = require("./passport");
-import pool from "./db/postgresdb";
+
+import passport = require("./kp-passport");
+import pool from "./db/Postgres";
 
 import apiIndex from "./routes/api/index";
 import apiLasergame from "./routes/api/lasergame";
@@ -42,15 +43,15 @@ readdir("./notes", (err, files) => {
 });
 
 // view engine setup
-app.set("views", path.join(__dirname, "../views"));
+app.set("views", path.join(path.resolve(), "views/"));
 app.set("view engine", "pug");
 
-app.use(favicon(path.join(__dirname, "../public", "favicon.ico")));
+app.use(favicon(path.join(path.resolve(), "public/", "favicon.ico")));
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(secretkey));
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(path.resolve(), "public/")));
 app.use(session({
   cookie: { maxAge: 24 * 60 * 60 * 1000 },
   resave: false,
@@ -108,4 +109,4 @@ app.use((err: ErrorWithStatus, req: any, res: any, next: any) => {
   res.render("error");
 });
 
-module.exports = app;
+export = app;

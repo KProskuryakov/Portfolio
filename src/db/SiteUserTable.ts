@@ -1,13 +1,19 @@
-import SiteUser from "./models/site-user";
-import pool from "./postgresdb";
+import pool from "./Postgres";
 
-pool.query(`
-CREATE TABLE IF NOT EXISTS site_users
-(
-  email varchar(256) PRIMARY KEY,
-  password varchar(80) NOT NULL,
-  display_name varchar(64) UNIQUE NOT NULL
-);`);
+/**
+ * The db representation of a user
+ *
+ * @interface SiteUser
+ *
+ * email: varchar(256) PRIMARY KEY
+ * display_name: varchar(64) UNIQUE NOT NULL
+ * password: varchar(256)
+ */
+export default  interface SiteUser {
+  email: string;
+  display_name: string;
+  password: string;
+}
 
 export async function insertSiteUser(email: string, displayName: string, pass: string): Promise<SiteUser> {
   const res = await pool.query(`INSERT INTO site_users (email, password, display_name)

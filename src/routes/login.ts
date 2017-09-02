@@ -1,7 +1,7 @@
 import express = require("express");
 const router = express.Router();
 
-import passport = require("../passport");
+import passport = require("../kp-passport");
 
 router.get("/", (req, res) => {
   const err = req.query.err;

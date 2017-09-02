@@ -1,4 +1,5 @@
-import Tile from "./tile";
+import Tile, {subTiles, tileWithinAreaExclusive} from "../../Tile";
+import { tileFromPixels, tileToPixels } from "../FrontendTile";
 
 /**
  * An abstract class representing a smaller section of the canvas
@@ -27,16 +28,16 @@ export default class CanvasComponent {
    * Draws the components image at the location
    */
   public draw(ctx: CanvasRenderingContext2D) {
-    const loc = this.tile.toPixels();
-    ctx.drawImage(this.img, loc.x + this.offsetX, loc.y + this.offsetY);
+    const loc = tileToPixels(this.tile);
+    ctx.drawImage(this.img, loc.px + this.offsetX, loc.py + this.offsetY);
   }
 
   /**
    * Figures out whether a button press happened inside the component and returns it. If it didn't, returns null.
    */
   public processMouseClick(x: number, y: number) {
-    const relativeTile = Tile.TileFromPixels(x, y).minus(this.tile);
-    if (relativeTile.isValid(this.widthInTiles, this.heightInTiles)) {
+    const relativeTile = subTiles(tileFromPixels(x, y), this.tile);
+    if (tileWithinAreaExclusive(relativeTile, {x: -1, y: -1}, {x: this.widthInTiles, y: this.heightInTiles})) {
       return relativeTile;
     }
     return null;
