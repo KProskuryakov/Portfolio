@@ -13,7 +13,7 @@ import LaserGrid, {
   makeDefaultGrid, removePieceFromGrid, setPieceInGrid, tileToEdgeNumber,
 } from "../../LaserGrid";
 
-import { edgeLevelData, pieceComponents, printPaths, toolbar, availablePieces } from "../FrontendLasergame";
+import { availablePieces, edgeLevelData, pieceComponents, printPaths, toolbar } from "../FrontendLasergame";
 import { TILE_FULL, TILE_HALF, tileToPixels } from "../FrontendTile";
 import CanvasComponent from "./CanvasComponent";
 
