@@ -6,6 +6,11 @@
     ],
     "only-arrow-functions": [
       false
-    ]
+    ],
+    "no-bitwise": false,
+    "object-literal-sort-keys": [
+      false
+    ],
+    "curly": false
   }
 }
