@@ -2,17 +2,14 @@ import seedrandom = require("seedrandom");
 import winston = require("winston");
 
 import Ending from "../Ending";
-import Lasergrid from "../LaserGrid";
-import Path from "../Path";
-import Piece from "../Piece";
-import Pieces from "../Pieces";
+import LaserGrid, { getPieceFromGrid, GridPiece, makeCustomGrid, makeDefaultGrid, setPieceInGrid } from "../LaserGrid";
+import Path, { equalPaths } from "../Path";
 import Tile from "../Tile";
 
-import * as db_ldl from "../../db/LasergameDailyLevelTable";
-import LasergameDailyLevel from "../../db/models/LasergameDailyLevel";
+import * as db_ldl from "./LasergameDailyLevelTable";
+import LasergameDailyLevel from "./LasergameDailyLevelTable";
 
-const defaultGrid = new Lasergrid();
-defaultGrid.calculateAllEndings();
+const defaultGrid = makeDefaultGrid();
 
 export function generateLevelFromSeed(seed = Date.now(), difficulty = "medium") {
   let numPaths = 5;
@@ -43,24 +40,28 @@ export function generateLevelFromSeed(seed = Date.now(), difficulty = "medium") 
   const interestingPaths: Path[] = [];
   const boringPaths: Path[] = [];
 
-  const randomGrid = new Lasergrid();
+  const availablePieces: GridPiece[] = [];
 
-  Pieces.forEach((piece: Piece) => {
+  for (let i = 0; i < 8; i++) {
+    availablePieces[i] = {pieceID: Math.floor(rng() * 8), tile: {x: -1, y: -1}};
+  }
+
+  const randomGrid = makeCustomGrid(availablePieces);
+
+  randomGrid.availablePieces.forEach((piece: GridPiece) => {
     while (true) {
-      const randTile = new Tile(Math.floor(rng() * 5), Math.floor(rng() * 5));
-      if (!randomGrid.getPiece(randTile)) {
-        randomGrid.setPiece(piece, randTile);
+      const randTile: Tile = {x: Math.floor(rng() * 5), y: Math.floor(rng() * 5)};
+      if (!getPieceFromGrid(randomGrid, randTile)) {
+        setPieceInGrid(randomGrid, piece, randTile);
         break;
       }
     }
   });
 
-  randomGrid.calculateAllEndings();
-
   const gridPaths = randomGrid.paths;
 
   for (let i = 0; i < gridPaths.length; i++) {
-    if (!gridPaths[i].endingsEqual(defaultGrid.paths[i])) {
+    if (!equalPaths(gridPaths[i], defaultGrid.paths[i])) {
       interestingPaths.push(gridPaths[i]);
     } else {
       boringPaths.push(gridPaths[i]);
@@ -79,7 +80,7 @@ export function generateLevelFromSeed(seed = Date.now(), difficulty = "medium") 
 
   randomPaths.sort((a, b) => a.start < b.start ? -1 : 1);
 
-  return { level_data: randomPaths, seed, difficulty };
+  return { levelData: {paths: randomPaths, availablePieces}, seed, difficulty };
 }
 
 export async function getTodaysDailyLevel(): Promise<LasergameDailyLevel> {
@@ -87,7 +88,7 @@ export async function getTodaysDailyLevel(): Promise<LasergameDailyLevel> {
     let level = await db_ldl.getDailyLevel("today");
     if (!level) {
       const randomLevel = generateLevelFromSeed();
-      level = await db_ldl.insertDailyLevel(randomLevel.level_data, randomLevel.seed);
+      level = await db_ldl.insertDailyLevel(randomLevel.levelData, randomLevel.seed);
     }
     return Promise.resolve(level);
   } catch (err) {

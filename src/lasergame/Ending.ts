@@ -1,66 +1,15 @@
-import Color from "./Color";
-import EndType from "./EndType";
+import Color, {colorToName} from "./Color";
 
-/**
- * A data point for the paths list holding a color and an ending edge number
- */
-export default class Ending {
-  public static fromJSON(ending: Ending) {
-    if (ending.end === EndType.Blocked) {
-      return new Ending(EndType.Blocked, Color.fromJSON(ending.color));
-    } else if (ending.end === EndType.Loop) {
-      return new Ending(EndType.Loop, Color.fromJSON(ending.color));
-    } else {
-      return new Ending(ending.end, Color.fromJSON(ending.color));
-    }
-  }
+export default interface Ending {
+  readonly end: End;
+  readonly color: Color;
+}
 
-  /**
-   * creates an ending from the logstring
-   * @param {string} logString (5 black) or (blocked blue) or (loop white)
-   */
-  public static endingFromLogString(logString: string) {
-    const end = Number(logString.slice(0, logString.indexOf(" ")));
-    const colorString = logString.slice(logString.indexOf(" ") + 1);
-    return new Ending(end, Color.colorFromName(colorString));
-  }
+export enum End {
+  Blocked = -2,
+  Loop,
+}
 
-  public end: number;
-  public color: Color;
-
-  /**
-   *
-   * @param {number|string} end
-   * @param {Color} color
-   */
-  constructor(end: number, color: Color) {
-    this.end = end;
-    this.color = color;
-  }
-
-  /**
-   * Converts the ending to a string representation
-   * @returns {string}
-   */
-  public toString() {
-    let str = "";
-    if (this.end === -2) {
-      str += "blocked";
-    } else if (this.end === -1) {
-      str += "loop";
-    } else {
-      str += this.end;
-    }
-    str += " " + this.color.toName();
-    return str;
-  }
-
-  /**
-   *
-   * @param {Ending} otherEnding
-   * @returns {boolean}
-   */
-  public equals(otherEnding: Ending) {
-    return this.end === otherEnding.end && this.color.equals(otherEnding.color);
-  }
+export function endingsEqual(a: Ending, b: Ending) {
+  return a.end === b.end && a.color === b.color;
 }

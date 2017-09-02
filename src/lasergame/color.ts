@@ -1,100 +1,26 @@
-/**
- * Represents colors in rgb and can be converted to a string or hex
- */
-export default class Color {
-  /**
-   * Creates a color from the name of the color
-   */
-  public static colorFromName(name: string) {
-    switch (name) {
-      case "black":
-        return new Color(0, 0, 0);
-      case "blue":
-        return new Color(0, 0, 255);
-      case "green":
-        return new Color(0, 255, 0);
-      case "red":
-        return new Color(255, 0, 0);
-      case "yellow":
-        return new Color(255, 255, 0);
-      case "cyan":
-        return new Color(0, 255, 255);
-      case "magenta":
-        return new Color(255, 0, 255);
-      case "white":
-        return new Color(255, 255, 255);
-      default:
-        return new Color(0, 0, 0);
-    }
-  }
+enum Color {
+  BLACK,
+  BLUE,
+  GREEN,
+  CYAN,
+  RED,
+  MAGENTA,
+  YELLOW,
+  WHITE,
+}
+export default Color;
 
-  public static fromJSON(color: any) {
-    return new Color(color.r, color.g, color.b);
-  }
+export function addColors(a: Color, b: Color) {
+  return a | b;
+}
 
-  public r: number;
-  public g: number;
-  public b: number;
+export function colorToRGBString(color: Color) {
+  const r = 4 === (4 & color) ? 255 : 0;
+  const g = 2 === (2 & color) ? 255 : 0;
+  const b = 1 === (1 & color) ? 255 : 0;
+  return `rgb(${r},${g},${b})`;
+}
 
-  /**
-   * Makes a color object
-   */
-  constructor(r = 0, g = 0, b = 0) {
-    this.r = r;
-    this.g = g;
-    this.b = b;
-  }
-
-  /**
-   * adds a color to this one and returns the result
-   */
-  public add(color: Color) {
-    return new Color(Math.min(this.r + color.r, 255), Math.min(this.g + color.g, 255), Math.min(this.b + color.b, 255));
-  }
-
-  /**
-   * copies this color
-   */
-  public copy() {
-    return new Color(this.r, this.g, this.b);
-  }
-
-  public equals(otherColor: Color) {
-    return this.r === otherColor.r && this.g === otherColor.g && this.b === otherColor.b;
-  }
-
-  /**
-   * returns the rgb string to shove into a ctx.fillstyle or somesuch
-   */
-  public toRGBString() {
-    return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
-  }
-
-  /**
-   * returns the english name of the color
-   */
-  public toName() {
-    if (this.r === 0) {
-      if (this.g === 0) {
-        if (this.b === 0) {
-          return "black";
-        }
-        return "blue";
-      }
-      if (this.b === 0) {
-        return "green";
-      }
-      return "cyan";
-    }
-    if (this.g === 0) {
-      if (this.b === 0) {
-        return "red";
-      }
-      return "magenta";
-    }
-    if (this.b === 0) {
-      return "yellow";
-    }
-    return "white";
-  }
+export function colorToName(color: Color) {
+  return Color[color];
 }

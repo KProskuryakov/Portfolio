@@ -1,8 +1,8 @@
 import express = require("express");
 const router = express.Router();
 
-import * as db_ll from "../db/LasergameLevelTable";
 import * as db_su from "../db/SiteUserTable";
+import * as db_ll from "../lasergame/backend/LasergameLevelTable";
 
 router.get("/:user", async (req, res, next) => {
   const user = await db_su.getSiteUserByDisplayName(req.params.user);

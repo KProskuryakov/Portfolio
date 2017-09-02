@@ -1,6 +1,6 @@
-import { TILE_FULL } from "../../Const";
-import Tile from "../../Tile";
+import Tile, { addTiles } from "../../Tile";
 import { pieceComponents } from "../FrontendLasergame";
+import { TILE_FULL, tileToPixels } from "../FrontendTile";
 import CanvasComponent from "./CanvasComponent";
 
 /**
@@ -18,8 +18,9 @@ export default class ToolbarComponent extends CanvasComponent {
    * @param {number} [offsetX = 0] pixel offset for the image
    * @param {number} [offsetY = 0] pixel offset for the image
    */
-  constructor(src: string, tile: Tile, widthInTiles: number, heightInTiles: number,
-              draw: () => void, offsetX = 0, offsetY = 0) {
+  constructor(
+    src: string, tile: Tile, widthInTiles: number, heightInTiles: number,
+    draw: () => void, offsetX = 0, offsetY = 0) {
     super(src, tile, widthInTiles, heightInTiles, draw, offsetX, offsetY);
     this.selectedPiece = 0;
   }
@@ -32,24 +33,24 @@ export default class ToolbarComponent extends CanvasComponent {
 
     // draw pieces in each box
     for (let i = 0; i < pieceComponents.length; i++) {
-      pieceComponents[i].drawAt(this.tile.add(new Tile(i, 0)), ctx);
+      pieceComponents[i].drawAt(addTiles(this.tile, {x: i, y: 0}), ctx);
     }
 
     // draw the green highlight
     ctx.fillStyle = "green";
     ctx.globalAlpha = 0.2;
-    let loc = new Tile(this.tile.add(new Tile(this.selectedPiece, 0)).tileX, this.tile.tileY).toPixels();
-    ctx.fillRect(loc.x, loc.y, TILE_FULL, TILE_FULL);
+    let loc = tileToPixels(addTiles(this.tile, {x: this.selectedPiece, y: 0}));
+    ctx.fillRect(loc.px, loc.py, TILE_FULL, TILE_FULL);
     ctx.globalAlpha = 1;
 
     // draw the red highlight
     ctx.fillStyle = "red";
     ctx.globalAlpha = 0.2;
     for (let i = 0; i < pieceComponents.length; i++) {
-      const piece = pieceComponents[i].piece;
-      if (i !== this.selectedPiece && piece.tile.isValid()) {
-        loc = new Tile(this.tile.add(new Tile(i, 0)).tileX, this.tile.tileY).toPixels();
-        ctx.fillRect(loc.x, loc.y, TILE_FULL, TILE_FULL);
+      const pieceComponent = pieceComponents[i];
+      if (i !== this.selectedPiece && pieceComponent.isPlaced) {
+        loc = tileToPixels(addTiles(this.tile, {x: i, y: 0}));
+        ctx.fillRect(loc.px, loc.py, TILE_FULL, TILE_FULL);
       }
     }
     ctx.globalAlpha = 1.0;
@@ -63,7 +64,7 @@ export default class ToolbarComponent extends CanvasComponent {
   public processMouseClick(x: number, y: number) {
     const relativeTile = super.processMouseClick(x, y);
     if (relativeTile !== null) {
-      this.selectedPiece = relativeTile.tileX;
+      this.selectedPiece = relativeTile.x;
     }
     return relativeTile;
   }

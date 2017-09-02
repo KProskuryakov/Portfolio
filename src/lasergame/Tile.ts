@@ -1,108 +1,55 @@
-import { TILE_FULL } from "./Const";
 import Direction from "./Direction";
 
-/**
- * A class that represents a tile, holds tileX and tileY
- */
-export default class Tile {
-  public static directionMapping(direction: Direction): Tile {
-    switch (direction) {
-      case Direction.North:
-        return new Tile(0, -1);
-      case Direction.East:
-        return new Tile(1, 0);
-      case Direction.South:
-        return new Tile(0, 1);
-      case Direction.West:
-        return new Tile(-1, 0);
-      default:
-        return new Tile(0, 0);
-    }
-  }
+export default interface Tile {
+  x: number;
+  y: number;
+}
 
-  /**
-   *  Constructs a tile based on pixel location and the global TILE_FULL
-   * @param {number} x
-   * @param {number} y
-   * @returns {Tile}
-   */
-  public static TileFromPixels(x: number, y: number) {
-    return new Tile(Math.floor(x / TILE_FULL), Math.floor(y / TILE_FULL));
+export function directionToTile(direction: Direction): Tile {
+  switch (direction) {
+    case Direction.NORTH:
+      return { x: 0, y: -1 };
+    case Direction.EAST:
+      return { x: 1, y: 0 };
+    case Direction.SOUTH:
+      return { x: 0, y: 1 };
+    case Direction.WEST:
+      return { x: -1, y: 0 };
+    default:
+      return { x: 0, y: 0 };
   }
+}
 
-  public tileX: number;
-  public tileY: number;
+export function nextTile(tile: Tile, dir: Direction) {
+  return addTiles(tile, directionToTile(dir));
+}
 
-  /**
-   *  Constructs a tile based on tile x and y values
-   * @param {number} tileX
-   * @param {number} tileY
-   */
-  constructor(tileX = -1, tileY = -1) {
-    this.tileX = tileX;
-    this.tileY = tileY;
-  }
+export function addTiles(...tiles: Tile[]): Tile {
+  return tiles.reduce((p, v, i) => {
+    return {x: p.x + v.x, y: p.y + v.y};
+  }, {x: 0, y: 0} );
+}
 
-  /**
-   * checks to see if the tile is greater than -1, and less than maxX/maxY
-   * @param {number} maxX
-   * @param {number} maxY
-   * @returns {boolean}
-   */
-  public isValid(maxX = Infinity, maxY = Infinity) {
-    return (this.tileX > -1 && this.tileY > -1 && this.tileX < maxX && this.tileY < maxY);
-  }
+export function subTiles(a: Tile, b: Tile): Tile {
+  return { x: a.x - b.x, y: a.y - b.y };
+}
 
-  /**
-   * The top left corner of the tile
-   * @returns {{x: number, y: number}}
-   */
-  public toPixels() {
-    return { x: this.tileX * TILE_FULL, y: this.tileY * TILE_FULL };
-  }
+export function copyTile(tile: Tile): Tile {
+  return { x: tile.x, y: tile.y };
+}
 
-  /**
-   * Compares this tile to another using the given comparator
-   * @param {Tile} tile
-   * @param {Tile~comparator} comparator
-   * @returns {boolean}
-   */
-  public compare(tile: Tile, comparator: any) {
-    return (comparator(this.tileX, tile.tileX) && comparator(this.tileY, tile.tileY));
-  }
+export function tileNotNegative(tile: Tile) {
+  return tileCompare(tile, { x: -1, y: -1 }, (a, b) => a > b);
+}
 
-  /**
-   * Subtracts a tile from this one, returns a new tile
-   * @param {Tile} tile
-   * @returns {Tile}
-   */
-  public minus(tile: Tile) {
-    return new Tile(this.tileX - tile.tileX, this.tileY - tile.tileY);
-  }
+export function tileCompare(a: Tile, b: Tile, compare: (a: number, b: number) => boolean) {
+  return compare(a.x, b.x) && compare(a.y , b.y);
+}
 
-  /**
-   * Adds a tile to this one, returns a new tile.
-   * @param {Tile} tile
-   * @returns {Tile}
-   */
-  public add(tile: Tile) {
-    return new Tile(this.tileX + tile.tileX, this.tileY + tile.tileY);
-  }
+export function tileWithinAreaInclusive(tile: Tile, min: Tile, max: Tile) {
+  return tileCompare(tile, min, (a, b) => a >= b) && tileCompare(tile, max, (a, b) => a <= b);
+}
 
-  /**
-   */
-  public copy() {
-    return new Tile(this.tileX, this.tileY);
-  }
-
-  /**
-   * returns the next tile in a given direction
-   */
-  public nextTile(dir: Direction) {
-    return this.add(Tile.directionMapping(dir));
-  }
-
-  public toString() {
-    return `Tile: (${this.tileX}, ${this.tileY})`;
-  }
+export function tileWithinAreaExclusive(tile: Tile, min: Tile, max: Tile) {
+  return tileCompare(tile, min, (a, b) => a > b) && tileCompare(tile, max, (a, b) => a < b);
 }

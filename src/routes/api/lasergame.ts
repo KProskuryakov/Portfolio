@@ -5,9 +5,9 @@
 import express = require("express");
 const router = express.Router();
 
-import * as db_ldl from "../../db/LasergameDailyLevelTable";
-import * as db_ll from "../../db/LasergameLevelTable";
 import { generateLevelFromSeed, getTodaysDailyLevel } from "../../lasergame/backend/BackendLasergame";
+import * as db_ldl from "../../lasergame/backend/LasergameDailyLevelTable";
+import * as db_ll from "../../lasergame/backend/LasergameLevelTable";
 
 import winston from "winston";
 
