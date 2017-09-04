@@ -12,6 +12,8 @@ export default Direction;
 const oppositeDirection = [Direction.SOUTH, Direction.WEST, Direction.NORTH, Direction.EAST];
 
 export function getOppositeDirection(dir: Direction) {
-  const oppDir = oppositeDirection[dir];
-  return oppDir === undefined ? Direction.NONE : oppDir;
+  if (dir > Direction.WEST) {
+    throw new Error(`Direction #getOppositeDirection called with ${Direction[dir]} which is invalid.`);
+  }
+  return oppositeDirection[dir];
 }

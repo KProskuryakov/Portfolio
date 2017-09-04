@@ -11,6 +11,9 @@
     "sourceMap": true,
     "outDir": "./js",
     "rootDirs": ["./src", "./test"],
+    "types": [
+      "mocha"
+    ],
     "lib": [
       "dom",
       "es5",

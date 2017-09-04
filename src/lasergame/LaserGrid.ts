@@ -77,20 +77,19 @@ export function edgeNumberToLaser(edge: number): LaserSegment {
 }
 
 export function getPieceFromGrid(laserGrid: LaserGrid, tile: Tile) {
-  if (laserGrid.grid[tile.y]) {
-    return laserGrid.grid[tile.y][tile.x];
-  }
-  return undefined;
+  return laserGrid.grid[tile.y][tile.x];
 }
 
 export function isValidSpace(laserGrid: LaserGrid, tile: Tile) {
   return tileWithinAreaExclusive(tile, { x: -1, y: -1 }, { x: laserGrid.width, y: laserGrid.length });
 }
 
-export function removePieceFromGrid(laserGrid: LaserGrid, piece: GridPiece): GridPiece {
+export function removePieceFromGrid(laserGrid: LaserGrid, piece: GridPiece, calculate = true): GridPiece {
   laserGrid.grid[piece.tile.y][piece.tile.x] = undefined;
   piece.tile = { x: -1, y: -1 };
-  calculateAllEndings(laserGrid);
+  if (calculate) {
+    calculateAllEndings(laserGrid);
+  }
   return piece;
 }
 
@@ -98,7 +97,7 @@ export function setPieceInGrid(laserGrid: LaserGrid, piece: GridPiece, tile: Til
   const currentPiece = getPieceFromGrid(laserGrid, tile);
   let removedPiece = null;
   if (currentPiece) {
-    removedPiece = removePieceFromGrid(laserGrid, currentPiece);
+    removedPiece = removePieceFromGrid(laserGrid, currentPiece, false);
   }
   piece.tile = tile;
   laserGrid.grid[tile.y][tile.x] = piece;

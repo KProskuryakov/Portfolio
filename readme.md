@@ -32,6 +32,12 @@ Download [Python 2](https://www.python.org/) (Needed for node.gyp)
 
 Optionally install [Github Desktop](https://desktop.github.com/)
 
+```
+npm install -g mocha
+npm install -g webpack
+npm install -g typescript
+```
+
 Clone the repo.
 
 ```
@@ -143,37 +149,12 @@ These are all extensions that I use specifically for this project.
 * Markdown Shortcuts
 * Move TS
 * npm
+* Project Snippets
 * TODO Parser
 * TSLint
 * Untabify
 * VS Color Picker
 * vscode-icons
 
-### Snippets:
-```json
-{
-  "Mocha Describe": {
-    "prefix": "mdesc",
-    "body": [
-      "describe(\"When$1\", function() {",
-      "  $0",
-      "});"
-    ],
-    "description": "Create a describe() block for Mocha."
-  },
-  "Mocha It": {
-    "prefix": "mit",
-    "body": [
-      "it(\"Can$1\", function() {",
-      "  ${2:// TODO}",
-      "});"
-    ],
-    "description": "Create an it() block for Mocha."
-  },
-  "TODO": {
-    "prefix": "todo",
-    "body": "// TODO $0",
-    "description": "Create a todo comment even faster."
-  }
-}
-```
+### Snippets
+The Project Snippets extension allows projects to specify their own snippets. The file is located in `.vscode/snippets`.

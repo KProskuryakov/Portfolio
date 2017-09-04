@@ -1,0 +1,25 @@
+{
+  "Mocha Describe": {
+    "prefix": "desc",
+    "body": [
+      "describe(\"$1\", function() {",
+      "  $0",
+      "});"
+    ],
+    "description": ""
+  },
+  "Mocha It": {
+    "prefix": "it",
+    "body": [
+      "it(\"$1\", function() {",
+      "  ${2:assert.ok(false);}",
+      "});"
+    ],
+    "description": ""
+  },
+  "TODO": {
+    "prefix": "todo",
+    "body": "// TODO $0",
+    "description": "todo comments"
+  }
+}
