@@ -40,9 +40,9 @@ function init() {
     "/lasergame/pieces/mirror_backslash.png", draw);
   pieceComponents[PieceID.BLACK_HOLE] = new PieceComponent(PieceID.BLACK_HOLE,
     "/lasergame/pieces/mirror_blackhole.png", draw);
-  pieceComponents[PieceID.HORI_SPLIT] = new PieceComponent(PieceID.HORI_SPLIT,
+  pieceComponents[PieceID.SOUTH_TO_HORI] = new PieceComponent(PieceID.SOUTH_TO_HORI,
     "/lasergame/pieces/mirror_sidesplit.png", draw);
-  pieceComponents[PieceID.VERT_SPLIT] = new PieceComponent(PieceID.VERT_SPLIT,
+  pieceComponents[PieceID.WEST_TO_VERT] = new PieceComponent(PieceID.WEST_TO_VERT,
     "/lasergame/pieces/mirror_upsplit.png", draw);
 
   pieceComponents[PieceID.BLUE] = new PieceComponent(PieceID.BLUE,

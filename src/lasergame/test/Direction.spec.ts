@@ -13,8 +13,8 @@ describe("Direction", function() {
 
     it("throws exception if invalid direction fed to function", function() {
       assert.throws(() => getOppositeDirection(Direction.NONE), "None");
-      assert.throws(() => getOppositeDirection(Direction.SPLIT_EAST_WEST), "Split east/west");
-      assert.throws(() => getOppositeDirection(Direction.SPLIT_NORTH_SOUTH), "Split north/south");
+      assert.throws(() => getOppositeDirection(Direction.SPLIT_SOUTH_TO_HORI), "Split east/west");
+      assert.throws(() => getOppositeDirection(Direction.SPLIT_WEST_TO_VERT), "Split north/south");
     });
   });
 });

@@ -32,21 +32,20 @@ Download [Python 2](https://www.python.org/) (Needed for node.gyp)
 
 Optionally install [Github Desktop](https://desktop.github.com/)
 
-```
-npm install -g mocha
-npm install -g webpack
-npm install -g typescript
-```
-
 Clone the repo.
 
 ```
+npm install -g typescript
+npm install -g webpack
+npm install -g mocha
 npm update
 tsc
 webpack
 ```
 
 In Windows, I had to add the PostgreSQL `bin` folder to PATH.
+
+Make sure to run the database queries listed in the PostgreSQL section below.
 
 Create the `.env` file as shown in the section below. Make sure the db info is correct.
 
@@ -128,10 +127,10 @@ CREATE TABLE IF web_data
   "git.confirmSync": false,
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
+  "typescript.referencesCodeLens.enabled": true,
   "TodoParser": {
-    "exclude": ["cpp", "c", "js"],
-    "folderExclude": ["node_modules", ".vscode"],
-    "only": ["sub-folder/sub-sub-folder"],
+    "include": ["ts"],
+    "only": ["src"],
     "showInProblems": false,
     "markers": ["NOTE:", "REMINDER:", ["FIXME", "Warning"]],
     "autoDefaultMarkers": true

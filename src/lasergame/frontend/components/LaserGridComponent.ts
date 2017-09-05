@@ -118,7 +118,7 @@ export default class LaserGridComponent extends CanvasComponent {
 
         this.calculateDrawPathWrapper();
       }
-      const newEdge = tileToEdgeNumber(addTiles(relativeTile, { x: -1, y: -1 }));
+      const newEdge = tileToEdgeNumber(this.lasergrid, addTiles(relativeTile, { x: -1, y: -1 }));
       if (newEdge !== 0) {
         this.selectedEdge = newEdge;
       }
@@ -143,12 +143,12 @@ export default class LaserGridComponent extends CanvasComponent {
       if (piece) {
         applyPieceToLaser(laser, piece.pieceID);
         switch (laser.dir) {
-          case Direction.SPLIT_NORTH_SOUTH:
+          case Direction.SPLIT_WEST_TO_VERT:
             laser.dir = Direction.NORTH;
             this.drawPath.push(getOppositeLaserSegment(laser));
             this.calculateDrawPath(getOppositeLaserSegment(laser));
             break;
-          case Direction.SPLIT_EAST_WEST:
+          case Direction.SPLIT_SOUTH_TO_HORI:
             laser.dir = Direction.EAST;
             this.drawPath.push(getOppositeLaserSegment(laser));
             this.calculateDrawPath(getOppositeLaserSegment(laser));

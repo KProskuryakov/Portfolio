@@ -24,10 +24,15 @@ export function makeDefaultGrid(): LaserGrid {
   for (let i = 0; i < 5; i++) {
     grid[i] = [];
   }
-  const newGrid = {
+  const availablePieces: GridPiece[] = [];
+  for (let i = 0; i < 8; i++) {
+    availablePieces[i] = {pieceID: i, tile: {x: -1, y: -1}};
+  }
+
+  const newGrid: LaserGrid = {
     paths: [] as Path[],
     grid: grid as GridPiece[][],
-    availablePieces: [] as GridPiece[],
+    availablePieces,
     length: 5, width: 5,
   };
   calculateAllEndings(newGrid);
@@ -49,22 +54,25 @@ export function makeCustomGrid(availablePieces: GridPiece[]): LaserGrid {
   return newGrid;
 }
 
-export function tileToEdgeNumber(tile: Tile) {
+export function tileToEdgeNumber(laserGrid: LaserGrid, tile: Tile) {
   const x = tile.x;
   const y = tile.y;
-  if (y === -1 && x > -1 && x < 5) {
+  if (y === -1 && x > -1 && x < laserGrid.width) {
     return 1 + x;
-  } else if (x === 5 && y > -1 && y < 5) {
-    return 6 + y;
-  } else if (y === 5 && x > -1 && x < 5) {
-    return 15 - x;
-  } else if (x === -1 && y > -1 && y < 5) {
-    return 20 - y;
+  } else if (x === laserGrid.width && y > -1 && y < laserGrid.length) {
+    return 1 + laserGrid.width + y;
+  } else if (y === laserGrid.length && x > -1 && x < laserGrid.width) {
+    return laserGrid.width * 2 + laserGrid.length - x;
+  } else if (x === -1 && y > -1 && y < laserGrid.length) {
+    return laserGrid.width * 2 + laserGrid.length * 2 - y;
   }
-  return 0;
+  throw Error(`LaserGrid #tileToEdgeNumber invalid tile given: ${tile}`);
 }
 
 export function edgeNumberToLaser(edge: number): LaserSegment {
+  if (edge < 1 || edge > 20) {
+    throw Error(`LaserGrid #edgeNumberToLaser invalid edge number given ${edge}`);
+  }
   if (edge < 6) {
     return { tile: { x: edge - 1, y: -1 }, dir: Direction.SOUTH, color: Color.BLACK };
   } else if (edge < 11) {
@@ -77,6 +85,9 @@ export function edgeNumberToLaser(edge: number): LaserSegment {
 }
 
 export function getPieceFromGrid(laserGrid: LaserGrid, tile: Tile) {
+  if (!isValidSpace(laserGrid, tile)) {
+    throw Error(`LaserGrid #getPieceFromGrid tile out of bounds ${tile}`);
+  }
   return laserGrid.grid[tile.y][tile.x];
 }
 
@@ -84,20 +95,27 @@ export function isValidSpace(laserGrid: LaserGrid, tile: Tile) {
   return tileWithinAreaExclusive(tile, { x: -1, y: -1 }, { x: laserGrid.width, y: laserGrid.length });
 }
 
-export function removePieceFromGrid(laserGrid: LaserGrid, piece: GridPiece, calculate = true): GridPiece {
+export function removePieceFromGrid(laserGrid: LaserGrid, piece: GridPiece): GridPiece {
+  if (!isValidSpace(laserGrid, piece.tile) || piece !== laserGrid.grid[piece.tile.y][piece.tile.x]) {
+    throw Error(`LaserGrid #removePieceFromGrid piece not valid ${piece}`);
+  }
   laserGrid.grid[piece.tile.y][piece.tile.x] = undefined;
   piece.tile = { x: -1, y: -1 };
-  if (calculate) {
-    calculateAllEndings(laserGrid);
-  }
+  calculateAllEndings(laserGrid);
   return piece;
 }
 
 export function setPieceInGrid(laserGrid: LaserGrid, piece: GridPiece, tile: Tile): GridPiece {
-  const currentPiece = getPieceFromGrid(laserGrid, tile);
-  let removedPiece = null;
-  if (currentPiece) {
-    removedPiece = removePieceFromGrid(laserGrid, currentPiece, false);
+  if (!isValidSpace(laserGrid, tile)) {
+    throw Error(`LaserGrid #setPieceInGrid tile not valid ${tile}`);
+  }
+  const removedPiece = getPieceFromGrid(laserGrid, tile);
+  if (removedPiece) {
+    laserGrid.grid[removedPiece.tile.y][removedPiece.tile.x] = undefined;
+    removedPiece.tile = { x: -1, y: -1 };
+  }
+  if (isValidSpace(laserGrid, piece.tile)) {
+    laserGrid.grid[piece.tile.y][piece.tile.x] = undefined;
   }
   piece.tile = tile;
   laserGrid.grid[tile.y][tile.x] = piece;
@@ -120,7 +138,7 @@ function calculateEndingList(laserGrid: LaserGrid, edge: number) {
     for (let i = 0; i < 100; i++) {
       laser.tile = nextTile(laser.tile, laser.dir);
       if (!isValidSpace(grid, laser.tile)) {
-        const endEdge = tileToEdgeNumber(laser.tile);
+        const endEdge = tileToEdgeNumber(grid, laser.tile);
         endingList.push({ end: endEdge, color: laser.color });
         return;
       }
@@ -128,11 +146,11 @@ function calculateEndingList(laserGrid: LaserGrid, edge: number) {
       if (piece) {
         applyPieceToLaser(laser, piece.pieceID);
         switch (laser.dir) {
-          case Direction.SPLIT_NORTH_SOUTH:
+          case Direction.SPLIT_WEST_TO_VERT:
             laser.dir = Direction.NORTH;
             trackOneEnding(grid, { tile: laser.tile, dir: Direction.SOUTH, color: laser.color });
             break;
-          case Direction.SPLIT_EAST_WEST:
+          case Direction.SPLIT_SOUTH_TO_HORI:
             laser.dir = Direction.EAST;
             trackOneEnding(grid, { tile: laser.tile, dir: Direction.WEST, color: laser.color });
             break;

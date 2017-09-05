@@ -7,12 +7,15 @@ enum PieceID {
   FORWARD_SLASH,
   BACK_SLASH,
   BLACK_HOLE,
-  HORI_SPLIT,
-  VERT_SPLIT,
+  WEST_TO_VERT,
+  SOUTH_TO_HORI,
 
   RED,
   BLUE,
   GREEN,
+
+  PLUS,
+  MINUS,
 }
 export default PieceID;
 
@@ -25,8 +28,8 @@ const pieceRuleList: ReadonlyArray<PieceRule> = [
   { dirs: [Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH] },
   { dirs: [Direction.WEST, Direction.SOUTH, Direction.EAST, Direction.NORTH] },
   { dirs: [Direction.NONE, Direction.NONE, Direction.NONE, Direction.NONE] },
-  { dirs: [Direction.EAST, Direction.NONE, Direction.EAST, Direction.SPLIT_NORTH_SOUTH] },
-  { dirs: [Direction.NONE, Direction.NORTH, Direction.SPLIT_EAST_WEST, Direction.NORTH] },
+  { dirs: [Direction.EAST, Direction.NONE, Direction.EAST, Direction.SPLIT_WEST_TO_VERT] },
+  { dirs: [Direction.NONE, Direction.NORTH, Direction.SPLIT_SOUTH_TO_HORI, Direction.NORTH] },
 
   { color: Color.RED },
   { color: Color.BLUE },
@@ -41,5 +44,4 @@ export function applyPieceToLaser(laser: LaserSegment, pieceID: PieceID) {
   if (pieceRules.color) {
     laser.color = colorManager.addColors(laser.color, pieceRules.color);
   }
-  return laser;
 }

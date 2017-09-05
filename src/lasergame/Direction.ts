@@ -4,8 +4,8 @@ enum Direction {
   SOUTH,
   WEST,
   NONE,
-  SPLIT_EAST_WEST,
-  SPLIT_NORTH_SOUTH,
+  SPLIT_SOUTH_TO_HORI,
+  SPLIT_WEST_TO_VERT,
 }
 export default Direction;
 
