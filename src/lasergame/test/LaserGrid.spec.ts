@@ -4,6 +4,8 @@ import LaserGrid, * as LaserGridModule from "../LaserGrid";
 
 import Color from "../Color";
 import Direction from "../Direction";
+import Path from "../Path";
+import PieceID from "../PieceID";
 
 describe("LaserGrid", function() {
   describe("#makeDefaultGrid", function() {
@@ -175,8 +177,63 @@ describe("LaserGrid", function() {
   });
 
   describe("#calculateAllEndings", function() {
-    it("calculates all the endings", function() {
-      assert.ok(false);
+    it("creates the appropriate default ending list given the default grid", function() {
+      const lg = LaserGridModule.makeDefaultGrid();
+      const expectedPathsList: Path[] = [
+        {start: 1, endings: [{end: 15, color: Color.BLACK}]},
+        {start: 2, endings: [{end: 14, color: Color.BLACK}]},
+        {start: 3, endings: [{end: 13, color: Color.BLACK}]},
+        {start: 4, endings: [{end: 12, color: Color.BLACK}]},
+        {start: 5, endings: [{end: 11, color: Color.BLACK}]},
+        {start: 6, endings: [{end: 20, color: Color.BLACK}]},
+        {start: 7, endings: [{end: 19, color: Color.BLACK}]},
+        {start: 8, endings: [{end: 18, color: Color.BLACK}]},
+        {start: 9, endings: [{end: 17, color: Color.BLACK}]},
+        {start: 10, endings: [{end: 16, color: Color.BLACK}]},
+        {start: 11, endings: [{end: 5, color: Color.BLACK}]},
+        {start: 12, endings: [{end: 4, color: Color.BLACK}]},
+        {start: 13, endings: [{end: 3, color: Color.BLACK}]},
+        {start: 14, endings: [{end: 2, color: Color.BLACK}]},
+        {start: 15, endings: [{end: 1, color: Color.BLACK}]},
+        {start: 16, endings: [{end: 10, color: Color.BLACK}]},
+        {start: 17, endings: [{end: 9, color: Color.BLACK}]},
+        {start: 18, endings: [{end: 8, color: Color.BLACK}]},
+        {start: 19, endings: [{end: 7, color: Color.BLACK}]},
+        {start: 20, endings: [{end: 6, color: Color.BLACK}]},
+      ];
+      assert.deepEqual(lg.paths, expectedPathsList);
+    });
+
+    it("calculates all the endings for a grid with pieces in it", function() {
+      const lg = LaserGridModule.makeDefaultGrid();
+
+      LaserGridModule.setPieceInGrid(lg, lg.availablePieces[PieceID.FORWARD_SLASH], {x: 0, y: 0});
+      LaserGridModule.setPieceInGrid(lg, lg.availablePieces[PieceID.RED], {x: 4, y: 4});
+
+
+      const expectedPathsList: Path[] = [
+        {start: 1, endings: [{end: 20, color: Color.BLACK}]},
+        {start: 2, endings: [{end: 14, color: Color.BLACK}]},
+        {start: 3, endings: [{end: 13, color: Color.BLACK}]},
+        {start: 4, endings: [{end: 12, color: Color.BLACK}]},
+        {start: 5, endings: [{end: 11, color: Color.RED}]},
+        {start: 6, endings: [{end: 15, color: Color.BLACK}]},
+        {start: 7, endings: [{end: 19, color: Color.BLACK}]},
+        {start: 8, endings: [{end: 18, color: Color.BLACK}]},
+        {start: 9, endings: [{end: 17, color: Color.BLACK}]},
+        {start: 10, endings: [{end: 16, color: Color.RED}]},
+        {start: 11, endings: [{end: 5, color: Color.RED}]},
+        {start: 12, endings: [{end: 4, color: Color.BLACK}]},
+        {start: 13, endings: [{end: 3, color: Color.BLACK}]},
+        {start: 14, endings: [{end: 2, color: Color.BLACK}]},
+        {start: 15, endings: [{end: 6, color: Color.BLACK}]},
+        {start: 16, endings: [{end: 10, color: Color.RED}]},
+        {start: 17, endings: [{end: 9, color: Color.BLACK}]},
+        {start: 18, endings: [{end: 8, color: Color.BLACK}]},
+        {start: 19, endings: [{end: 7, color: Color.BLACK}]},
+        {start: 20, endings: [{end: 1, color: Color.BLACK}]},
+      ];
+      assert.deepEqual(lg.paths, expectedPathsList);
     });
   });
 });

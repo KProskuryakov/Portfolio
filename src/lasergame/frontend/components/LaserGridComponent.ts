@@ -5,7 +5,7 @@ import PathsList from "../../PathsList";
 import { applyPieceToLaser } from "../../PieceID";
 import Tile, {
   addTiles, directionToTile, nextTile,
-  subTiles, tileCompare, tileNotNegative, tileWithinAreaInclusive,
+  subTiles, tileNotNegative, tileWithinAreaInclusive,
 } from "../../Tile";
 
 import LaserGrid, {
