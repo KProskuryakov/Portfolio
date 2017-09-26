@@ -6,7 +6,9 @@
     "postinstall": "tsc & webpack -p",
     "start": "node ./bin/www",
     "lint": "tslint 'src/**/*.ts'",
-    "test": "mocha src/**/*.spec.ts --compilers ts:ts-node/register --recursive"
+    "test": "mocha src/**/*.spec.ts --compilers ts:ts-node/register --recursive",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "engines": {
     "node": "8.1.4",
@@ -29,12 +31,12 @@
     "@types/serve-favicon": "^2.2.28",
     "@types/winston": "^2.3.4",
     "bcrypt": "^1.0.2",
-    "body-parser": "~1.16.0",
+    "body-parser": "~1.18.2",
     "connect-pg-simple": "^4.2.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
     "email-addresses": "^2.0.2",
-    "express": "~4.14.1",
+    "express": "~4.15.5",
     "express-session": "^1.15.4",
     "jstransformer-markdown-it": "^2.0.0",
     "morgan": "~1.7.0",
@@ -52,11 +54,13 @@
     "ts-node": "^3.3.0",
     "typescript": "^2.4.2",
     "webpack": "^2.7.0",
-    "winston": "^2.3.1"
+    "winston": "^2.3.1",
+    "snyk": "^1.41.1"
   },
   "devDependencies": {
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
     "tslint": "^5.5.0"
-  }
+  },
+  "snyk": true
 }
