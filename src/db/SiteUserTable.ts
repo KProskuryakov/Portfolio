@@ -9,17 +9,18 @@ import pool from "./Postgres";
  * display_name: varchar(64) UNIQUE NOT NULL
  * password: varchar(256)
  */
-export default  interface SiteUser {
+export default interface SiteUser {
   email: string;
   display_name: string;
   password: string;
 }
 
 export async function insertSiteUser(email: string, displayName: string, pass: string): Promise<SiteUser> {
-  const res = await pool.query(`INSERT INTO site_users (email, password, display_name)
-                                VALUES ($1, $2, $3)
-                                RETURNING *;`,
-                                [email, pass, displayName]);
+  const res = await pool.query(
+    `INSERT INTO site_users (email, password, display_name)
+    VALUES ($1, $2, $3)
+    RETURNING *;`,
+    [email, pass, displayName]);
   return res.rows[0];
 }
 

@@ -1,17 +1,17 @@
+import bodyParser = require("body-parser");
+import connectPG = require("connect-pg-simple");
+import cookieParser = require("cookie-parser");
 import express = require("express");
+import session = require("express-session");
 import { readdir } from "fs";
+import morgan = require("morgan");
+import { Passport } from "passport";
 import path = require("path");
 import favicon = require("serve-favicon");
-import morgan = require("morgan");
 import winston = require("winston");
-import cookieParser = require("cookie-parser");
-import bodyParser = require("body-parser");
-import session = require("express-session");
-import connectPG = require("connect-pg-simple");
-import { Passport } from "passport";
 
-import passport = require("./kp-passport");
 import pool from "./db/Postgres";
+import passport = require("./kp-passport");
 
 import apiIndex from "./routes/api/index";
 import apiLasergame from "./routes/api/lasergame";
@@ -28,7 +28,6 @@ import users from "./routes/users";
 import webdata from "./routes/webdata";
 
 const app = express();
-const secretkey = process.env.SECRET_KEY;
 const pgSession = connectPG(session);
 
 const notesList: string[] = [];
@@ -42,7 +41,6 @@ readdir("./notes", (err, files) => {
   }
 });
 
-// view engine setup
 app.set("views", path.join(path.resolve(), "views/"));
 app.set("view engine", "pug");
 
@@ -50,13 +48,13 @@ app.use(favicon(path.join(path.resolve(), "public/", "favicon.ico")));
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser(secretkey));
+app.use(cookieParser(process.env.SECRET_KEY));
 app.use(express.static(path.join(path.resolve(), "public/")));
 app.use(session({
   cookie: { maxAge: 24 * 60 * 60 * 1000 },
   resave: false,
   saveUninitialized: false,
-  secret: secretkey,
+  secret: process.env.SECRET_KEY,
   store: new pgSession({
     pool,
   }),

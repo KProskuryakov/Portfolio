@@ -1,26 +1,36 @@
-enum Color {
-  BLACK,
-  BLUE,
-  GREEN,
-  CYAN,
-  RED,
-  MAGENTA,
-  YELLOW,
-  WHITE,
-}
-export default Color;
+type ColorName = "BLACK" | "BLUE" | "GREEN" | "CYAN" | "RED" | "MAGENTA" | "YELLOW" | "WHITE";
+enum ColorEnum { BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, YELLOW, WHITE }
 
-export function addColors(a: Color, b: Color) {
-  return a | b;
-}
+export default class Color {
+  public static getInstance(name: ColorName | ColorEnum): Color {
+    if (typeof name === "string") {
+      name = ColorEnum[name];
+    }
+    if (name < ColorEnum.BLACK || name > ColorEnum.WHITE) {
+      name = ColorEnum.BLACK;
+    }
+    if (!Color.colorArray[name]) {
+      Color.colorArray[name] = new Color(name);
+    }
+    return Color.colorArray[name];
+  }
 
-export function colorToRGBString(color: Color) {
-  const r = 4 === (4 & color) ? 255 : 0;
-  const g = 2 === (2 & color) ? 255 : 0;
-  const b = 1 === (1 & color) ? 255 : 0;
-  return `rgb(${r},${g},${b})`;
-}
+  private static readonly colorArray: Color[] = [];
 
-export function colorToName(color: Color) {
-  return Color[color];
+  private constructor(private readonly value: ColorEnum) {}
+
+  public add(other: Color) {
+    return Color.getInstance(ColorEnum[this.value | other.value] as ColorName);
+  }
+
+  public getName() {
+    return ColorEnum[this.value];
+  }
+
+  public toRGBString() {
+    const r = 4 === (4 & this.value) ? 255 : 0;
+    const g = 2 === (2 & this.value) ? 255 : 0;
+    const b = 1 === (1 & this.value) ? 255 : 0;
+    return `rgb(${r},${g},${b})`;
+  }
 }

@@ -78,20 +78,20 @@ In the heroku production environment, connect to the db by running `heroku pg:ps
 Postgres has to be installed for this to work
 
 ```sql
-CREATE TABLE IF "session" (
+CREATE TABLE IF NOT EXISTS "session" (
   "sid" varchar NOT NULL COLLATE "default" PRIMARY KEY NOT DEFERRABLE INITIALLY IMMEDIATE,
 	"sess" json NOT NULL,
 	"expire" timestamp(6) NOT NULL
 )
 WITH (OIDS=FALSE);
-CREATE TABLE lasergame_daily_levels
+CREATE TABLE IF NOT EXISTS lasergame_daily_levels
 (
   daily_date date PRIMARY KEY DEFAULT CURRENT_DATE,
   level_data jsonb NOT NULL,
   seed bigint NOT NULL,
   times_beaten int DEFAULT 0
 );
-CREATE TABLE IF lasergame_levels
+CREATE TABLE IF NOT EXISTS lasergame_levels
 (
   id serial PRIMARY KEY,
   name varchar(64) NOT NULL,
@@ -100,13 +100,13 @@ CREATE TABLE IF lasergame_levels
   times_beaten int DEFAULT 0,
   user_display_name varchar(64) references site_users (display_name)
 );
-CREATE TABLE IF site_users
+CREATE TABLE IF NOT EXISTS site_users
 (
   email varchar(256) PRIMARY KEY,
   password varchar(80) NOT NULL,
   display_name varchar(64) UNIQUE NOT NULL
 );
-CREATE TABLE IF web_data
+CREATE TABLE IF NOT EXISTS web_data
 (
   url text PRIMARY KEY,
   title text,
@@ -142,17 +142,14 @@ CREATE TABLE IF web_data
 ### Current extensions in vscode:
 These are all extensions that I use specifically for this project.
 
-* Document This
+* Code Outline
 * gitignore (CodeZombie)
 * HTML CSS Support
-* Markdown Shortcuts
 * Move TS
 * npm
 * Project Snippets
-* TODO Parser
 * TSLint
 * Untabify
-* VS Color Picker
 * vscode-icons
 
 ### Snippets

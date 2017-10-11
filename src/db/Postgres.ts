@@ -1,6 +1,6 @@
 import pg = require("pg");
-import url = require("url");
 import { Pool } from "pg";
+import url = require("url");
 
 import winston = require("winston");
 

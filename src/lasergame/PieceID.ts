@@ -1,4 +1,4 @@
-import Color, * as colorManager from "./Color";
+import Color from "./Color";
 import Direction from "./Direction";
 import LaserSegment, * as laserManager from "./LaserSegment";
 import Tile from "./Tile";
@@ -42,6 +42,6 @@ export function applyPieceToLaser(laser: LaserSegment, pieceID: PieceID) {
     laser.dir = pieceRules.dirs[laser.dir];
   }
   if (pieceRules.color) {
-    laser.color = colorManager.addColors(laser.color, pieceRules.color);
+    laser.color = laser.color | pieceRules.color;
   }
 }

@@ -1,37 +1,48 @@
 import assert = require("assert");
 
-import Color, {addColors, colorToName, colorToRGBString} from "../Color";
+import Color from "../Color";
+import ColorName from "../ColorName";
 
 describe("Color", function() {
+  describe("#getInstance", function() {
+    it("gets a color instance", function() {
+      assert.equal(Color.getInstance(ColorName.BLACK).name(), "BLACK");
+    });
+
+    it("does not duplicate instances", function() {
+      assert.ok(Color.getInstance(ColorName.WHITE) === Color.getInstance(ColorName.WHITE));
+    });
+  });
+
   describe("#addColors", function() {
-    it("bunch of color addition tests", function() {
-      assert.equal(addColors(Color.BLACK, Color.BLACK), Color.BLACK);
-      assert.equal(addColors(Color.RED, Color.RED), Color.RED);
-      assert.equal(addColors(Color.WHITE, Color.WHITE), Color.WHITE);
-      assert.equal(addColors(Color.YELLOW, Color.CYAN), Color.WHITE);
-      assert.equal(addColors(Color.BLUE, Color.GREEN), Color.CYAN);
-      assert.equal(addColors(Color.RED, Color.WHITE), Color.WHITE);
-      assert.equal(addColors(Color.RED, Color.WHITE), Color.WHITE);
+    it("adds colors", function() {
+      const black = Color.getInstance(ColorName.BLACK);
+      const black2 = Color.getInstance(ColorName.BLACK);
+      const red = Color.getInstance(ColorName.RED);
+
+      assert.equal(black.add(black2), black);
+      assert.equal(black.add(black2), black2);
+      assert.equal(black.add(red), red);
     });
   });
 
   describe("#colorToRGBString", function() {
     it("correctly creates rgb strings", function() {
-      assert.equal(colorToRGBString(Color.BLACK), "rgb(0,0,0)");
-      assert.equal(colorToRGBString(Color.RED), "rgb(255,0,0)");
-      assert.equal(colorToRGBString(Color.GREEN), "rgb(0,255,0)");
-      assert.equal(colorToRGBString(Color.BLUE), "rgb(0,0,255)");
-      assert.equal(colorToRGBString(Color.CYAN), "rgb(0,255,255)");
-      assert.equal(colorToRGBString(Color.YELLOW), "rgb(255,255,0)");
-      assert.equal(colorToRGBString(Color.MAGENTA), "rgb(255,0,255)");
-      assert.equal(colorToRGBString(Color.WHITE), "rgb(255,255,255)");
+      assert.equal(Color.getInstance(ColorName.BLACK).toRGBString(), "rgb(0,0,0)");
+      assert.equal(Color.getInstance(ColorName.RED).toRGBString(), "rgb(255,0,0)");
+      assert.equal(Color.getInstance(ColorName.GREEN).toRGBString(), "rgb(0,255,0)");
+      assert.equal(Color.getInstance(ColorName.BLUE).toRGBString(), "rgb(0,0,255)");
+      assert.equal(Color.getInstance(ColorName.CYAN).toRGBString(), "rgb(0,255,255)");
+      assert.equal(Color.getInstance(ColorName.YELLOW).toRGBString(), "rgb(255,255,0)");
+      assert.equal(Color.getInstance(ColorName.MAGENTA).toRGBString(), "rgb(255,0,255)");
+      assert.equal(Color.getInstance(ColorName.WHITE).toRGBString(), "rgb(255,255,255)");
     });
   });
 
   describe("#colorToName", function() {
     it("names correctly", function() {
-      assert.equal(colorToName(Color.BLACK), "BLACK");
-      assert.equal(colorToName(Color.WHITE), "WHITE");
+      assert.equal(Color.getInstance(ColorName.BLACK).name(), "BLACK");
+      assert.equal(Color.getInstance(ColorName.WHITE).name(), "WHITE");
     });
   });
 });

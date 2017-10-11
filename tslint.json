@@ -1,9 +1,7 @@
 {
   "extends": "tslint:latest",
   "rules": {
-    "interface-name": [
-      "never-prefix"
-    ],
+    "interface-name": false,
     "only-arrow-functions": [
       false
     ],
@@ -11,6 +9,7 @@
     "object-literal-sort-keys": [
       false
     ],
-    "curly": false
+    "curly": false,
+    "member-ordering": false
   }
 }

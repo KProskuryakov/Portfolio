@@ -210,7 +210,6 @@ describe("LaserGrid", function() {
       LaserGridModule.setPieceInGrid(lg, lg.availablePieces[PieceID.FORWARD_SLASH], {x: 0, y: 0});
       LaserGridModule.setPieceInGrid(lg, lg.availablePieces[PieceID.RED], {x: 4, y: 4});
 
-
       const expectedPathsList: Path[] = [
         {start: 1, endings: [{end: 20, color: Color.BLACK}]},
         {start: 2, endings: [{end: 14, color: Color.BLACK}]},

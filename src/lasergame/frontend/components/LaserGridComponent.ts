@@ -1,4 +1,4 @@
-import { colorToRGBString } from "../../Color";
+import * as ColorUtils from "../../Color";
 import Direction, { getOppositeDirection } from "../../Direction";
 import LaserSegment, { copyLaserSegment, getOppositeLaserSegment } from "../../LaserSegment";
 import PathsList from "../../PathsList";
@@ -48,7 +48,7 @@ export default class LaserGridComponent extends CanvasComponent {
     // Draw laser path on grid
     for (const laser of this.drawPath) {
       ctx.beginPath();
-      ctx.strokeStyle = colorToRGBString(laser.color);
+      ctx.strokeStyle = ColorUtils.toRGBString(laser.color);
       const loc = tileToPixels(addTiles(laser.tile, { x: 1, y: 1 }));
       loc.px += TILE_HALF;
       loc.py += TILE_HALF;

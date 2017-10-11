@@ -27,7 +27,7 @@ export function nextTile(tile: Tile, dir: Direction) {
 export function addTiles(...tiles: Tile[]): Tile {
   return tiles.reduce((p, v, i) => {
     return {x: p.x + v.x, y: p.y + v.y};
-  }, {x: 0, y: 0} );
+  }, {x: 0, y: 0});
 }
 
 export function subTiles(a: Tile, b: Tile): Tile {
