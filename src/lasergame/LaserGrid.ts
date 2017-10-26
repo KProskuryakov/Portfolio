@@ -11,7 +11,7 @@ export interface GridPiece {
   tile: Tile;
 }
 
-export default interface LaserGrid {
+export default class LaserGrid {
   paths: Path[];
   readonly grid: GridPiece[][];
   readonly availablePieces: GridPiece[];

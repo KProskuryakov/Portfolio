@@ -1,8 +1,10 @@
+import Colorable from "./Colorable";
+
 type ColorName = "BLACK" | "BLUE" | "GREEN" | "CYAN" | "RED" | "MAGENTA" | "YELLOW" | "WHITE";
 enum ColorEnum { BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, YELLOW, WHITE }
 
 export default class Color {
-  public static getInstance(name: ColorName | ColorEnum): Color {
+  public static getInstance(name: ColorName | ColorEnum = "BLACK"): Color {
     if (typeof name === "string") {
       name = ColorEnum[name];
     }
@@ -21,6 +23,10 @@ export default class Color {
 
   public add(other: Color) {
     return Color.getInstance(ColorEnum[this.value | other.value] as ColorName);
+  }
+
+  public applyColor(laser: Colorable) {
+    laser.applyColor(this);
   }
 
   public getName() {

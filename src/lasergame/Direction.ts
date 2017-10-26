@@ -1,28 +1,20 @@
 type DirectionName = "NORTH" | "EAST" | "SOUTH" | "WEST" | "NONE";
-enum DirectionEnum { NORTH = -2, EAST, NONE, WEST, SOUTH }
 
-class Direction {
-  public static getInstance(name: DirectionName, y: number) {
-    if (!Direction.directionArray[DirectionEnum[name]]) {
-      Direction.directionArray[DirectionEnum[name]] = new Direction(name);
-    }
-    return Direction.directionArray[DirectionEnum[name]];
+export default abstract class Direction {
+
+  protected constructor(private readonly _name: DirectionName, private readonly _x: number, private readonly _y: number) {}
+
+  public abstract opposite(): Direction;
+
+  public get x() {
+    return this._x;
   }
 
-  private static readonly directionArray: Direction[] = [];
-
-  private readonly x: number;
-  private readonly y: number;
-  private constructor(private readonly name: DirectionName) {
-    
+  public get y() {
+    return this._y;
   }
-}
 
-const oppositeDirection = [Direction.SOUTH, Direction.WEST, Direction.NORTH, Direction.EAST];
-
-export function getOppositeDirection(dir: Direction) {
-  if (dir > Direction.WEST) {
-    throw new Error(`Direction #getOppositeDirection called with ${Direction[dir]} which is invalid.`);
+  public get name() {
+    return this._name;
   }
-  return oppositeDirection[dir];
 }
